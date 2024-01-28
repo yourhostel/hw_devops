@@ -8,9 +8,9 @@ from web_checker import web_check
 
 init()
 
-if len(sys.argv) < 2:
-    print("Usage: python script.py <path_to_config_file>")
-    sys.exit(1)
+# if len(sys.argv) < 2:
+#     print("Usage: python script.py <path_to_config_file>")
+#     sys.exit(1)
 
 file_path = sys.argv[1]
 
