@@ -2,7 +2,6 @@ import subprocess
 import sys
 import random
 import string
-import getpass
 
 
 def install_mysql():
@@ -44,14 +43,14 @@ def generate_password(length=12):
     return ''.join(random.choice(characters) for i in range(length))
 
 
-def create_mysql_user(user, password, root_password):
+def create_mysql_user(user, password):
     # Створення користувача MySQL
     try:
         import mysql.connector
         connection = mysql.connector.connect(
             host='localhost',
-            user='root',
-            password=root_password
+            user='root',  # Видаліть це поле, оскільки ми не використовуємо root_password
+            password=''    # Видаліть це поле, оскільки ми не використовуємо root_password
         )
         cursor = connection.cursor()
         cursor.execute(f"CREATE USER '{user}'@'localhost' IDENTIFIED BY '{password}';")
@@ -72,12 +71,13 @@ install_mysql()
 # Встановлення MySQL Connector/Python, якщо він не встановлений
 install_mysql_connector()
 
-# Запит пароля для користувача root
-root_password = getpass.getpass("Будь ласка, введіть пароль для користувача root MySQL: ")
-
-# Генерація пароля
+# Генерація пароля для користувача "tysser"
 password = generate_password()
 
-# Створення користувача MySQL
+# Створення користувача MySQL з іменем "tysser" та згенерованим паролем
 user = "tysser"
-create_mysql_user(user, password, root_password)
+create_mysql_user(user, password)
+
+# Виведення імені користувача та його пароля
+print(f"Ім'я користувача: {user}")
+print(f"Пароль користувача: {password}")
