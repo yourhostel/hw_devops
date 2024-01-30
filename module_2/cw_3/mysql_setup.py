@@ -59,7 +59,7 @@ def create_mysql_user(user, password):
     except mysql.connector.Error as err:
         print("Помилка MySQL:", err)
     finally:
-        if connection and connection.is_connected():
+        if 'connection' in locals() and connection.is_connected():
             cursor.close()
             connection.close()
 
