@@ -10,32 +10,43 @@ MYSQL_ROOT_PASSWORD = None
 def install_mysql():
     global MYSQL_ROOT_PASSWORD
 
-    if MYSQL_ROOT_PASSWORD is None:
+    # Перевірка, чи встановлено MySQL
+    is_mysql_installed = subprocess.run(["dpkg-query", "-l", "mysql-server"], capture_output=True, text=True).stdout
+
+    if not is_mysql_installed:
         MYSQL_ROOT_PASSWORD = getpass.getpass("Введіть пароль для користувача root MySQL: ")
 
-    # Перевірка, чи встановлено MySQL
-    if not subprocess.run(["dpkg-query", "-l", "mysql-server"], capture_output=True, text=True).stdout:
         # Встановлення MySQL, якщо він не встановлений
         subprocess.run(["sudo", "apt", "install", "-y", "mysql-server"])
         print("MySQL Server встановлено.")
 
-        # Після встановлення намагаємося запустити MySQL
+        # Запуск MySQL
         subprocess.run(["sudo", "systemctl", "start", "mysql"])
         print("Сервіс MySQL запущено.")
+
+        # Зміна методу аутентифікації та встановлення пароля
+        change_auth_command = (
+            f"ALTER USER 'root'@'localhost' "
+            f"IDENTIFIED WITH 'mysql_native_password' "
+            f"BY '{MYSQL_ROOT_PASSWORD}';"
+        )
+        flush_privileges_command = "FLUSH PRIVILEGES;"
+        subprocess.run(["sudo", "mysql", "-e", change_auth_command])
+        subprocess.run(["sudo", "mysql", "-e", flush_privileges_command])
+        print("Метод аутентифікації користувача root змінено, пароль встановлено.")
     else:
         print("MySQL Server вже встановлено.")
-
-        # Перевірка, чи запущено MySQL
         status = subprocess.run(["systemctl", "is-active", "mysql"], capture_output=True, text=True).stdout.strip()
+
         if status != "active":
             subprocess.run(["sudo", "systemctl", "start", "mysql"])
             print("Сервіс MySQL був не активний і тепер запущено.")
         else:
             print("Сервіс MySQL вже запущено.")
 
-    # Тут встановлюємо пароль для користувача root
-    subprocess.run(["sudo", "mysqladmin", "-u", "root", "password", MYSQL_ROOT_PASSWORD])
-    print("Пароль користувача root оновлено.")
+        # Запит чинного пароля для root
+        if MYSQL_ROOT_PASSWORD is None:
+            MYSQL_ROOT_PASSWORD = getpass.getpass("Введіть чинний пароль для користувача root MySQL: ")
 
 
 def install_mysql_connector():
