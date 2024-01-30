@@ -44,7 +44,7 @@ def generate_password(length=12):
 
 
 def create_mysql_user(user, password):
-    # Створення користувача MySQL, якщо його не існує
+    # Створення користувача MySQL, або оновлення паролю, якщо користувач існує
     try:
         import mysql.connector
         connection = mysql.connector.connect(
@@ -52,10 +52,20 @@ def create_mysql_user(user, password):
             user='root'
         )
         cursor = connection.cursor()
-        cursor.execute(f"CREATE USER IF NOT EXISTS '{user}'@'localhost' IDENTIFIED BY '{password}';")
-        cursor.execute(f"GRANT ALL PRIVILEGES ON *.* TO '{user}'@'localhost' WITH GRANT OPTION;")
+        cursor.execute(f"SELECT user FROM mysql.user WHERE user = '{user}'")
+        existing_user = cursor.fetchone()
+
+        if existing_user:
+            # Користувач існує, оновлюємо пароль
+            cursor.execute(f"ALTER USER '{user}'@'localhost' IDENTIFIED BY '{password}';")
+            print(f"Пароль користувача '{user}' оновлено.")
+        else:
+            # Користувач не існує, створюємо його
+            cursor.execute(f"CREATE USER '{user}'@'localhost' IDENTIFIED BY '{password}';")
+            cursor.execute(f"GRANT ALL PRIVILEGES ON *.* TO '{user}'@'localhost' WITH GRANT OPTION;")
+            print(f"Користувач '{user}' успішно створений з паролем: {password}")
+
         connection.commit()
-        print(f"Користувач '{user}' успішно створений або вже існує з паролем: {password}")
     except mysql.connector.Error as err:
         print("Помилка MySQL:", err)
     finally:
