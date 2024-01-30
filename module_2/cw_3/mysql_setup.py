@@ -2,11 +2,17 @@ import subprocess
 import sys
 import random
 import string
+import getpass
 
-global MYSQL_ROOT_PASSWORD  # Додаємо глобальну змінну
+MYSQL_ROOT_PASSWORD = None
 
 
 def install_mysql():
+    global MYSQL_ROOT_PASSWORD
+
+    if MYSQL_ROOT_PASSWORD is None:
+        MYSQL_ROOT_PASSWORD = getpass.getpass("Введіть пароль для користувача root MySQL: ")
+
     # Перевірка, чи встановлено MySQL
     if not subprocess.run(["dpkg-query", "-l", "mysql-server"], capture_output=True, text=True).stdout:
         # Встановлення MySQL, якщо він не встановлений
