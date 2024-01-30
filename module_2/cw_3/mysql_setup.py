@@ -49,7 +49,8 @@ def create_mysql_user(user, password):
         import mysql.connector
         connection = mysql.connector.connect(
             host='localhost',
-            user='root'
+            user='root',
+            password="1234"
         )
         cursor = connection.cursor()
         cursor.execute(f"SELECT user FROM mysql.user WHERE user = '{user}'")
@@ -72,7 +73,6 @@ def create_mysql_user(user, password):
         if 'connection' in locals() and connection.is_connected():
             cursor.close()
             connection.close()
-
 
 
 def create_database_and_table(user):
@@ -128,4 +128,3 @@ create_database_and_table(user)
 
 print(f"Ім'я користувача: {user}")
 print(f"Пароль користувача: {password}")
-
