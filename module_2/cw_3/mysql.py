@@ -3,19 +3,26 @@ import string
 import subprocess
 
 
-def generate_password(length=12):
-    characters = string.ascii_letters + string.digits + string.punctuation
-    return ''.join(random.choice(characters) for i in range(length))
-
-
-password = generate_password()
-
-
 def install_mysql():
-    if not subprocess.run(["dpkg-query", "l", "mysql-server"], capture_output=True, text=True).stdout:
+    # Проверяем, установлен ли MySQL
+    if not subprocess.run(["dpkg-query", "-l", "mysql-server"], capture_output=True, text=True).stdout:
+        # Устанавливаем MySQL, если он не установлен
         subprocess.run(["sudo", "apt", "install", "-y", "mysql-server"])
+        print("MySQL Server установлен.")
+
+        # После установки пытаемся запустить MySQL
+        subprocess.run(["sudo", "systemctl", "start", "mysql"])
+        print("MySQL сервис запущен.")
     else:
         print("MySQL Server уже установлен.")
+
+        # Проверяем, запущен ли MySQL
+        status = subprocess.run(["systemctl", "is-active", "mysql"], capture_output=True, text=True).stdout.strip()
+        if status != "active":
+            subprocess.run(["sudo", "systemctl", "start", "mysql"])
+            print("MySQL сервис был неактивен и теперь запущен.")
+        else:
+            print("MySQL сервис уже запущен.")
 
 
 install_mysql()
