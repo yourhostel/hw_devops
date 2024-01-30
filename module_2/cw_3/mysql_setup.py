@@ -43,19 +43,53 @@ def generate_password(length=12):
     return ''.join(random.choice(characters) for i in range(length))
 
 
-def create_mysql_user(user, password):
-    # Створення користувача MySQL
-    connection = None
+def create_mysql_user(user, password, root_password):
+    # Створення користувача MySQL, якщо його не існує
     try:
         import mysql.connector
         connection = mysql.connector.connect(
             host='localhost'
         )
         cursor = connection.cursor()
-        cursor.execute(f"CREATE USER '{user}'@'localhost' IDENTIFIED BY '{password}';")
+        cursor.execute(f"CREATE USER IF NOT EXISTS '{user}'@'localhost' IDENTIFIED BY '{password}';")
         cursor.execute(f"GRANT ALL PRIVILEGES ON *.* TO '{user}'@'localhost' WITH GRANT OPTION;")
         connection.commit()
-        print(f"Користувач '{user}' успішно створений з паролем: {password}")
+        print(f"Користувач '{user}' успішно створений або вже існує з паролем: {password}")
+    except mysql.connector.Error as err:
+        print("Помилка MySQL:", err)
+    finally:
+        if connection and connection.is_connected():
+            cursor.close()
+            connection.close()
+
+
+def create_database_and_table(user, root_password):
+    try:
+        import mysql.connector
+        connection = mysql.connector.connect(
+            host='localhost',
+            user='root',
+            password=root_password
+        )
+        cursor = connection.cursor()
+
+        # Створення бази даних, якщо вона не існує
+        cursor.execute("CREATE DATABASE IF NOT EXISTS mydatabase;")
+        print("База даних 'mydatabase' створена або вже існує.")
+
+        # Вибір бази даних
+        cursor.execute("USE mydatabase;")
+
+        # Створення таблиці "users", якщо вона не існує
+        cursor.execute("CREATE TABLE IF NOT EXISTS users (id INT AUTO_INCREMENT PRIMARY KEY, "
+                       "username VARCHAR(255), role VARCHAR(255));")
+        print("Таблиця 'users' створена або вже існує.")
+
+        # Додавання запису "tysser" з роллю "super"
+        cursor.execute("INSERT INTO users (username, role) VALUES (%s, %s);", ("tysser", "super"))
+        connection.commit()
+        print("Запис 'tysser' з роллю 'super' доданий до таблиці 'users'.")
+
     except mysql.connector.Error as err:
         print("Помилка MySQL:", err)
     finally:
@@ -70,12 +104,18 @@ install_mysql()
 # Встановлення MySQL Connector/Python, якщо він не встановлений
 install_mysql_connector()
 
+# Запит пароля для користувача root
+root_password = getpass.getpass("Будь ласка, введіть пароль для користувача root MySQL: ")
+
 # Генерація пароля для користувача "tysser"
 password = generate_password()
 
-# Створення користувача MySQL з іменем "tysser" та згенерованим паролем
+# Створення користувача MySQL
 user = "tysser"
-create_mysql_user(user, password)
+create_mysql_user(user, password, root_password)
+
+# Створення бази даних та таблиці "users"
+create_database_and_table(user, root_password)
 
 # Виведення імені користувача та його пароля
 print(f"Ім'я користувача: {user}")
