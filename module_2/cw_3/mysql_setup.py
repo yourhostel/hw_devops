@@ -45,6 +45,7 @@ def generate_password(length=12):
 
 def create_mysql_user(user, password):
     # Створення користувача MySQL
+    connection = None
     try:
         import mysql.connector
         connection = mysql.connector.connect(
