@@ -74,6 +74,7 @@ def create_mysql_user(user, password):
             connection.close()
 
 
+
 def create_database_and_table(user):
     connection = None  # Ініціалізуємо connection поза спробою з'єднання з базою даних
     try:
