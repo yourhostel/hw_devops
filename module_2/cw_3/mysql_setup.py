@@ -21,7 +21,7 @@ def install_mysql():
         status = subprocess.run(["systemctl", "is-active", "mysql"], capture_output=True, text=True).stdout.strip()
         if status != "active":
             subprocess.run(["sudo", "systemctl", "start", "mysql"])
-            print("Сервіс MySQL був неактивний і тепер запущено.")
+            print("Сервіс MySQL був не активний і тепер запущено.")
         else:
             print("Сервіс MySQL вже запущено.")
 
@@ -43,12 +43,13 @@ def generate_password(length=12):
     return ''.join(random.choice(characters) for i in range(length))
 
 
-def create_mysql_user(user, password, root_password):
+def create_mysql_user(user, password):
     # Створення користувача MySQL, якщо його не існує
     try:
         import mysql.connector
         connection = mysql.connector.connect(
-            host='localhost'
+            host='localhost',
+            user='root'
         )
         cursor = connection.cursor()
         cursor.execute(f"CREATE USER IF NOT EXISTS '{user}'@'localhost' IDENTIFIED BY '{password}';")
@@ -63,13 +64,12 @@ def create_mysql_user(user, password, root_password):
             connection.close()
 
 
-def create_database_and_table(user, root_password):
+def create_database_and_table(user):
     try:
         import mysql.connector
         connection = mysql.connector.connect(
             host='localhost',
-            user='root',
-            password=root_password
+            user='root'
         )
         cursor = connection.cursor()
 
@@ -104,19 +104,15 @@ install_mysql()
 # Встановлення MySQL Connector/Python, якщо він не встановлений
 install_mysql_connector()
 
-# Запит пароля для користувача root
-root_password = getpass.getpass("Будь ласка, введіть пароль для користувача root MySQL: ")
-
 # Генерація пароля для користувача "tysser"
 password = generate_password()
 
 # Створення користувача MySQL
 user = "tysser"
-create_mysql_user(user, password, root_password)
+create_mysql_user(user, password)
 
 # Створення бази даних та таблиці "users"
-create_database_and_table(user, root_password)
+create_database_and_table(user)
 
-# Виведення імені користувача та його пароля
 print(f"Ім'я користувача: {user}")
 print(f"Пароль користувача: {password}")
