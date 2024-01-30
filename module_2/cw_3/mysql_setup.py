@@ -48,9 +48,7 @@ def create_mysql_user(user, password):
     try:
         import mysql.connector
         connection = mysql.connector.connect(
-            host='localhost',
-            user='root',  # Видаліть це поле, оскільки ми не використовуємо root_password
-            password=''    # Видаліть це поле, оскільки ми не використовуємо root_password
+            host='localhost'
         )
         cursor = connection.cursor()
         cursor.execute(f"CREATE USER '{user}'@'localhost' IDENTIFIED BY '{password}';")
