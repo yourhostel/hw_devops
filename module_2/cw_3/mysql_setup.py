@@ -22,7 +22,7 @@ def generate_password(length=12):
 
 def create_mysql_user(user, password, root_password):
     try:
-        import mysql_setup.connector
+        import mysql.connector
         connection = mysql.connector.connect(
             host='localhost',
             user='root',
