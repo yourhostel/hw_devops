@@ -98,14 +98,14 @@ def create_mysql_user(user, password):
             connection.close()
 
 
-def create_database_and_table(user):
+def create_database_and_table(user_create, password_create):
     connection = None  # Ініціалізуємо connection поза спробою з'єднання з базою даних
     try:
         import mysql.connector
         connection = mysql.connector.connect(
             host='localhost',
-            user='tysser',
-            password=user
+            user=user_create,
+            password=password_create
         )
         cursor = connection.cursor()
 
@@ -148,7 +148,7 @@ user = "tysser"
 create_mysql_user(user, password)
 
 # Створення бази даних та таблиці "users"
-create_database_and_table(user)
+create_database_and_table(user, password)
 
 print(f"Ім'я користувача: {user}")
 print(f"Пароль користувача: {password}")
