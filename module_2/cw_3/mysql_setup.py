@@ -7,7 +7,7 @@ import getpass
 
 def install_mysql_connector():
     try:
-        import mysql.connector
+        import mysql_setup.connector
         print("MySQL Connector/Python вже встановлено.")
     except ImportError:
         print("Встановлення MySQL Connector/Python.")
@@ -22,7 +22,7 @@ def generate_password(length=12):
 
 def create_mysql_user(user, password, root_password):
     try:
-        import mysql.connector
+        import mysql_setup.connector
         connection = mysql.connector.connect(
             host='localhost',
             user='root',
