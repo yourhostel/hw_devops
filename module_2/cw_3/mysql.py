@@ -16,3 +16,6 @@ def install_mysql():
         subprocess.run(["sudo", "apt", "install", "-y", "mysql-server"])
     else:
         print("MySQL Server уже установлен.")
+
+
+install_mysql()
