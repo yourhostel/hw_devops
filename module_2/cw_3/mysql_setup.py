@@ -3,6 +3,8 @@ import sys
 import random
 import string
 
+global MYSQL_ROOT_PASSWORD  # Додаємо глобальну змінну
+
 
 def install_mysql():
     # Перевірка, чи встановлено MySQL
@@ -24,6 +26,10 @@ def install_mysql():
             print("Сервіс MySQL був не активний і тепер запущено.")
         else:
             print("Сервіс MySQL вже запущено.")
+
+    # Тут встановлюємо пароль для користувача root
+    subprocess.run(["sudo", "mysqladmin", "-u", "root", "password", MYSQL_ROOT_PASSWORD])
+    print("Пароль користувача root оновлено.")
 
 
 def install_mysql_connector():
@@ -50,7 +56,7 @@ def create_mysql_user(user, password):
         connection = mysql.connector.connect(
             host='localhost',
             user='root',
-            password="1234"
+            password=MYSQL_ROOT_PASSWORD
         )
         cursor = connection.cursor()
         cursor.execute(f"SELECT user FROM mysql.user WHERE user = '{user}'")
@@ -129,3 +135,4 @@ create_database_and_table(user)
 
 print(f"Ім'я користувача: {user}")
 print(f"Пароль користувача: {password}")
+print(f"MYSQL_ROOT_PASSWORD: {MYSQL_ROOT_PASSWORD}")
