@@ -81,7 +81,8 @@ def create_database_and_table(user):
         import mysql.connector
         connection = mysql.connector.connect(
             host='localhost',
-            user='root'
+            user='tysser',
+            password=user
         )
         cursor = connection.cursor()
 
