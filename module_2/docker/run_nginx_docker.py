@@ -14,3 +14,4 @@ try:
     print("Доступ до Nginx можна отримати за адресою http://localhost:8080")
 except Exception as e:
     print(f"Помилка при запуску контейнера Nginx: {e}")
+
