@@ -1,17 +1,12 @@
 import docker
-from docker.errors import ImageNotFound, APIError
 
+# Створюємо клієнт Docker, використовуючи змінні оточення
 client = docker.from_env()
 
 try:
-    container = client.containers.run("nginx", detach=True, ports={'80/tcp': 8080})
-    print(f"Nginx контейнер запущено с ID: {container.id}")
-    print("Доступ до Nginx можна отримати через http://localhost:8080")
-    logs = container.logs(tail=10)
-    print(logs.decode("utf-8"))
-except ImageNotFound:
-    print("Образ 'nginx:latest' не знайдений. Завантаження...")
-except APIError as e:
-    print(f"Виникла помилка Docker API: {e}")
+    # Запускаємо контейнер Nginx, відображаючи порт 80 контейнера на порт 8080 хоста
+    container = client.containers.run("nginx:latest", detach=True, ports={"80/tcp": 8080})
+    print(f"Nginx running, ID: {container.id}")
+    print("Access in Nginx http://localhost:8080")
 except Exception as e:
-    print(f"невідома помилка: {e}")
+    print(f"Помилка при запуску контейнера Nginx: {e}")
