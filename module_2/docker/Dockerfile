@@ -1,16 +1,14 @@
-# Використовуємо базовий образ, наприклад, Ubuntu
+# Використовуємо базовий образ Ubuntu
 FROM ubuntu:latest
 
-# Додаємо декілька команд для налаштування користувача Test
-# Додавання користувача
+# Встановлюємо необхідні пакети
+RUN apt-get update && apt-get install -y nginx
+
+# Додаємо користувача Test і створюємо домашній каталог
 RUN useradd -ms /bin/bash Test
 
-# Змінюємо власника деяких директорій на користувача Test (опціонально)
-RUN chown -R Test /var/run/nginx /var/log/nginx
+# Змінюємо власника деяких директорій (за потреби)
+RUN chown -R Test:Test /var/www/html
 
-# Встановлюємо Nginx (під користувачем "Test")
-USER Test
-RUN apt-get update && apt-get install nginx -y
-
-# Команда, яка виконується при запуску контейнера (можна вказати свою)
+# Вказуємо команду, яка виконується при запуску контейнера
 CMD ["nginx", "-g", "daemon off;"]
