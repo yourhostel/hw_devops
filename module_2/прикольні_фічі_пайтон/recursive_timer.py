@@ -9,7 +9,7 @@ def recursive_timer(milliseconds, callback):
         recursive_timer(milliseconds - 1, callback)
 
 
-delay_in_milliseconds = 997  # 5 секунд
+delay_in_milliseconds = 997  # максимальна глибина рекурсії в Python у моїй машині
 
 
 def callback_function():
