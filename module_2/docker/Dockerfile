@@ -12,7 +12,7 @@ RUN chown -R Test /tmp
 USER Test
 
 # Оновлюємо пакети та встановлюємо Nginx
-RUN apt-get update && apt-get install nginx -y && service nginx start
+RUN apt-get update && apt-get install nginx -y
 
 # Команда, яка виконується при запуску контейнера (можна вказати свою)
 CMD ["nginx", "-g", "daemon off;"]
