@@ -16,11 +16,14 @@ print("-------final-------")
 
 from final_attribute import Dog
 
-rayne = Dog(3)
+rayne = Dog(3, "grey")
 
 try:
-    rayne.age = 4
+    rayne.color = "white"  # спроба змінити атрибут color
+    rayne.age = 4  # спроба змінити final атрибут age
 except AttributeError as error:
     print(f"Помилка: {error}")
 
-print(rayne.age)
+print(f"age={rayne.age}")
+print(f"dir(rayne) -> {dir(rayne)}")
+print(f"vars(rayne) -> {vars(rayne)}")
