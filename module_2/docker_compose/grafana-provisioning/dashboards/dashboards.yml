@@ -1,4 +1,4 @@
-apanels:
+panels:
   - type: "graph"
     title: "Приклад графіка"
     datasource: "Prometheus"
@@ -6,7 +6,7 @@ apanels:
       - expr: "your_metric{job=\"node\"}"
         legendFormat: "{{job}}"
   - type: "stat"
-    title: "Ключові показники"
+    title: "Ключевые показатели"
     datasource: "Prometheus"
     targets:
       - expr: "avg(your_metric)"
@@ -27,5 +27,6 @@ sharedCrosshair: true
 style: "dark"
 links:
   - type: "link"
-    title: "Документація"
+    title: "Документация"
     url: "https://example.com/docs"
+
