@@ -1,50 +1,67 @@
 {
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
   "panels": [
     {
-      "type": "graph",
-      "title": "Приклад графіка",
       "datasource": "Prometheus",
+      "gridPos": { "h": 9, "w": 12, "x": 0, "y": 0 },
+      "id": 2,
       "targets": [
         {
-          "expr": "your_metric{job=\"node\"}",
-          "legendFormat": "{{job}}"
-        }
-      ]
-    },
-    {
-      "type": "stat",
-      "title": "Загальний стан системи",
-      "datasource": "Prometheus",
-      "targets": [
-        {
-          "expr": "avg(overall_system_health)"
+          "expr": "100 - (avg by (instance) (irate(node_cpu_seconds_total{job=\"node\",mode=\"idle\"}[5m])) * 100)",
+          "legendFormat": "CPU Usage",
+          "refId": "A"
         }
       ],
-      "options": {
-        "colorMode": "background",
-        "graphMode": "area",
-        "justifyMode": "auto"
-      }
+      "title": "CPU Usage",
+      "type": "graph"
     },
     {
-      "type": "table",
-      "title": "Топ проблемних вузлів",
       "datasource": "Prometheus",
+      "gridPos": { "h": 9, "w": 12, "x": 12, "y": 0 },
+      "id": 4,
       "targets": [
         {
-          "expr": "topk(5, node_load5)"
+          "expr": "node_memory_MemAvailable_bytes{job=\"node\"} / 1024 / 1024",
+          "legendFormat": "Available Memory MB",
+          "refId": "B"
         }
       ],
-      "options": {
-        "showHeader": true
-      }
+      "title": "Available Memory",
+      "type": "graph"
+    },
+    {
+      "datasource": "Prometheus",
+      "gridPos": { "h": 9, "w": 24, "x": 0, "y": 9 },
+      "id": 6,
+      "targets": [
+        {
+          "expr": "node_load1{job=\"node\"}",
+          "legendFormat": "1m Load",
+          "refId": "C"
+        }
+      ],
+      "title": "Load Average",
+      "type": "graph"
     }
   ],
   "title": "Удосконалений дашборд",
-  "editable": true,
-  "hideControls": false,
-  "sharedCrosshair": true,
-  "style": "dark",
-  "links": []
+  "schemaVersion": 16,
+  "version": 0
 }
 
