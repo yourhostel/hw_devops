@@ -1,0 +1,22 @@
+{
+  "panels": [
+    {
+      "type": "graph",
+      "title": "Приклад графіка",
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "your_metric{job=\"node\"}",
+          "legendFormat": "{{job}}"
+        }
+      ]
+    }
+  ],
+  "title": "Простой графік",
+  "editable": true,
+  "hideControls": false,
+  "sharedCrosshair": true,
+  "rows": [],
+  "style": "dark",
+  "links": []
+}
