@@ -10,7 +10,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* # очищення кешу APT
 
 # EXPOSE вказує, що контейнер слухає порт 80
-EXPOSE 80
+EXPOSE 81
 
 # Запускаємо nginx на передньому плані
 CMD ["nginx", "-g", "daemon off;"]
