@@ -6,9 +6,42 @@ class MathOperations:
         else:
             return n * MathOperations.factorial(n - 1)
 
+    @staticmethod
+    def fibonacci(n):
+        """Повертає n число Фібоначчі"""
+        if n <= 0:
+            return 0
+        elif n == 1:
+            return 1
+        else:
+            a, b = 0, 1
+            for _ in range(2, n + 1):
+                a, b = b, a + b
+            return b
+
+    @staticmethod
+    def print_names(names):
+        """Takes a space-delimited string or an iterable"""
+        try:
+            for name in names.split():  # string case
+                print(name)
+        except AttributeError:  # iterable case
+            for name in names:
+                print(name)
+
 
 # Виклик статичного методу без створення екземпляра класу
 print(MathOperations.factorial(5))
+
+n = 10  # Обчислити перші 10 чисел Фібоначчі
+for i in range(n):
+    print(MathOperations.fibonacci(i))
+
+print("-----")
+print(MathOperations.print_names("Takes a space-delimited string or an iterable"))
+print("-----")
+print(MathOperations.print_names(["Takes", "a", "space-delimited", "string", "or", "an", "iterable"]))
+print("-----")
 
 
 class UnitConverter:
