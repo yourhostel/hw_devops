@@ -8,7 +8,7 @@ try:
     container = client.containers.run(
         "my-custom-nginx",  # Використовуйте ім'я вашого нового образу
         detach=True,  # Запуск в режимі фону
-        ports={"80/tcp": 8080},  # Відображення портів
+        ports={"80/tcp": 8081},  # Відображення портів
     )
     print(f"Контейнер Nginx запущено, ID: {container.id}")
     print("Доступ до Nginx можна отримати за адресою http://localhost:8080")

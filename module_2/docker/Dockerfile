@@ -1,5 +1,5 @@
 # Використовуємо базовий образ Ubuntu
-FROM ubuntu:latest AS builder
+FROM ubuntu:20.04
 
 # Встановлюємо необхідні пакети
 RUN apt-get update && \
