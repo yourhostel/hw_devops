@@ -26,4 +26,5 @@ except AttributeError as error:
 
 print(f"age={rayne.age}")
 print(f"dir(rayne) -> {dir(rayne)}")
+print(f"filtered dir() -> {[attr for attr in dir(rayne) if not attr.startswith('__')]}")
 print(f"vars(rayne) -> {vars(rayne)}")

@@ -1,17 +1,12 @@
 # Використовуємо базовий образ Ubuntu
-FROM ubuntu:latest
+FROM ubuntu:latest AS builder
 
 # Встановлюємо необхідні пакети
-RUN apt-get update && apt-get install -y nginx
+RUN apt-get update && \
+    apt-get install -y python3 nginx
 
-# Додаємо користувача Test і створюємо домашній каталог
-RUN useradd -ms /bin/bash Test
-
-# Змінюємо власника деяких директорій (за потреби)
-RUN chown -R Test:Test /var/www/html
-
-# Вказуємо користувача за замовчуванням для контейнера
-USER Test
+# Вказуємо порт, який буде відкритий
+EXPOSE 8080
 
 # Вказуємо команду, яка виконується при запуску контейнера
 CMD ["nginx", "-g", "daemon off;"]

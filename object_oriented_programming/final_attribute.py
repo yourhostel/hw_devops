@@ -15,7 +15,7 @@ class FinalAttribute:
 
 
 class Dog:
-    age = FinalAttribute("'age'")  # Ініціалізація не потрібна
+    age = FinalAttribute("'age'")  # Ініціалізація value не потрібна
 
     def __init__(self, age, color):
         self.age = age  # Установка можлива тільки один раз
