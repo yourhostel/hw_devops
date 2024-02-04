@@ -10,13 +10,41 @@
           "legendFormat": "{{job}}"
         }
       ]
+    },
+    {
+      "type": "stat",
+      "title": "Загальний стан системи",
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "avg(overall_system_health)"
+        }
+      ],
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "auto"
+      }
+    },
+    {
+      "type": "table",
+      "title": "Топ проблемних вузлів",
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "topk(5, node_load5)"
+        }
+      ],
+      "options": {
+        "showHeader": true
+      }
     }
   ],
-  "title": "Простой графік",
+  "title": "Удосконалений дашборд",
   "editable": true,
   "hideControls": false,
   "sharedCrosshair": true,
-  "rows": [],
   "style": "dark",
   "links": []
 }
+
