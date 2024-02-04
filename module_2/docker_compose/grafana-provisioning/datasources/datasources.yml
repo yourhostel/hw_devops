@@ -1,4 +1,4 @@
-# datasources.yaml
+# datasources.yml
 apiVersion: 1
 datasources:
   - name: Prometheus

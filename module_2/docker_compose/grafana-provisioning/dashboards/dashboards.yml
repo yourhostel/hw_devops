@@ -1,32 +1,14 @@
-panels:
-  - type: "graph"
-    title: "Приклад графіка"
-    datasource: "Prometheus"
-    targets:
-      - expr: "your_metric{job=\"node\"}"
-        legendFormat: "{{job}}"
-  - type: "stat"
-    title: "Ключевые показатели"
-    datasource: "Prometheus"
-    targets:
-      - expr: "avg(your_metric)"
-        format: "time_series"
-    options:
-      colorMode: "value"
-      graphMode: "area"
-      justifyMode: "auto"
-      orientation: "horizontal"
-  - type: "logs"
-    title: "Логи"
-    datasource: "Loki"
-    targets:
-      - expr: "{job=\"your_job\"}"
-editable: true
-hideControls: false
-sharedCrosshair: true
-style: "dark"
-links:
-  - type: "link"
-    title: "Документация"
-    url: "https://example.com/docs"
+# dashboards.yml
+apiVersion: 1
+
+providers:
+- name: 'default'
+  orgId: 1
+  folder: ''
+  type: file
+  disableDeletion: false
+  updateIntervalSeconds: 10
+  allowUiUpdates: true
+  options:
+    path: /etc/grafana/provisioning/dashboards # Путь
 
