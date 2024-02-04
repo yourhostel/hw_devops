@@ -1,12 +1,17 @@
 # Використовуємо базовий образ Ubuntu
 FROM ubuntu:20.04
 
+# Вимикаємо запити під час установки пакетів
+ARG DEBIAN_FRONTEND=noninteractive
+
 # Встановлюємо необхідні пакети
 RUN apt-get update && \
-    apt-get install -y python3 nginx
+    apt-get install -y python3 nginx && \
+    rm -rf /var/lib/apt/lists/*
 
-# Вказуємо порт, який буде відкритий
-EXPOSE 8080
+# EXPOSE вказує, що контейнер слухає порт 80
+EXPOSE 80
 
-# Вказуємо команду, яка виконується при запуску контейнера
+# Запускаємо nginx на передньому плані
 CMD ["nginx", "-g", "daemon off;"]
+
