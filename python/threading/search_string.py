@@ -2,24 +2,24 @@ import threading
 
 
 # Функція для пошуку рядка у файлі якщо треба знайти в обох
-# def search_in_file(filename, search_string, found_event):
-#     with open(filename, 'r', encoding='utf-8') as file:  # Відкриваємо файл з вказанням кодування
-#         for line in file:  # Читаємо файл по рядку
-#             if search_string in line:  # Якщо знайдено шуканий рядок
-#                 print(f"Знайдено в {filename}: {line.strip()}")  # Виводимо інформацію про знахідку
-#                 found_event.set()  # Встановлюємо подію, щоб сигналізувати іншим потокам про знахідку
-#                 return  # Виходимо з функції, щоб не шукати далі
+def search_in_file(filename, search_string, found_event):
+    with open(filename, 'r', encoding='utf-8') as file:  # Відкриваємо файл з вказанням кодування
+        for line in file:  # Читаємо файл по рядку
+            if search_string in line:  # Якщо знайдено шуканий рядок
+                print(f"Знайдено в {filename}: {line.strip()}")  # Виводимо інформацію про знахідку
+                found_event.set()  # Встановлюємо подію, щоб сигналізувати іншим потокам про знахідку
+                return  # Виходимо з функції, щоб не шукати далі
 
 # перериваємо обидва потоки за подією знаходження одного
-def search_in_file(filename, search_string, found_event):
-    with open(filename, 'r', encoding='utf-8') as file:
-        for line in file:
-            if found_event.is_set():  # Перевірка, чи не було знайдено рядок в іншому потоці
-                break  # Вихід з циклу, якщо рядок уже знайдено
-            if search_string in line:
-                print(f"Знайдено в {filename}: {line.strip()}")
-                found_event.set()
-                break
+# def search_in_file(filename, search_string, found_event):
+#     with open(filename, 'r', encoding='utf-8') as file:
+#         for line in file:
+#             if found_event.is_set():  # Перевірка, чи не було знайдено рядок в іншому потоці
+#                 break  # Вихід з циклу, якщо рядок уже знайдено
+#             if search_string in line:
+#                 print(f"Знайдено в {filename}: {line.strip()}")
+#                 found_event.set()
+#                 break
 
 
 # Подія для сповіщення між потоками, що рядок знайдено
