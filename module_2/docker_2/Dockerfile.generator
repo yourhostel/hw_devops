@@ -14,6 +14,9 @@ RUN npm install
 # Copy the rest of the application code
 COPY . .
 
+# Make sure start.sh is executable
+RUN chmod +x start.sh
+
 # Change ownership of the application directory to the non-root user 'node'
 RUN chown -R node:node /app
 
@@ -23,5 +26,12 @@ EXPOSE 3000
 # Use the non-root user to run your application
 USER node
 
-# Command to run the Node.js application
-CMD ["node", "index.js"]
+# Specify the command to run the Node.js application using bash or sh
+CMD ["bash", "-c", "./start.sh"]
+# Or if bash is not available
+# CMD ["sh", "-c", "./start.sh"]
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
+  CMD curl --silent --fail http://localhost:3000/healthz || exit 1
+
