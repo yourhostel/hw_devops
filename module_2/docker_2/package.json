@@ -1,0 +1,27 @@
+{
+  "name": "docker_2",
+  "version": "1.0.0",
+  "description": "\"Основи Docker та Node.js додаток для навчання роботі з контейнеризацією та розгортанням.\"",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yourhostel/hw_devops.git#main"
+  },
+  "keywords": [
+    "docker",
+    "node.js",
+    "devops",
+    "containerization",
+    "learning",
+    "education"
+  ],
+  "author": "Serhii Tyshchenko",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yourhostel/hw_devops/issues"
+  },
+  "homepage": "https://github.com/yourhostel/hw_devops/tree/main#readme"
+}
