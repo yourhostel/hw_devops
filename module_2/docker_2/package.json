@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "\"Основи Docker та Node.js додаток для навчання роботі з контейнеризацією та розгортанням.\"",
   "main": "index.js",
+  "type": "module",
   "scripts": {
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -23,5 +25,10 @@
   "bugs": {
     "url": "https://github.com/yourhostel/hw_devops/issues"
   },
-  "homepage": "https://github.com/yourhostel/hw_devops/tree/main#readme"
+  "homepage": "https://github.com/yourhostel/hw_devops/tree/main#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "dotenv": "^8.2.0",
+    "chalk": "^4.1.0"
+  }
 }
