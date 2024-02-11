@@ -1,7 +1,6 @@
 # Main tasks
 ![1 (1).jpg](screenshots%2F1%20%281%29.jpg)
 ![1 (2).jpg](screenshots%2F1%20%282%29.jpg)
-![1 (3).jpg](screenshots%2F1%20%283%29.jpg)
 ![1 (4).jpg](screenshots%2F1%20%284%29.jpg)
 ![1 (5).jpg](screenshots%2F1%20%285%29.jpg)
 ![1 (6).jpg](screenshots%2F1%20%286%29.jpg)
