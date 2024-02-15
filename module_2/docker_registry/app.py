@@ -8,4 +8,4 @@ app.add_url_rule('/uuid', 'uuid', get_uuid)
 app.add_url_rule('/healthz', 'healthz', get_healthz)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080)
+    app.run(host='0.0.0.0', port=8081)
