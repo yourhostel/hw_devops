@@ -7,7 +7,7 @@
 ![registry (5).jpg](screenshots%2Fregistry%20%285%29.jpg)
 ![registry (6).jpg](screenshots%2Fregistry%20%286%29.jpg)
 ![registry (7).jpg](screenshots%2Fregistry%20%287%29.jpg)
-#### Тут ми додаємо внесені зміни до Registry та змінюємо тег з latest на 1.1
+#### Тут ми додаємо внесені зміни до Registry та додаємо тег 1.1
 ![registry (8).jpg](screenshots%2Fregistry%20%288%29.jpg)
 #### Запускаємо образ з Registry і переконуємось що додаток слухає 8081 порт
 ![registry (9).jpg](screenshots%2Fregistry%20%289%29.jpg)
