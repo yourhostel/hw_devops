@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title> homework6-async-await </title>
+  <style>
+    html, pre {
+      font-family: sans-serif;
+    }
+
+    body {
+      width: 500px;
+      margin: 0 auto;
+      background-color: #ccc;
+    }
+
+    pre {
+      line-height: 1.5;
+      border-radius: 0.3rem;
+      padding: 1rem;
+      background-color: white;
+    }
+  </style>
+</head>
+<body>
+<h1>Я тебе знайду по IP</h1>
+<form>
+  <button type="button" id="btn">Знайти по IP</button>
+  <label class="label" for="btn"></label>
+</form>
+<p class="scan">перший варіант</p>
+<pre class="pre1"></pre>
+<p class="scan">другий варіант</p>
+<pre class="pre2"></pre>
+<script>
+  /**
+   * Асинхронність це виконання програми, яка чекає на результат обчислення іншої програми, події, таймера чи ін. затримки,
+   * поза основним потоком
+   **/
+  const getIp = document.querySelector( '#btn' ),
+        label = document.querySelector( '.label' ), //для виводу ip поруч із кнопкою
+        display1 = document.querySelector( '.pre1' ), //для першого варіанта за допомогою класу inf
+        display2 = document.querySelector( '.pre2' ); //для другого варіанта за допомогою циклу for
+
+class inf {
+  constructor( obj ) {
+    const { timezone, country, regionName, city } = obj
+    this.timezone = "timezone: " + timezone
+    this.country = "country: " + country
+    this.regionName = "regionName: " + regionName
+    this.city = "city: " + city
+  }
+
+  return = () => [ this.timezone, this.country, this.regionName, this.city ]
+}
+
+  getIp.addEventListener('click', async () => {
+      //очищаємо обидва дисплеї
+    display1.innerText = "";
+    display2.innerText = "";
+    try {
+        let response = await fetch('https://api.ipify.org/?format=json'),
+            result = await response.json(),
+            ipResponse = await fetch(`http://ip-api.com/json/${result.ip}`),
+            ipResult = await ipResponse.json();
+
+    label.innerHTML = "&nbsp;" + result.ip; //показуємо ip поруч із кнопкою
+
+//перший варіант
+    new inf(ipResult).return()
+            .map(e => display1.insertAdjacentHTML('beforeend', `<p>${e}</p>`));
+//другий варіант
+    for await ( const key of Object.keys( ipResult ) ) {
+      if (key.match(/^timezone|country|regionName|city|as\+$/)) {
+        // if ( key === 'timezone'|| key ==='country'|| key ==='regionName'|| key ==='city' || key ==='as' ){  // третій варіант )
+        display2.insertAdjacentHTML('beforeend', `<p>${key}: ${ipResult[key]}</p>`)
+      }
+    }
+  } catch ( err ){
+      console.log( err )
+    }
+  });
+</script>
+</body>
+</html>
