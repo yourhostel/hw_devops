@@ -12,6 +12,7 @@ servers = ';\n'.join([f"server {ip}:80" for ip in ip_addresses]) + ';'
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 template_path = os.path.join(script_dir, 'default.conf.template')
+config_path = os.path.join(script_dir, 'default.conf') # Використовуємо абсолютний шлях для default.conf
 
 # Читаємо шаблон конфігурації
 with open(template_path, 'r') as file:
@@ -20,6 +21,6 @@ with open(template_path, 'r') as file:
 # Замінюємо плейсхолдер на рядок серверів
 config = re.sub(r'{{app_servers}}', servers, template)
 
-# Записуємо кінцевий конфіг у default.conf
-with open('default.conf', 'w') as file:
+# Записуємо кінцевий конфіг у default.conf, використовуючи абсолютний шлях
+with open(config_path, 'w') as file:
     file.write(config)
