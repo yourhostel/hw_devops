@@ -11,7 +11,7 @@ for IP in $APP_IPS; do
 done
 
 # Заміна плейсхолдера у шаблоні конфігурації Nginx
-sed "s|{{app_servers}}|$SERVERS|" /path/to/nginx/default.conf.template > /path/to/nginx/default.conf
+sed "s|{{app_servers}}|$SERVERS|" ./nginx/default.conf.template > ./nginx/default.conf
 
 # Перезапуск Nginx для нової конфігурації
 docker-compose restart nginx
