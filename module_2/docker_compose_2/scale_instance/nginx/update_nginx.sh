@@ -4,4 +4,4 @@
 ./nginx/generate_conf.py
 
 # Перезапускаємо Nginx для застосування нової конфігурації
-docker-compose restart nginx
+docker compose restart nginx
