@@ -1,0 +1,16 @@
+version: '2.24.6'
+services:
+  writer:
+    image: python:3.8-slim
+    volumes:
+      - shared_volume:/app
+    command: >
+      sh -c "echo 'Hello from writer service' > /app/shared_message.txt"
+  reader:
+    image: ubuntu:latest
+    volumes:
+      - shared_volume:/app
+    command: >
+      sh -c "cat /app/shared_message.txt; sleep 3600"
+volumes:
+  shared_volume:
