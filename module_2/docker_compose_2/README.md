@@ -15,3 +15,6 @@
  - оновлює конфігурацію NGINX відповідно до IP-адрес запущених контейнерів програми і перезапускає NGINX.
  - NGINX працює як балансувальник навантаження у цьому випадку. Він розподіляє запити між контейнерами.
 ![scale_instance_4.jpg](screenshots%2Fscale_instance_4.jpg)
+# Volume to share
+- Після запуску Docker Compose, сервіс writer створює файл shared_message.txt у загальному томі, а сервіс reader читає та виводить його вміст у консоль.
+- ![volume_to_share.jpg](screenshots%2Fvolume_to_share.jpg)
