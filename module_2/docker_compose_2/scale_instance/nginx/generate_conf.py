@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import os
 import re
 import subprocess
 
@@ -9,8 +10,11 @@ ip_addresses = result.stdout.strip().split('\n')
 # Формуємо рядок серверів для Nginx
 servers = ';\n'.join([f"server {ip}:80" for ip in ip_addresses]) + ';'
 
+script_dir = os.path.dirname(os.path.abspath(__file__))
+template_path = os.path.join(script_dir, 'default.conf.template')
+
 # Читаємо шаблон конфігурації
-with open('default.conf.template', 'r') as file:
+with open(template_path, 'r') as file:
     template = file.read()
 
 # Замінюємо плейсхолдер на рядок серверів
