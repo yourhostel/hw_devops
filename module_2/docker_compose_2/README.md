@@ -7,3 +7,11 @@
 ![persistent_docker_registry_1.jpg](screenshots%2Fpersistent_docker_registry_1.jpg)
 ![persistent_docker_registry_2.jpg](screenshots%2Fpersistent_docker_registry_2.jpg)
 ![persistent_docker_registry_3.jpg](screenshots%2Fpersistent_docker_registry_3.jpg)
+# Scale instance 1 - 3
+![scale_instance_1.jpg](screenshots%2Fscale_instance_1.jpg)
+![scale_instance_2.jpg](screenshots%2Fscale_instance_2.jpg)
+![scale_instance_3.jpg](screenshots%2Fscale_instance_3.jpg)
+####  Cкрипт update_nginx.sh 
+ - оновлює конфігурацію NGINX відповідно до IP-адрес запущених контейнерів програми і перезапускає NGINX.
+ - NGINX працює як балансувальник навантаження у цьому випадку. Він розподіляє запити між контейнерами.
+![scale_instance_4.jpg](screenshots%2Fscale_instance_4.jpg)
