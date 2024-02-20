@@ -1,0 +1,9 @@
+upstream app_servers {
+    {{app_servers}}
+}
+server {
+    listen 80;
+    location / {
+        proxy_pass http://app_servers;
+    }
+}

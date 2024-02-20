@@ -1,0 +1,14 @@
+version: '2.24.6'
+services:
+  app:
+    build: .
+    depends_on:
+      - nginx
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - "80:80"
+    depends_on:
+      - app
