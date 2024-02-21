@@ -23,3 +23,14 @@
 - (ім'я бази даних drupal, користувач drupal, пароль drupalpassword).
 ![drupal_1.jpg](screenshots%2Fdrupal_1.jpg)
 ![drupal_2.jpg](screenshots%2Fdrupal_2.jpg)
+# elk-stack
+![elk-stack (1).jpg](screenshots%2Felk-stack%20%281%29.jpg)
+![elk-stack (2).jpg](screenshots%2Felk-stack%20%282%29.jpg)
+![elk-stack (3).jpg](screenshots%2Felk-stack%20%283%29.jpg)
+![elk-stack (4).jpg](screenshots%2Felk-stack%20%284%29.jpg)
+![elk-stack (5).jpg](screenshots%2Felk-stack%20%285%29.jpg)
+![elk-stack (6).jpg](screenshots%2Felk-stack%20%286%29.jpg)
+![elk-stack (7).jpg](screenshots%2Felk-stack%20%287%29.jpg)
+![elk-stack (8).jpg](screenshots%2Felk-stack%20%288%29.jpg)
+![elk-stack (9).jpg](screenshots%2Felk-stack%20%289%29.jpg)
+![elk-stack (10).jpg](screenshots%2Felk-stack%20%2810%29.jpg)
