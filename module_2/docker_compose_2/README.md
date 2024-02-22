@@ -34,3 +34,11 @@
 ![elk-stack (8).jpg](screenshots%2Felk-stack%20%288%29.jpg)
 ![elk-stack (9).jpg](screenshots%2Felk-stack%20%289%29.jpg)
 ![elk-stack (10).jpg](screenshots%2Felk-stack%20%2810%29.jpg)
+# Encrypt certbot
+- Налаштовано DNS для 13.53.82.220 -> devops.tysser.com
+- В Docker-compose запущено додаток "Сапер" з репозиторію [homework24_optional_minesweeper](https://gitlab.com/yourhostel.ua/homework-js/-/tree/main/homework24_optional_minesweeper)
+- налаштовані ssl в certbot
+- налаштовані nginx для хост машини та контейнера
+- доступ до сторінки з грою [https://devops.tysser.com](https://devops.tysser.com)
+![tysser_1.jpg](screenshots%2Ftysser_1.jpg)
+![tysser_2.jpg](screenshots%2Ftysser_2.jpg)
