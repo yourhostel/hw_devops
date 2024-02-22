@@ -193,7 +193,7 @@ body{
 }
 
 .black{
-    background-color: rgba(0, 0, 0, .5);
+    background-color: rgba(0, 0, 0, 1);
     box-shadow: inset 3px 3px 3px #FFF;
     position: relative;
     /*color: transparent;*/
