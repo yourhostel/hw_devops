@@ -1,0 +1,249 @@
+body{
+    width: 100vw;
+    height: 100vh;
+    background: url('../images/winter.jpg') no-repeat fixed;
+    background-size: cover;
+}
+
+.container{
+    display: flex;
+    flex-wrap: wrap;
+    position: relative;
+    justify-content: center;
+}
+
+.caption{
+    margin-top: 20px;
+    margin-bottom: 80px;
+    text-align: center;
+    font-size: 30px;
+    width: 100vw;
+    box-shadow: inset 2px 2px 5px ;
+    background-color: rgba(255, 255, 255, .5);
+    padding: 30px;
+    text-shadow: 3px 5px 3px #FFF;
+}
+
+.wrapper{
+    box-shadow: inset 1px 1px 3px black;
+    display: grid;
+    grid-template-areas:
+"item1"
+"item2";
+    justify-items: center;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, .5);
+    padding-bottom: 8px;
+}
+
+.boxPanel{
+    display: grid;
+    grid-template: 1fr / 1fr 1fr 1fr 1fr;
+    grid-area: item1;
+    width: 700px;
+    margin: 5px;
+    padding: 5px;
+    box-shadow: inset 2px 2px 5px black;
+    border-radius: 3px;
+    background-color: #FFF;
+}
+
+[panel|='1']{
+    font-size: 30px;
+}
+
+[panel|='2']{
+    font-size: 30px;
+}
+
+[panel|='3']{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#viewCellOpen,
+#viewMines{
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 5px;
+    width: 100%;
+}
+
+[panel|='4']{
+    position: relative;
+}
+
+#viewUserFlag{
+    left: 5px;
+}
+
+#viewChoiceField{
+    left: 50px;
+}
+
+#viewChoiceMines {
+    left: 100px;
+}
+
+#viewChoiceField,
+#viewChoiceMines{
+    top: 8px;
+    width: 45px;
+    text-align: center;
+}
+
+.field,
+.mines{
+    position: absolute;
+    left: -3px;
+    top: 25px;
+    padding: 2px;
+    border-radius: 3px;
+    width: 44px;
+}
+
+.mines > li,
+.field > li{
+    box-shadow: inset 2px 2px 5px black;
+    background-color: #FFF;
+    border-radius: 3px;
+    margin: 1px;
+    padding: 2px;
+    width: 45px;
+}
+
+.mines > li:hover,
+.field > li:hover{
+    box-shadow: inset 2px 2px 3px black;
+}
+
+.mines > li:active,
+.field > li:active{
+    box-shadow: inset 1px 1px 1px black;
+    color: #CD2C24;
+}
+
+#viewUserFlag,
+#viewChoiceField,
+#viewChoiceMines{
+    position: absolute;
+    padding: 4px;
+    justify-content: center;
+    align-items: center;
+    margin: 2px;
+}
+
+[panel|='1'],
+#viewChoiceField,
+#viewChoiceMines{
+   border-radius: 3px;
+   box-shadow: inset 2px 2px 5px black;
+   background: #FFFFFF;
+   cursor: pointer;
+}
+
+[panel|='1']:hover,
+#viewChoiceField:hover,
+#viewChoiceMines:hover{
+    box-shadow: inset 2px 2px 3px black;
+}
+
+[panel|='1']:active,
+#viewChoiceField:active,
+#viewChoiceMines:active{
+    box-shadow: inset 1px 1px 1px black;
+    color: #CD2C24;
+}
+
+.table{
+    display: grid;
+    gap: 2px 2px ;
+    padding: 5px;
+    grid-area: item2;
+    border:1px solid #000;
+    border-radius: 5px;
+    margin: 5px;
+    box-shadow: inset 1px 1px 3px black;
+    background-color: #FFF;
+}
+
+[panel|='1'],
+[panel|='2'],
+[panel|='3'],
+[panel|='4']{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    margin: 5px;
+    width: 160px;
+}
+
+.td{
+    display: flex;
+    justify-content: center;
+    box-shadow: inset 1px 1px 2px black;
+    align-items: center;
+    border:1px solid #000;
+    font-size: 18px;
+    border-radius: 2px;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+}
+
+.black{
+    background-color: rgba(0, 0, 0, .5);
+    box-shadow: inset 3px 3px 3px #FFF;
+    position: relative;
+    /*color: transparent;*/
+}
+
+[mines|='1']{
+    background-image: url("../images/pirate_skull.svg") ;
+    background-size: calc(100% - 8px);
+    background-repeat: no-repeat;
+    background-position-x: 50%;
+    background-position-y: 50%;
+}
+
+.won{
+    position: absolute;
+    top: 120px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 300px;
+    height: 60px;
+    background-color: rgba(255, 255, 255, .7);
+    border-radius: 5px;
+    box-shadow: inset 1px 1px 3px black;
+}
+
+.won>p{
+    position: relative;
+    top: -3px;
+    left: 3px;
+    font-size: 40px;
+    animation-duration: 1s;
+    animation-name: won;
+}
+
+@keyframes won {
+    from {
+        top: -100px;
+    }
+
+    to {
+        top: 0;
+    }
+}
+
+/*http://prison.kiev.ua/homework24_optional_minesweeper/*/
+
+
+
+
+
+
