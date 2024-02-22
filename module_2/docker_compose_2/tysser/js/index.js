@@ -168,64 +168,61 @@ q.selector(mines, false)
 q.triggerZero()
 
 function timer() {
+          // елемент для секунд
     const se = document.getElementById("se"),
+          // елемент для хвилин
           mi = document.getElementById("mi"),
+          // елемент для годин
           ho = document.getElementById("ho");
-    let seconds = 0, minutes = 0, hours = 0;
-
-    function formatTime(unit) {
-        return unit.toString().padStart(2, '0');
-    }
+      let seconds = 0, minutes = 0, hours = 0;
+          // Ідентифікатор для можливості зупинки таймера
+      let idTimeout;
 
     function secPlus() {
-        let idTimeout = setTimeout(() => {
-            if (!startFlag) {
-                // Якщо таймер активний, продовжуємо відлік
-                seconds++;
-                if (seconds === 60) {
-                    minutes++;
-                    seconds = 0;
-                }
-                if (minutes === 60) {
-                    hours++;
-                    minutes = 0;
-                }
+           // якщо true, зупиняємо таймер
+        if (startFlag) { // Если true, останавливаем таймер
+            // очищуємо localStorage, видаляємо збережений час
+            localStorage.removeItem("timer");
+            // Записуємо поточний час таймера перед скиданням
+            localStorage.setItem("timer", `${ho.textContent}:${mi.textContent}:${se.textContent}`);
+            // Скидуємо значення таймера
+            [seconds, minutes, hours] = [0, 0, 0];
+            // Оновлюємо відображення таймера
+            updateDisplay();
+            // Зупиняємо таймер
+            clearTimeout(idTimeout);
+            // Виходимо з функції, щоб не продовжувати відлік
+            return;
+        }
 
-                se.textContent = formatTime(seconds);
-                mi.textContent = `:${formatTime(minutes)}:`;
-                ho.textContent = formatTime(hours);
-
-                secPlus();
-            } else {
-                // Якщо таймер зупинено, зберігаємо поточний час
-                localStorage.setItem("timer", `${formatTime(hours)}:${formatTime(minutes)}:${formatTime(seconds)}`);
-                clearTimeout(idTimeout);
-            }
-        }, 1000);
+        // Логіка таймера, якщо startFlag false
+        seconds++;
+        if (seconds === 60) { seconds = 0; minutes++; }
+        if (minutes === 60) { minutes = 0; hours++; }
+        // Оновлюємо відображення таймера
+        updateDisplay();
+        // Плануємо наступний виклик
+        idTimeout = setTimeout(secPlus, 1000);
     }
 
-    // Завантаження та старт таймера
-    let savedTime = localStorage.getItem("timer");
-    if (savedTime) {
-        let parts = savedTime.split(':');
-        hours = parseInt(parts[0], 10);
-        minutes = parseInt(parts[1], 10);
-        seconds = parseInt(parts[2], 10);
-        // Оновлення дисплея таймера під час старту
-        ho.textContent = formatTime(hours);
-        mi.textContent = `:${formatTime(minutes)}:`;
-        se.textContent = formatTime(seconds);
+    // Функція для оновлення відображення
+    function updateDisplay() {
+        se.textContent = String(seconds).padStart(2, '0');
+        mi.textContent = `:${String(minutes).padStart(2, '0')}:`;
+        ho.textContent = String(hours).padStart(2, '0');
     }
 
-    secPlus();
+    secPlus(); // Запуск таймера
 }
+
+timer();
 
 // Повертає елемент матриці
 function e(i, j) {
     return document.querySelector(`.table div[data-ij="${i}.${j}"]`);
 }
 
-// рандомайзер з mozilla.org
+// Рандомайзер
 function getRandomInt(max, min) {
     min = Math.ceil(min);
     max = Math.floor(max);
