@@ -179,8 +179,8 @@ function timer() {
       let idTimeout;
 
     function secPlus() {
-           // якщо true, зупиняємо таймер
-        if (startFlag) { // Если true, останавливаем таймер
+        // якщо true, зупиняємо таймер
+        if (startFlag) {
             // очищуємо localStorage, видаляємо збережений час
             localStorage.removeItem("timer");
             // Записуємо поточний час таймера перед скиданням
