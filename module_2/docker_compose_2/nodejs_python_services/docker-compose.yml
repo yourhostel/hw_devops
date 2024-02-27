@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - nodejs-app
+      - python-app
+
+  nodejs-app:
+    build:
+      context: ./nodejs-app
+      dockerfile: Dockerfile
+    expose:
+      - "3000"
+
+  python-app:
+    build:
+      context: ./python-app
+      dockerfile: Dockerfile
+    expose:
+      - "5000"
