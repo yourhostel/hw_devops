@@ -1,0 +1,16 @@
+FROM openjdk:20-jdk
+
+# Tools
+RUN apt-get update && \
+    apt-get install -y git && \
+    rm -rf /var/lib/apt/lists/*
+
+ARG user=jenkins
+ARG group=jenkins
+ARG uid=1000
+ARG gid=1000
+RUN groupadd -g ${gid} ${group} \
+    && useradd -d "/home/${user}" -u ${uid} -g ${gid} -m -s /bin/bash ${user}
+
+USER jenkins
+WORKDIR /home/jenkins
