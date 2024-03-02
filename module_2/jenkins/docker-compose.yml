@@ -3,7 +3,7 @@ services:
   jenkins-master:
     build:
       context: .
-      dockerfile: Dockerfile.jenkins-master
+      dockerfile: Dockerfile.master
     ports:
       - "8080:8080"
       - "50000:50000"
@@ -15,7 +15,7 @@ services:
   jenkins-agent:
     build:
       context: .
-      dockerfile: Dockerfile.jenkins-agent
+      dockerfile: Dockerfile.agent
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
