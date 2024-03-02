@@ -1,0 +1,19 @@
+FROM eclipse-temurin:21-jdk
+
+# Tools
+RUN apt-get update && \
+    apt-get install -y git curl && \
+    rm -rf /var/lib/apt/lists/*
+
+# Jenkins
+RUN curl -L https://get.jenkins.io/war-stable/2.426.1/jenkins.war -o /opt/jenkins.war
+
+RUN chmod 644 /opt/jenkins.war
+
+ENV JENKINS_HOME /var/jenkins_home
+VOLUME /var/jenkins_home
+
+EXPOSE 8080 50000
+
+# Run Jenkins
+CMD ["java", "-jar", "/opt/jenkins.war"]
