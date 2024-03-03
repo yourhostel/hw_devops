@@ -15,6 +15,9 @@ RUN chmod 644 /opt/jenkins.war
 ENV JENKINS_HOME /var/jenkins_home
 VOLUME /var/jenkins_home
 
+# Скидаємо DEBIAN_FRONTEND
+ENV DEBIAN_FRONTEND=""
+
 EXPOSE 8080 50000
 
 # Run Jenkins
