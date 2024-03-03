@@ -16,6 +16,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.agent
+    environment:
+      - JENKINS_SECRET
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:

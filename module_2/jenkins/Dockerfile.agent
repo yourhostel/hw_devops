@@ -1,18 +1,29 @@
 FROM ubuntu:20.04
 
+# Встановлюємо змінну оточення для запобігання інтерактивному режиму під час встановлення пакетів
 ENV DEBIAN_FRONTEND noninteractive
 
-# Tools
+# Встановлюємо необхідні інструменти
 RUN apt-get update && \
     apt-get install -y openjdk-21-jdk git curl && \
-    rm -rf /var/lib/apt/lists/*
+    # Очищаємо кеш apt для зменшення розміру образу
+    rm -rf /var/lib/apt/lists/* && \
+    echo "Packages installed successfully"
 
+# Створюємо користувача jenkins
 ARG user=jenkins
 ARG group=jenkins
 ARG uid=1000
 ARG gid=1000
-RUN groupadd -g ${gid} ${group} \
-    && useradd -d "/home/${user}" -u ${uid} -g ${gid} -m -s /bin/bash ${user}
+RUN groupadd -g ${gid} ${group} && \
+    useradd -d "/home/${user}" -u ${uid} -g ${gid} -m -s /bin/bash ${user} && \
+    echo "User jenkins created successfully"
+
+# Скидаємо DEBIAN_FRONTEND
+ENV DEBIAN_FRONTEND=""
 
 USER jenkins
 WORKDIR /home/jenkins
+
+# Запускаємо агента Jenkins, який залишається активним
+CMD ["sh", "-c", "curl -sO http://jenkins-master:8080/jnlpJars/agent.jar && java -jar agent.jar -jnlpUrl http://jenkins-master:8080/computer/jenkins-agent/jenkins-agent.jnlp -secret ${JENKINS_SECRET} -workDir '/home/jenkins'"]
