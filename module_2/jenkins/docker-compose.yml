@@ -9,8 +9,9 @@ services:
       - "50000:50000"
     volumes:
       - jenkins-data:/var/jenkins_home
-      - C:/Users/dated2/.ssh/id_rsa:/var/jenkins_home/.ssh/id_rsa:ro
-      - C:/Users/dated2/.ssh/known_hosts:/var/jenkins_home/.ssh/known_hosts:ro
+      - /home/tysser/.ssh/github:/var/jenkins_home/.ssh/id_rsa:ro  # Use the GitHub SSH key for Ubuntu
+      # - C:/Users/dated2/.ssh/id_rsa:/var/jenkins_home/.ssh/id_rsa:ro  # Windows path for SSH key
+      # - C:/Users/dated2/.ssh/known_hosts:/var/jenkins_home/.ssh/known_hosts:ro  # Windows path for known_hosts (commented out)
     networks:
       - jenkins
 
@@ -24,8 +25,9 @@ services:
       - JENKINS_SECRET
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - C:/Users/dated2/.ssh/id_rsa:/var/jenkins_home/.ssh/id_rsa:ro
-      - C:/Users/dated2/.ssh/known_hosts:/var/jenkins_home/.ssh/known_hosts:ro
+      - /home/tysser/.ssh/github:/var/jenkins_home/.ssh/id_rsa:ro  # Use the GitHub SSH key for Ubuntu
+      # - C:/Users/dated2/.ssh/id_rsa:/var/jenkins_home/.ssh/id_rsa:ro  # Windows path for SSH key
+      # - C:/Users/dated2/.ssh/known_hosts:/var/jenkins_home/.ssh/known_hosts:ro  # Windows path for known_hosts (commented out)
     networks:
       - jenkins
 
@@ -34,3 +36,4 @@ networks:
 
 volumes:
   jenkins-data:
+

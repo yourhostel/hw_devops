@@ -26,4 +26,4 @@ USER jenkins
 WORKDIR /home/jenkins
 
 # Запускаємо агента Jenkins, який залишається активним
-CMD ["sh", "-c", "curl -sO http://jenkins-master:8080/jnlpJars/agent.jar && java -jar agent.jar -webSocket -url http://jenkins-master:8080/ -secret ${JENKINS_SECRET} -name jenkins-agent -workDir '/home/jenkins'"]
+CMD ["sh", "-c", "curl -sO http://jenkins-master:8080/jnlpJars/agent.jar && java -jar agent.jar -url http://jenkins-master:8080 -name jenkins-agent -secret ${JENKINS_SECRET} -workDir '/home/jenkins'"
