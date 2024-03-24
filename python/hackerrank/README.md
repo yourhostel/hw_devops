@@ -1,0 +1,1 @@
+ - [fibonacci_map_and_lambda.py](https://www.hackerrank.com/challenges/map-and-lambda-expression) -> [solution]()
