@@ -1,3 +1,3 @@
  - [fibonacci_map_and_lambda.py](https://www.hackerrank.com/challenges/map-and-lambda-expression) -> [solution](https://github.com/yourhostel/hw_devops/blob/main/python/hackerrank/%20fibonacci_map_and_lambda.py)
- - [fibonacci_map_and_lambda.py](https://www.hackerrank.com/challenges/validate-list-of-email-address-with-filter) -> [solution](https://github.com/yourhostel/hw_devops/blob/main/python/hackerrank/email_validation.py)
+ - [Validating Email Addresses With a Filter](https://www.hackerrank.com/challenges/validate-list-of-email-address-with-filter) -> [solution](https://github.com/yourhostel/hw_devops/blob/main/python/hackerrank/email_validation.py)
  
