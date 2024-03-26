@@ -2,3 +2,4 @@
  - [Validating Email Addresses With a Filter](https://www.hackerrank.com/challenges/validate-list-of-email-address-with-filter) -> [solution](https://github.com/yourhostel/hw_devops/blob/main/python/hackerrank/email_validation.py)
  - [Reduce Function](https://www.hackerrank.com/challenges/reduce-function) -> [solution](https://github.com/yourhostel/hw_devops/blob/main/python/hackerrank/reduce_function.py)
  - [Forming Magic Square](https://www.hackerrank.com/challenges/magic-square-forming) -> [solution](https://github.com/yourhostel/hw_devops/blob/main/python/hackerrank/magic-square-forming.py)
+ - [Any or All](https://www.hackerrank.com/challenges/any-or-all) -> [solution](https://github.com/yourhostel/hw_devops/blob/main/python/hackerrank/any_or_all.py) 
