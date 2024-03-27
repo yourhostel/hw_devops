@@ -1,0 +1,72 @@
+$creating_user = <<-SCRIPT
+  echo "Creating user: ${1}"
+  sudo adduser --disabled-password --gecos "" "${1}"
+
+  sudo mkdir -p "/home/${1}/.ssh"
+  sudo cp /home/vagrant/.ssh/authorized_keys "/home/${1}/.ssh/authorized_keys"
+  sudo chown -R "${1}:${1}" "/home/${1}/.ssh"
+  sudo echo "${1} ALL=(ALL) NOPASSWD:ALL" | sudo tee -a /etc/sudoers
+  sudo hostnamectl set-hostname "jenkins-${1}"
+
+  if [ "${1}" = "master" ]; then
+    sudo docker exec jenkins bash -c "\
+      mkdir -p /var/jenkins_home/.ssh && \
+      touch /var/jenkins_home/.ssh/known_hosts && \
+      ssh-keyscan -H 192.168.90.11 >> /var/jenkins_home/.ssh/known_hosts && \
+      chown jenkins:jenkins /var/jenkins_home/.ssh/known_hosts && \
+      chmod 644 /var/jenkins_home/.ssh/known_hosts"
+    sudo usermod -aG docker "${1}"
+  fi
+SCRIPT
+
+$install_java = <<-SCRIPT
+  echo "Updating and installing OpenJDK 17"
+  sudo apt-get update
+  sudo apt-get install -y openjdk-17-jdk
+  # Setting JAVA_HOME environment variable
+  echo "export JAVA_HOME=$(readlink -f /usr/bin/java | sed 's:/bin/java::')" >> ~/.bashrc
+  echo "export PATH=\$JAVA_HOME/bin:\$PATH" >> ~/.bashrc
+SCRIPT
+
+Vagrant.configure("2") do |config|
+  # Definition of VM for Jenkins Master
+  config.vm.define "jenkins_master" do |jenkins_master|
+    jenkins_master.vm.box = "bento/ubuntu-20.04"
+    jenkins_master.vm.network "private_network", ip: "192.168.90.10"
+    jenkins_master.vm.provider "virtualbox" do |vb|
+      vb.memory = "4096"
+    end
+    jenkins_master.vm.provision "shell", inline: <<-SHELL
+      # Updating and installing dependencies
+      sudo apt-get update && sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common
+      curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+      sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+      # Installing Docker Engine and Docker Compose
+      sudo apt-get update && sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+      # Installing Jenkins on Docker
+      sudo docker run -d --name jenkins --restart=unless-stopped -p 80:8080 -p 50000:50000 jenkins/jenkins:lts
+    SHELL
+    # Creating a user master
+    jenkins_master.vm.provision "shell", inline: $creating_user, args: ["master"]
+  end
+
+  # Definition VM for Jenkins Worker
+  config.vm.define "jenkins_worker" do |jenkins_worker|
+    jenkins_worker.vm.box = "bento/ubuntu-20.04"
+    jenkins_worker.vm.network "private_network", ip: "192.168.90.11"
+    jenkins_worker.vm.provider "virtualbox" do |vb|
+      vb.memory = "4096"
+    end
+    # Java installation
+    jenkins_worker.vm.provision "shell", inline: $install_java
+    # Creating a user worker
+    jenkins_worker.vm.provision "shell", inline: $creating_user, args: ["worker"]
+  end
+end
+
+
+
+
+
+
+
