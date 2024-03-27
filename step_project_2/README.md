@@ -14,13 +14,12 @@ Task:
   If tests fail, just print message "Tests failed"
 
 
-1. ## Edit test script command to exit after tests execution
+## Edit test script command to exit after tests execution
 ![first (1).jpg](screenshots%2Ffirst%20%281%29.jpg)
 ![first (2).jpg](screenshots%2Ffirst%20%282%29.jpg)
-2. ## Create test account in Docker hub.
-3. ## Create two VMs
-4. ## In Vagrant file add installation of docker, docker-compose on first VM
-5. 
+## Create test account in Docker hub.
+## Create two VMs
+## In Vagrant file add installation of docker, docker-compose on first VM
 ![first (3).jpg](screenshots%2Ffirst%20%283%29.jpg)
 ![first (4).jpg](screenshots%2Ffirst%20%284%29.jpg)
 ![first (5).jpg](screenshots%2Ffirst%20%285%29.jpg)
