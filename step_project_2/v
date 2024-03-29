@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+
+function start_vms() {
+    echo "Starting all VMs..."
+    vagrant up
+
+    echo "Executing script on master..."
+    vagrant ssh jenkins_master -c "bash /vagrant/vagrant_scripts/add_worker_key_to_container.sh jenkins"
+
+    echo "Setup completed."
+}
+
+function stop_vms() {
+    echo "Stopping all VMs..."
+    vagrant halt
+}
+
+function destroy_vms() {
+    echo "Destroying all VMs..."
+    vagrant destroy -f
+}
+
+function reload_vms() {
+    echo "Reloading all VMs..."
+    vagrant reload
+
+    echo "Executing script on master after reload..."
+    vagrant ssh jenkins_master -c "bash /vagrant/vagrant_scripts/add_worker_key_to_container.sh jenkins"
+
+    echo "Reload completed."
+}
+
+case "$1" in
+    l)
+        start_vms
+        ;;
+    s)
+        stop_vms
+        ;;
+    d)
+        destroy_vms
+        ;;
+    r)
+        reload_vms
+        ;;
+    *)
+        echo "Usage: $0 {l|s|d|r}"
+        echo "l: launch, s: stop, d: destroy, r: reload"
+        exit 1
+        ;;
+esac
