@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# add_worker_key_to_container.sh
 
 # Using "$1" directly for the container name.
 # Defining user and group, with defaults to "$1" if "$2" and "$3" are not provided.

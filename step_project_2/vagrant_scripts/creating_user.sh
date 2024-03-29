@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# creating_user.sh
 
 echo "Creating user: ${1}"
 sudo adduser --disabled-password --gecos "" "${1}"

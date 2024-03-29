@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# install_java.sh
 
 echo "Updating and installing OpenJDK 17"
 sudo apt-get update
