@@ -20,6 +20,7 @@ Vagrant.configure("2") do |config|
     end
     jenkins_worker.vm.provision "shell", path: "vagrant_scripts/install_docker.sh"
     jenkins_worker.vm.provision "shell", path: "vagrant_scripts/install_java.sh"
+    jenkins_worker.vm.provision "shell", path: "vagrant_scripts/install_node.sh"
     jenkins_worker.vm.provision "shell", path: "vagrant_scripts/creating_user.sh", args: ["worker"]
   end
 end
