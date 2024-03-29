@@ -1,13 +1,22 @@
 #!/usr/bin/env bash
 
 function start_vms() {
-    echo "Starting all VMs..."
+  if [[ "$1" == "c" || "$2" == "c" ]]; then
+    echo "Removing Vagrant index file..."
+    rm -f ~/.vagrant.d/data/machine-index/index
+  fi
+
+  if [ "$1" == "p" ]; then
+    echo "Starting all VMs with provisioning..."
+    vagrant up --provision
+  else
+    echo "Starting all VMs without provisioning..."
     vagrant up
+  fi
 
-    echo "Executing script on master..."
-    vagrant ssh jenkins_master -c "bash /vagrant/vagrant_scripts/add_worker_key_to_container.sh jenkins"
-
-    echo "Setup completed."
+  echo "Executing script on master..."
+  vagrant ssh jenkins_master -c "bash /vagrant/vagrant_scripts/add_worker_key_to_container.sh jenkins"
+  echo "Setup completed."
 }
 
 function stop_vms() {
@@ -32,7 +41,7 @@ function reload_vms() {
 
 case "$1" in
     l)
-        start_vms
+        start_vms "$2" "$3"
         ;;
     s)
         stop_vms
@@ -44,8 +53,8 @@ case "$1" in
         reload_vms
         ;;
     *)
-        echo "Usage: $0 {l|s|d|r}"
-        echo "l: launch, s: stop, d: destroy, r: reload"
+        echo "Usage: $0 {l|s|d|r} [p] [c]"
+        echo "l: launch, s: stop, d: destroy, r: reload, p: provision, c: clear index"
         exit 1
         ;;
 esac
