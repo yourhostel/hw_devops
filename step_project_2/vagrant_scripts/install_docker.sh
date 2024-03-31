@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# install_docker.sh
 
 echo "Updating and installing Docker"
 sudo apt-get update && sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common
