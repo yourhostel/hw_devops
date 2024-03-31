@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# v
 
 function start_vms() {
   if [[ "$1" == "c" || "$2" == "c" ]]; then
