@@ -131,3 +131,7 @@ pipeline {
 - [my-react-app is on hub.docker.com](https://hub.docker.com/repository/docker/yourhostel/my-react-app/general) 
  
 ![second (2).jpg](screenshots%2Fsecond%20%282%29.jpg)
+
+## Worker demonstration
+![third (1).jpg](screenshots%2Fthird%20%281%29.jpg)
+![third (2).jpg](screenshots%2Fthird%20%282%29.jpg)
