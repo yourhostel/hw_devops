@@ -16,31 +16,31 @@ Task:
 - The vagrant is controlled using the [script "v"](https://github.com/yourhostel/hw_devops/blob/main/step_project_2/v) 
 - examples :
   l: launch, s: stop, d: destroy, r: reload, p: provision, c: clear index
-  - `bash v l`     the same as 
+- `bash v l`     the same as 
 ```bash
 vagrant up && \
 vagrant ssh jenkins_master -c "bash /vagrant/vagrant_scripts/add_worker_key_to_container.sh jenkins"
 ```
-  - `bash v l p`   the same as 
+- `bash v l p`   the same as 
 ```bash
 vagrant up --provision && \
 vagrant ssh jenkins_master -c "bash /vagrant/vagrant_scripts/add_worker_key_to_container.sh jenkins"
 ```
-  - `bash v l p c` the same as 
+- `bash v l p c` the same as 
 ```bash
 rm -f ~/.vagrant.d/data/machine-index/index && \
 vagrant up --provision && \
 vagrant ssh jenkins_master -c "bash /vagrant/vagrant_scripts/add_worker_key_to_container.sh jenkins" 
 ```
-  - `bash v s` the same as 
+- `bash v s` the same as 
 ```bash
 vagrant halt
 ```
-  - `bash v d` the same as 
+- `bash v d` the same as 
 ```bash
 vagrant destroy -f
 ```
-  - `bash v r` the same as 
+- `bash v r` the same as 
 ```bash
 vagrant vagrant reload && \
 vagrant ssh jenkins_master -c "bash /vagrant/vagrant_scripts/add_worker_key_to_container.sh jenkins"
