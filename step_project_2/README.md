@@ -23,3 +23,77 @@ Task:
 ![first (3).jpg](screenshots%2Ffirst%20%283%29.jpg)
 ![first (4).jpg](screenshots%2Ffirst%20%284%29.jpg)
 ![first (5).jpg](screenshots%2Ffirst%20%285%29.jpg)
+## Add credentials with your Docker hub user and password to Jenkins credentials.
+
+```groovy
+pipeline {
+    agent {
+        node {     
+          label 'JDK17'
+        }  
+    }
+    
+    environment {
+        // Generating a tag in the format 'YYYYMMDD-HHMMSS'
+        DOCKER_TAG = "${new java.text.SimpleDateFormat('yyyyMMdd-HHmmss').format(new Date())}"
+        IMAGE_NAME = "yourhostel/my-react-app"
+    }
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm: [ 
+                  $class: 'GitSCM', 
+                  branches: [[name: '*/main']], 
+                  userRemoteConfigs: [
+                    [url: 'git@github.com:yourhostel/hw_devops.git',
+                     credentialsId: 'yourhostel']
+                  ]
+                ]
+            }
+        }
+
+        stage('Build') {
+            steps {
+                dir('step_project_2/react') {
+                sh 'npm install'
+                sh 'npm run build'
+                } 
+            }
+        }
+        
+        stage('Test') {
+            steps {
+                dir('step_project_2/react') {
+                sh 'npm test'
+                } 
+            }
+        }
+        
+        stage('Build Docker Image') {
+            steps {
+                dir('step_project_2/react') {
+                    script {
+                        // Build the Docker image
+                        sh "docker build -t ${env.IMAGE_NAME}:${env.DOCKER_TAG} ."
+                    }
+                }
+            }
+        }
+        
+        stage('Push Docker Image') {
+            steps {
+                script {
+                    // Login to Docker Hub and upload an image
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        sh "echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin"
+                        sh "docker push ${env.IMAGE_NAME}:${env.DOCKER_TAG}"
+                    }
+                }
+            }
+        }
+    }
+}
+```
+![second (1).jpg](screenshots%2Fsecond%20%281%29.jpg)
+![second (2).jpg](screenshots%2Fsecond%20%282%29.jpg)
