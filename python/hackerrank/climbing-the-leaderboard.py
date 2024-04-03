@@ -20,23 +20,11 @@ def climbingLeaderboard(ranked, player):
     return result
 
 
-# Testing the function
-print(climbingLeaderboard(ranked, player))
-
 if __name__ == '__main__':
-    fptr = open(os.environ['OUTPUT_PATH'], 'w')
 
-    ranked_count = int(input().strip())
-
-    ranked = list(map(int, input().rstrip().split()))
-
-    player_count = int(input().strip())
-
-    player = list(map(int, input().rstrip().split()))
+    ranked = [100, 90, 90, 80, 75, 60]
+    player = [50, 65, 77, 90, 102]
 
     result = climbingLeaderboard(ranked, player)
 
-    fptr.write('\n'.join(map(str, result)))
-    fptr.write('\n')
-
-    fptr.close()
+    print('\n'.join(map(str, result)))
