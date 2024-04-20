@@ -154,7 +154,22 @@ aws iam create-login-profile --user-name TestUserForYourHostel --password iI5258
 }
 
 ```
+* _Change the policy_
 ```bash
 aws iam create-policy-version --policy-arn arn:aws:iam::590184137042:policy/YourHostelBucketAccess --policy-document file://s3bucketpolicy.json --set-as-default
 ```
+* _Get a list of all policy versions_
+```bash
+aws iam list-policy-versions --policy-arn arn:aws:iam::590184137042:policy/YourHostelBucketAccess
+```
 ![S3 (10).jpg](screenshots%2FS3%20%2810%29.jpg)
+* _Detailed contents of the policy version_
+```bash
+aws iam get-policy-version --policy-arn arn:aws:iam::590184137042:policy/YourHostelBucketAccess --version-id v4
+```
+![S3 (11).jpg](screenshots%2FS3%20%2811%29.jpg)
+* _Checking the operation of the policy for the yourhostel bucket under the user TestUserForYourHostel_
+![S3 (12).jpg](screenshots%2FS3%20%2812%29.jpg)
+![S3 (13).jpg](screenshots%2FS3%20%2813%29.jpg)
+* _Download the file to your local computer using the profile TestUserForYourHostel_
+![S3 (14).jpg](screenshots%2FS3%20%2814%29.jpg)
