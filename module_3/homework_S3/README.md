@@ -68,7 +68,7 @@ export AWS_SECRET_ACCESS_KEY="SECRET_ACCESS_KEY"
 export AWS_SESSION_TOKEN="SESSION_TOKEN"
 ```
 ***
-* _Сreate a bucket named "yourhostel"_
+1.  _Сreate a bucket named "yourhostel"_
 ```bash
 tysser@tysser:~$ aws s3 mb s3://yourhostel --region eu-north-1
 ```
@@ -82,3 +82,6 @@ tysser@tysser:~$ aws s3 ls
  
 > 2024-04-20 18:20:59 yourhostel
 ***
+2. _Upload/Download a test file to/from S3_
+![S3 (4).jpg](screenshots%2FS3%20%284%29.jpg)
+3. 
