@@ -13,6 +13,11 @@
         "arn:aws:s3:::yourhostel",
         "arn:aws:s3:::yourhostel/*"
       ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": "iam:ChangePassword",
+      "Resource": "arn:aws:iam::*:user/${aws:username}"
     }
   ]
 }
