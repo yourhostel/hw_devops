@@ -56,5 +56,29 @@ aws sts get-caller-identity
 ***
 
 ### Performing the main task
-
-
+* _Getting temporary credentials using two-factor authentication_
+```bash
+aws sts get-session-token --serial-number arn:aws:iam::590184137042:mfa/redmi1 --token-code 572227 
+```
+***
+* _Add to environment variables_
+```bash
+export AWS_ACCESS_KEY_ID="ACCESS_KEY_ID"
+export AWS_SECRET_ACCESS_KEY="SECRET_ACCESS_KEY"
+export AWS_SESSION_TOKEN="SESSION_TOKEN"
+```
+***
+* _Сreate a bucket named "yourhostel"_
+```bash
+tysser@tysser:~$ aws s3 mb s3://yourhostel --region eu-north-1
+```
+> make_bucket: yourhostel
+***
+* _Checking the list buckets_
+```bash
+tysser@tysser:~$ aws s3 ls
+```
+> 2024-04-08 17:38:29 terraform-state-danit-devops-2
+ 
+> 2024-04-20 18:20:59 yourhostel
+***
