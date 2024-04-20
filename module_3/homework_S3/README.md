@@ -84,6 +84,7 @@ tysser@tysser:~$ aws s3 ls
 ***
 2. _Upload/Download a test file to/from S3_
 ![S3 (4).jpg](screenshots%2FS3%20%284%29.jpg)
+***
 3. _Create your own IAM policy_
 ```json
 {
@@ -109,6 +110,7 @@ tysser@tysser:~$ aws s3 ls
 aws iam create-policy --policy-name YourHostelBucketAccess --policy-document file://s3bucketpolicy.json
 ```
 ![S3 (5).jpg](screenshots%2FS3%20%285%29.jpg)
+***
 4. _Create your own test user and provide him only this policy_
 * __Create a new IAM user__
 ```bash
@@ -121,7 +123,7 @@ aws iam attach-user-policy --policy-arn arn:aws:iam::590184137042:policy/YourHos
 ![S3 (6).jpg](screenshots%2FS3%20%286%29.jpg)
 ![S3 (7).jpg](screenshots%2FS3%20%287%29.jpg)
 ![S3 (8).jpg](screenshots%2FS3%20%288%29.jpg)
-
+***
 5. Login to AWS console with created user and check that this user has access only to this s3 bucket
 ```bash
 aws iam create-login-profile --user-name TestUserForYourHostel --password iI52585654 --password-reset-required
@@ -173,3 +175,62 @@ aws iam get-policy-version --policy-arn arn:aws:iam::590184137042:policy/YourHos
 ![S3 (13).jpg](screenshots%2FS3%20%2813%29.jpg)
 * _Download the file to your local computer using the profile TestUserForYourHostel_
 ![S3 (14).jpg](screenshots%2FS3%20%2814%29.jpg)
+***
+6. _Cleanup AWS Resources_
+
+__Remove IAM Policy__
+
+```bash
+# also (v2, v3) but v4 - current and deleting it will cause an error
+aws iam delete-policy-version --policy-arn arn:aws:iam::590184137042:policy/YourHostelBucketAccess --version-id v1
+```
+![S3 (15).jpg](screenshots%2FS3%20%2815%29.jpg)
+```bash
+# Checking to which entities the policy is applied.
+aws iam list-entities-for-policy --policy-arn arn:aws:iam::590184137042:policy/YourHostelBucketAccess
+```
+```json
+{
+    "PolicyGroups": [],
+    "PolicyUsers": [
+        {
+            "UserName": "TestUserForYourHostel",
+            "UserId": "AIDAYS2NXIFJGJNYATHGB"
+        }
+    ],
+    "PolicyRoles": []
+}
+```
+
+```bash
+# Unpin a policy from a user
+aws iam detach-user-policy --user-name TestUserForYourHostel --policy-arn arn:aws:iam::590184137042:policy/YourHostelBucketAccess
+```
+
+```bash
+# Removing the policy
+aws iam delete-policy --policy-arn arn:aws:iam::590184137042:policy/YourHostelBucketAccess
+```
+__Remove IAM User__
+```bash
+# Delete login profile if it exists
+aws iam delete-login-profile --user-name TestUserForYourHostel
+
+# List and delete access keys if they exist
+aws iam list-access-keys --user-name TestUserForYourHostel
+
+# Then for each AccessKeyId:
+aws iam delete-access-key --access-key-id <AccessKeyId> --user-name TestUserForYourHostel
+
+# Finally, delete the user
+aws iam delete-user --user-name TestUserForYourHostel
+```
+__Remove S3 Bucket and Its Contents__
+```bash
+# Remove all objects within the bucket
+aws s3 rm s3://yourhostel --recursive
+
+# Remove the bucket itself
+aws s3 rb s3://yourhostel
+```
+![S3 (16).jpg](screenshots%2FS3%20%2816%29.jpg)
