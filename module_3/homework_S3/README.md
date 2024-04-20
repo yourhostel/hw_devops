@@ -105,4 +105,56 @@ tysser@tysser:~$ aws s3 ls
   ]
 }
 ```
+```bash
+aws iam create-policy --policy-name YourHostelBucketAccess --policy-document file://s3bucketpolicy.json
+```
+![S3 (5).jpg](screenshots%2FS3%20%285%29.jpg)
+4. _Create your own test user and provide him only this policy_
+* __Create a new IAM user__
+```bash
+aws iam create-user --user-name TestUserForYourHostel
+```
+* __Attaching a Policy to a User__
+```bash
+aws iam attach-user-policy --policy-arn arn:aws:iam::590184137042:policy/YourHostelBucketAccess --user-name TestUserForYourHostel
+```
+![S3 (6).jpg](screenshots%2FS3%20%286%29.jpg)
+![S3 (7).jpg](screenshots%2FS3%20%287%29.jpg)
+![S3 (8).jpg](screenshots%2FS3%20%288%29.jpg)
 
+5. Login to AWS console with created user and check that this user has access only to this s3 bucket
+```bash
+aws iam create-login-profile --user-name TestUserForYourHostel --password iI52585654 --password-reset-required
+```
+![S3 (9).jpg](screenshots%2FS3%20%289%29.jpg)
+* _Change the policy to allow password changes_ __s3bucketpolicy.json__
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:ListBucket",
+        "s3:PutObject",
+        "s3:DeleteObject"
+      ],
+      "Resource": [
+        "arn:aws:s3:::yourhostel",
+        "arn:aws:s3:::yourhostel/*"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": "iam:ChangePassword",
+      "Resource": "arn:aws:iam::*:user/${aws:username}"
+    }
+  ]
+}
+
+```
+```bash
+aws iam create-policy-version --policy-arn arn:aws:iam::590184137042:policy/YourHostelBucketAccess --policy-document file://s3bucketpolicy.json --set-as-default
+```
+![S3 (10).jpg](screenshots%2FS3%20%2810%29.jpg)
