@@ -84,4 +84,25 @@ tysser@tysser:~$ aws s3 ls
 ***
 2. _Upload/Download a test file to/from S3_
 ![S3 (4).jpg](screenshots%2FS3%20%284%29.jpg)
-3. 
+3. _Create your own IAM policy_
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:ListBucket",
+        "s3:PutObject",
+        "s3:DeleteObject"
+      ],
+      "Resource": [
+        "arn:aws:s3:::yourhostel",
+        "arn:aws:s3:::yourhostel/*"
+      ]
+    }
+  ]
+}
+```
+
