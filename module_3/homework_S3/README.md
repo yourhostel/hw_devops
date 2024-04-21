@@ -129,7 +129,7 @@ aws iam attach-user-policy --policy-arn arn:aws:iam::590184137042:policy/YourHos
 aws iam create-login-profile --user-name TestUserForYourHostel --password iI52585654 --password-reset-required
 ```
 ![S3 (9).jpg](screenshots%2FS3%20%289%29.jpg)
-* _Change the policy to allow password changes_ __s3bucketpolicy.json__
+* _Change the policy to allow password changes_ __[s3bucketpolicy.json](https://github.com/yourhostel/hw_devops/blob/main/module_3/homework_S3/s3bucketpolicy.json)__
 ```json
 {
   "Version": "2012-10-17",
