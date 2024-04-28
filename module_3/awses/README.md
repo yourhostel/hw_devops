@@ -1,6 +1,6 @@
 # AWS Session Script
 
-Цей скрипт дозволяє автоматизувати процес отримання сесійних облікових даних для AWS CLI за допомогою MFA.
+[Цей скрипт](https://github.com/yourhostel/hw_devops/blob/main/module_3/awses/aws_session.sh) дозволяє автоматизувати процес отримання сесійних облікових даних для AWS CLI за допомогою MFA.
 
 ## Вимоги
 
@@ -24,4 +24,5 @@ chmod +x aws_session.sh
 sudo mv aws_session.sh /usr/local/bin/awses && chmod +x /usr/local/bin/awses
 ```
 4. Використання скрипта
+
 ![2024-04-28.jpg](screenshots%2F2024-04-28.jpg)
