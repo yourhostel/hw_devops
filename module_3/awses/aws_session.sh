@@ -8,6 +8,9 @@ if [ -f aws_credentials.sh ]; then
     read RESPONSE
     if [ "$RESPONSE" == "yes" ]; then
         rm aws_credentials.sh
+        unset AWS_ACCESS_KEY_ID
+        unset AWS_SECRET_ACCESS_KEY
+        unset AWS_SESSION_TOKEN
         echo "Активну сесію було завершено."
     else
         echo "Продовження використання існуючої сесії."
