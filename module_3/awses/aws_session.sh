@@ -1,14 +1,13 @@
 #!/usr/bin/env bash
 
 # Перевірка поточних облікових даних AWS
-if [ -n "$AWS_ACCESS_KEY_ID" ]; then
+if [ -f aws_credentials.sh ]; then
+    source aws_credentials.sh
     echo "Виявлено активну сесію AWS CLI."
     echo "Ви хочете завершити цю сесію та розпочати нову? (yes/no)"
     read RESPONSE
     if [ "$RESPONSE" == "yes" ]; then
-        unset AWS_ACCESS_KEY_ID
-        unset AWS_SECRET_ACCESS_KEY
-        unset AWS_SESSION_TOKEN
+        rm aws_credentials.sh
         echo "Активну сесію було завершено."
     else
         echo "Продовження використання існуючої сесії."
@@ -27,9 +26,9 @@ if echo $OUTPUT | grep -q 'Credentials'; then
     SECRET_KEY=$(echo $OUTPUT | jq -r '.Credentials.SecretAccessKey')
     SESSION_TOKEN=$(echo $OUTPUT | jq -r '.Credentials.SessionToken')
 
-    export AWS_ACCESS_KEY_ID=$ACCESS_KEY
-    export AWS_SECRET_ACCESS_KEY=$SECRET_KEY
-    export AWS_SESSION_TOKEN=$SESSION_TOKEN
+    echo "export AWS_ACCESS_KEY_ID=$ACCESS_KEY" > aws_credentials.sh
+    echo "export AWS_SECRET_ACCESS_KEY=$SECRET_KEY" >> aws_credentials.sh
+    echo "export AWS_SESSION_TOKEN=$SESSION_TOKEN" >> aws_credentials.sh
 
     echo "Сесія встановлена успішно!"
     # Додаткова перевірка встановлення сесії
