@@ -19,7 +19,7 @@ fi
 echo "Введіть MFA код з Вашого пристрою та натисніть Enter:"
 read MFA_CODE
 
-MFA_SERIAL_NUMBER="Вкажіть ваш ARN для пристрою MFA"
+MFA_SERIAL_NUMBER="arn:aws:iam::590184137042:mfa/redmi1"
 OUTPUT=$(aws sts get-session-token --serial-number $MFA_SERIAL_NUMBER --token-code $MFA_CODE 2>&1)
 
 if echo $OUTPUT | grep -q 'Credentials'; then
