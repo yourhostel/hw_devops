@@ -22,6 +22,9 @@ chmod +x aws_session.sh
 3. Використання скрипта з будь-якого місця:
 ```bash
 sudo mv aws_session.sh /usr/local/bin/awses && chmod +x /usr/local/bin/awses
+# додаємо аліас
+echo "alias awses='source awses'" >> ~/.bashrc
+source ~/.bashrc
 ```
 4. Використання скрипта
 
