@@ -40,6 +40,12 @@ aws lambda create-function --function-name StopEC2Instances \
 aws lambda update-function-configuration --function-name StartEC2Instances --timeout 30
 aws lambda update-function-configuration --function-name StopEC2Instances --timeout 30
 ```
+
+![l (4).jpg](screenshots%2Fl%20%284%29.jpg)
+![l (5).jpg](screenshots%2Fl%20%285%29.jpg)
+![l (6).jpg](screenshots%2Fl%20%286%29.jpg)
+![l (7).jpg](screenshots%2Fl%20%287%29.jpg)
+
 4) Creating an API Gateway
 
 ```bash
