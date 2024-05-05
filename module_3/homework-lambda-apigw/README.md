@@ -72,6 +72,13 @@ aws lambda add-permission --function-name StopEC2Instances \
 --source-arn "arn:aws:execute-api:eu-north-1:590184137042:ozqw4jyu0h/*/POST/instances/stop"
 ```
 
+### Explanation of the added policy:
+- `--function-name StopEC2Instances`: Specifies the name of the Lambda function to which permissions are added.
+- `--statement-id apigateway-test-stop`: Unique identifier for this permission policy. This value must be unique within the Lambda function.
+- `--action lambda:InvokeFunction`: Allows the Lambda function to be called.
+- `--principal apigateway.amazonaws.com`: Specifies that permissions are granted by API Gateway.
+- `--source-arn`: ARN of the resource that will call Lambda. This is the ARN of the API Gateway and a specific method (in this case, POST to stop instances). Asterisks (*) indicate that the permission applies to all request types and stages.
+
 6) Creating a stage
 
 ```bash
