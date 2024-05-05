@@ -18,8 +18,10 @@ unzip -l stop_instances.zip
 ```bash
 # Creating a role
 aws iam create-role --role-name lambda-ec2-role --assume-role-policy-document file://trust-policy.json
-# Attaching a Policy to a Role
+# Attaching a policy to work with EC2 (if functions need to manage EC2 instances)
 aws iam attach-role-policy --role-name lambda-ec2-role --policy-arn arn:aws:iam::aws:policy/AmazonEC2FullAccess
+# Attaching a policy for logging to CloudWatch
+aws iam attach-role-policy --role-name lambda-ec2-role --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
 ```
 
 ![l (2).jpg](screenshots%2Fl%20%282%29.jpg)
@@ -34,4 +36,7 @@ aws lambda create-function --function-name StartEC2Instances \
 aws lambda create-function --function-name StopEC2Instances \
 --zip-file fileb://stop_instances.zip --handler stop_instances.lambda_handler \
 --runtime python3.8 --role arn:aws:iam::590184137042:role/lambda-ec2-role
+
+aws lambda update-function-configuration --function-name StartEC2Instances --timeout 30
+aws lambda update-function-configuration --function-name StopEC2Instances --timeout 30
 ```
