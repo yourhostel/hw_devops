@@ -1,0 +1,31 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "EC2 Management API",
+    "version": "1.0"
+  },
+  "paths": {
+    "/instances/start": {
+      "post": {
+        "summary": "Start EC2 instances",
+        "x-amazon-apigateway-integration": {
+          "uri": "arn:aws:lambda:eu-north-1:590184137042:function:StartEC2Instances",
+          "passthroughBehavior": "when_no_match",
+          "httpMethod": "POST",
+          "type": "aws_proxy"
+        }
+      }
+    },
+    "/instances/stop": {
+      "post": {
+        "summary": "Stop EC2 instances",
+        "x-amazon-apigateway-integration": {
+          "uri": "arn:aws:lambda:eu-north-1:590184137042:function:StopEC2Instances",
+          "passthroughBehavior": "when_no_match",
+          "httpMethod": "POST",
+          "type": "aws_proxy"
+        }
+      }
+    }
+  }
+}
