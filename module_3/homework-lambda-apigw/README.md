@@ -52,23 +52,59 @@ aws lambda update-function-configuration --function-name StopEC2Instances --time
  aws apigateway import-rest-api --body 'file://api-config.json'
 ```
 
-5) Creating a stage
+![l (8).jpg](screenshots%2Fl%20%288%29.jpg)
+![l (9).jpg](screenshots%2Fl%20%289%29.jpg)
+
+5) Setting Lambda functions a permission policy that allows calls from API Gateway.
+
+```bash
+# StartEC2Instances
+aws lambda add-permission --function-name StartEC2Instances \
+--statement-id apigateway-test \
+--action lambda:InvokeFunction \
+--principal apigateway.amazonaws.com \
+--source-arn "arn:aws:execute-api:eu-north-1:590184137042:ozqw4jyu0h/*/POST/instances/start"
+# StopEC2Instances
+aws lambda add-permission --function-name StopEC2Instances \
+--statement-id apigateway-test-stop \
+--action lambda:InvokeFunction \
+--principal apigateway.amazonaws.com \
+--source-arn "arn:aws:execute-api:eu-north-1:590184137042:ozqw4jyu0h/*/POST/instances/stop"
+```
+
+6) Creating a stage
 
 ```bash
 aws apigateway create-deployment --rest-api-id ozqw4jyu0h --stage-name test --description 'Test stage for API'
 ```
-6) Create a usage plan
+7) Create a usage plan
 ```bash
 ws apigateway create-usage-plan --name 'BasicUsagePlan' --description 'Basic usage plan for testing' --api-stages apiId=ozqw4jyu0h,stage=test
 ```
 
-7) Creating an API key
+8) Creating an API key
 
 ```bash
  aws apigateway create-api-key --name 'YourhostelAPIKey' --enabled
 ```
 
-8) Associate a new API key with a usage plan
+9) Associate a new API key with a usage plan
 ```bash
 aws apigateway create-usage-plan-key --usage-plan-id ujx73w --key-id bggc7734fk --key-type API_KEY
 ```
+
+![l (12).jpg](screenshots%2Fl%20%2812%29.jpg)
+
+10) Endpoint testing
+  * AWS console
+
+![l (13).jpg](screenshots%2Fl%20%2813%29.jpg)
+![l (14).jpg](screenshots%2Fl%20%2814%29.jpg)
+![l (15).jpg](screenshots%2Fl%20%2815%29.jpg)
+![l (16).jpg](screenshots%2Fl%20%2816%29.jpg)
+![l (17).jpg](screenshots%2Fl%20%2817%29.jpg)
+
+  * Postman
+
+![l (18).jpg](screenshots%2Fl%20%2818%29.jpg)
+![l (19).jpg](screenshots%2Fl%20%2819%29.jpg)
