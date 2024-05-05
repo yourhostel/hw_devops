@@ -40,7 +40,7 @@ aws lambda create-function --function-name StopEC2Instances \
 aws lambda update-function-configuration --function-name StartEC2Instances --timeout 30
 aws lambda update-function-configuration --function-name StopEC2Instances --timeout 30
 ```
-4) Создайте API Gateway
+4) Creating an API Gateway
 
 ```bash
  aws apigateway import-rest-api --body 'file://api-config.json'
