@@ -41,8 +41,28 @@ aws lambda update-function-configuration --function-name StartEC2Instances --tim
 aws lambda update-function-configuration --function-name StopEC2Instances --timeout 30
 ```
 4) Создайте API Gateway
+
 ```bash
-aws apigateway create-rest-api --name "YourhostelEC2ManagementAPI" --region eu-north-1
+ aws apigateway import-rest-api --body 'file://api-config.json'
 ```
 
+5) Creating a stage
 
+```bash
+aws apigateway create-deployment --rest-api-id ozqw4jyu0h --stage-name test --description 'Test stage for API'
+```
+6) Create a usage plan
+```bash
+ws apigateway create-usage-plan --name 'BasicUsagePlan' --description 'Basic usage plan for testing' --api-stages apiId=ozqw4jyu0h,stage=test
+```
+
+7) Creating an API key
+
+```bash
+ aws apigateway create-api-key --name 'YourhostelAPIKey' --enabled
+```
+
+8) Associate a new API key with a usage plan
+```bash
+aws apigateway create-usage-plan-key --usage-plan-id ujx73w --key-id bggc7734fk --key-type API_KEY
+```
