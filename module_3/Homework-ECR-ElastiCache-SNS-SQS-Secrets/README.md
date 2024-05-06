@@ -225,3 +225,58 @@ aws sns publish \
 ```
 
 ![SNS (3).jpg](screenshots%2FSNS%20%283%29.jpg)
+
+## 4. SQS Simple Queue Service
+1) Creating an SQS Queue
+```bash
+aws sqs create-queue --queue-name yourhostel-queue --region eu-north-1
+```
+
+![SQS (1).jpg](screenshots%2FSQS%20%281%29.jpg)
+
+2) Sending a message via the web console
+
+![SQS (2).jpg](screenshots%2FSQS%20%282%29.jpg)
+
+3) Receiving a message via AWS CLI
+```bash
+aws sqs receive-message \
+--queue-url https://eu-north-1.queue.amazonaws.com/590184137042/yourhostel-queue \
+--region eu-north-1
+```
+
+![SQS (3).jpg](screenshots%2FSQS%20%283%29.jpg)
+
+4) Sending a message via AWS CLI
+```bash
+aws sqs send-message \
+--queue-url https://eu-north-1.queue.amazonaws.com/590184137042/yourhostel-queue \
+--message-body "Hello from AWS CLI!" \
+--region eu-north-1
+```
+
+![SQS (4).jpg](screenshots%2FSQS%20%284%29.jpg)
+
+5) Receiving a message via the web console
+
+![SQS (5).jpg](screenshots%2FSQS%20%285%29.jpg)
+![SQS (6).jpg](screenshots%2FSQS%20%286%29.jpg)
+
+6) Deleting a queue
+
+```bash
+aws sqs delete-queue \
+--queue-url https://eu-north-1.queue.amazonaws.com/590184137042/yourhostel-queue \
+--region eu-north-1
+```
+
+## 5. Secrets Manager
+1)
+```bash
+
+```
+
+2)
+```bash
+
+```
