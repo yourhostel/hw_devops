@@ -193,4 +193,7 @@ aws elasticache describe-cache-clusters \
 --cache-cluster-id yourhostel-cache-cluster \
 --show-cache-node-info \
 --region eu-north-1
+
+redis-cli -h yourhostel-cache-cluster.ac1vf1.0001.eun1.cache.amazonaws.com -p 6379
 ```
+![EC (6).jpg](screenshots%2FEC%20%286%29.jpg)
