@@ -35,18 +35,6 @@ aws ecr delete-repository --repository-name yourhostel-repo --region eu-north-1 
 ```
 
 ## 2. ElastiCache
-1) Creating an ElastiCache (Redis) Cluster
-```bash
-aws elasticache create-cache-cluster \
---cache-cluster-id yourhostel-cache-cluster \
---engine redis \
---cache-node-type cache.t3.micro \
---num-cache-nodes 1 \
---region eu-north-1
-```
-
-![EC (1).jpg](screenshots%2FEC%20%281%29.jpg)
-### Creating an EC2 instance
 1) Creating a VPC `yourhostel-vpc`
 ```bash
 aws ec2 create-vpc \
@@ -73,7 +61,7 @@ aws ec2 attach-internet-gateway \
 --internet-gateway-id igw-0425123c9cb16e9e2
 ```
 
-3) Creating a routing table for Internet access
+4) Creating a routing table for Internet access
 ```bash
 aws ec2 create-route-table \
 --vpc-id vpc-0b6df671cd3d836af \
@@ -91,7 +79,7 @@ aws ec2 associate-route-table  \
 
 ![EC (2).jpg](screenshots%2FEC%20%282%29.jpg)
 
-4) Creating a Security Group
+5) Creating a Security Group
 ```bash
 aws ec2 create-security-group \
 --group-name yourhostel-security-group \
@@ -115,7 +103,59 @@ aws ec2 authorize-security-group-ingress \
 ```
 ![EC (3).jpg](screenshots%2FEC%20%283%29.jpg)
 
-5) Сreating an EC2 instance
+6) Create an IAM policy from [elasticache-policy.json](https://github.com/yourhostel/hw_devops/blob/main/module_3/Homework-ECR-ElastiCache-SNS-SQS-Secrets/ElastiCache/elasticache-policy.json)
+```bash
+aws iam create-policy \
+--policy-name yourhostel-elasticache-policy \
+--policy-document file://elasticache-policy.json
+```
+7) Create an IAM role from [trust-policy.json](https://github.com/yourhostel/hw_devops/blob/main/module_3/Homework-ECR-ElastiCache-SNS-SQS-Secrets/ElastiCache/trust-policy.json)
+```bash
+aws iam create-role \
+--role-name yourhostel-elasticache-role \
+--assume-role-policy-document file://trust-policy.json
+```
+
+8) Attaching a Policy to a Role
+```bash
+aws iam attach-role-policy \
+--role-name yourhostel-elasticache-role \
+--policy-arn arn:aws:iam::590184137042:policy/yourhostel-elasticache-policy
+```
+
+9) create IAM Instance Profile
+```bash
+aws iam create-instance-profile \
+--instance-profile-name yourhostel-elasticache-profile
+```
+
+10) Attaching a Role to an Instance Profile
+```bash
+aws iam add-role-to-instance-profile \
+--instance-profile-name yourhostel-elasticache-profile \
+--role-name yourhostel-elasticache-role 
+```
+
+11) Creating a DB Subnet Group for ElastiCache:
+```bash
+aws elasticache create-cache-subnet-group \
+    --cache-subnet-group-name yourhostel-cache-subnet-group \
+    --cache-subnet-group-description "Subnet group for yourhostel cache cluster" \
+    --subnet-ids "subnet-024c8bc155fcd90ef"
+```
+
+12) Creating a Redis Cluster
+```bash
+aws elasticache create-cache-cluster \
+    --cache-cluster-id yourhostel-cache-cluster \
+    --engine redis \
+    --cache-node-type cache.t3.micro \
+    --num-cache-nodes 1 \
+    --region eu-north-1 \
+    --cache-subnet-group-name yourhostel-cache-subnet-group
+```
+
+13) Сreating an EC2 instance
 ```bash
 aws ec2 run-instances \
 --image-id ami-05fd03138da450caf \
@@ -127,6 +167,11 @@ aws ec2 run-instances \
 --associate-public-ip-address \
 --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=yourhostel-ElastiCache}]'
 
+# Associating an Instance Profile with an EC2 instance
+aws ec2 associate-iam-instance-profile \
+--instance-id i-0666a645e77cdacfc \
+--iam-instance-profile Name=yourhostel-elasticache-profile
+
 # Connect to the instance
 ssh -i ~/.ssh/YourHostelKey.pem -p 22 ec2-user@13.51.107.218
 ```
@@ -134,7 +179,7 @@ ssh -i ~/.ssh/YourHostelKey.pem -p 22 ec2-user@13.51.107.218
 ![EC (4).jpg](screenshots%2FEC%20%284%29.jpg)
 ![EC (5).jpg](screenshots%2FEC%20%285%29.jpg)
 
-6) Installing Redis CLI on an EC2 instance
+14) Installing Redis CLI on an EC2 instance
 ```bash
 sudo yum update
 
@@ -142,15 +187,10 @@ sudo yum update
 sudo amazon-linux-extras install redis6 -y
 ```
 
-7) Connecting to ElastiCache Redis
+15) Connecting to ElastiCache Redis 
 ```bash
 aws elasticache describe-cache-clusters \
 --cache-cluster-id yourhostel-cache-cluster \
 --show-cache-node-info \
 --region eu-north-1
-```
-
-8)
-```bash
-
 ```
