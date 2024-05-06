@@ -214,6 +214,7 @@ aws sns subscribe \
 
 ![SNS (1).jpg](screenshots%2FSNS%20%281%29.jpg)
 ![SNS (2).jpg](screenshots%2FSNS%20%282%29.jpg)
+![SNS (4).jpg](screenshots%2FSNS%20%284%29.jpg)
 
 3) Sending a message via AWS CLI
 ```bash
