@@ -197,3 +197,30 @@ aws elasticache describe-cache-clusters \
 redis-cli -h yourhostel-cache-cluster.ac1vf1.0001.eun1.cache.amazonaws.com -p 6379
 ```
 ![EC (6).jpg](screenshots%2FEC%20%286%29.jpg)
+
+## 3. Simple Notification Service
+1) Creating an SNS topic
+```bash
+aws sns create-topic --name yourhostel-topic --region eu-north-1
+```
+
+2) Subscribe to notifications
+```bash
+aws sns subscribe \
+--topic-arn arn:aws:sns:eu-north-1:590184137042:yourhostel-topic \
+--protocol email \
+--notification-endpoint yourhostel.ua@gmail.com
+```
+
+![SNS (1).jpg](screenshots%2FSNS%20%281%29.jpg)
+![SNS (2).jpg](screenshots%2FSNS%20%282%29.jpg)
+
+3) Sending a message via AWS CLI
+```bash
+aws sns publish \
+--topic-arn arn:aws:sns:eu-north-1:590184137042:yourhostel-topic \
+--message "Hello from AWS CLI!" \
+--region eu-north-1
+```
+
+![SNS (3).jpg](screenshots%2FSNS%20%283%29.jpg)
