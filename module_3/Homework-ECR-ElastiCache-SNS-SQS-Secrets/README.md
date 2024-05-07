@@ -1,5 +1,5 @@
 # Homework AWS ECR ElastiCache SNS SQS Secrets Manager
-
+[homework-20240502](https://gitlab.com/dan-it/groups/devops2/homework/-/blob/main/homework-20240502.md)
 ## 1. Elastic Container Registry
 1) Creating an ECR Repository
 ```bash
