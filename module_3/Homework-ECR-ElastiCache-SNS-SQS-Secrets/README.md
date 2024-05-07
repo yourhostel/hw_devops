@@ -271,12 +271,37 @@ aws sqs delete-queue \
 ```
 
 ## 5. Secrets Manager
-1)
-```bash
+1) Creating a secret via the web console
 
+![SecretsManager (1).jpg](screenshots%2FSecretsManager%20%281%29.jpg)
+
+2) Retrieving a secret value via AWS CLI
+```bash
+aws secretsmanager get-secret-value \
+--secret-id yourhostel-name-key \
+--region eu-north-1
 ```
 
-2)
-```bash
+![SecretsManager (2).jpg](screenshots%2FSecretsManager%20%282%29.jpg)
 
+3) Changing the secret value via AWS CLI
+```bash
+aws secretsmanager update-secret \
+--secret-id yourhostel-name-key \
+--secret-string '{"newkey":"newvalue"}' \
+--region eu-north-1
+```
+
+![SecretsManager (3).jpg](screenshots%2FSecretsManager%20%283%29.jpg)
+
+4) Retrieving an updated secret value via the web console
+
+![SecretsManager (4).jpg](screenshots%2FSecretsManager%20%284%29.jpg)
+
+5) Deleting a secret via AWS CLI without retention period
+```bash
+aws secretsmanager delete-secret \
+--secret-id yourhostel-name-key \
+--force-delete-without-recovery \
+--region eu-north-1
 ```
