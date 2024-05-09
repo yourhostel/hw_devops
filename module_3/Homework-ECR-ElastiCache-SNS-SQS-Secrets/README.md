@@ -1,5 +1,5 @@
 # Homework AWS ECR ElastiCache SNS SQS Secrets Manager
-
+[homework-20240502](https://gitlab.com/dan-it/groups/devops2/homework/-/blob/main/homework-20240502.md)
 ## 1. Elastic Container Registry
 1) Creating an ECR Repository
 ```bash
@@ -192,5 +192,116 @@ sudo amazon-linux-extras install redis6 -y
 aws elasticache describe-cache-clusters \
 --cache-cluster-id yourhostel-cache-cluster \
 --show-cache-node-info \
+--region eu-north-1
+
+redis-cli -h yourhostel-cache-cluster.ac1vf1.0001.eun1.cache.amazonaws.com -p 6379
+```
+![EC (6).jpg](screenshots%2FEC%20%286%29.jpg)
+
+## 3. Simple Notification Service
+1) Creating an SNS topic
+```bash
+aws sns create-topic --name yourhostel-topic --region eu-north-1
+```
+
+2) Subscribe to notifications
+```bash
+aws sns subscribe \
+--topic-arn arn:aws:sns:eu-north-1:590184137042:yourhostel-topic \
+--protocol email \
+--notification-endpoint yourhostel.ua@gmail.com
+```
+
+![SNS (1).jpg](screenshots%2FSNS%20%281%29.jpg)
+![SNS (2).jpg](screenshots%2FSNS%20%282%29.jpg)
+![SNS (4).jpg](screenshots%2FSNS%20%284%29.jpg)
+
+3) Sending a message via AWS CLI
+```bash
+aws sns publish \
+--topic-arn arn:aws:sns:eu-north-1:590184137042:yourhostel-topic \
+--message "Hello from AWS CLI!" \
+--region eu-north-1
+```
+
+![SNS (3).jpg](screenshots%2FSNS%20%283%29.jpg)
+
+## 4. SQS Simple Queue Service
+1) Creating an SQS Queue
+```bash
+aws sqs create-queue --queue-name yourhostel-queue --region eu-north-1
+```
+
+![SQS (1).jpg](screenshots%2FSQS%20%281%29.jpg)
+
+2) Sending a message via the web console
+
+![SQS (2).jpg](screenshots%2FSQS%20%282%29.jpg)
+
+3) Receiving a message via AWS CLI
+```bash
+aws sqs receive-message \
+--queue-url https://eu-north-1.queue.amazonaws.com/590184137042/yourhostel-queue \
+--region eu-north-1
+```
+
+![SQS (3).jpg](screenshots%2FSQS%20%283%29.jpg)
+
+4) Sending a message via AWS CLI
+```bash
+aws sqs send-message \
+--queue-url https://eu-north-1.queue.amazonaws.com/590184137042/yourhostel-queue \
+--message-body "Hello from AWS CLI!" \
+--region eu-north-1
+```
+
+![SQS (4).jpg](screenshots%2FSQS%20%284%29.jpg)
+
+5) Receiving a message via the web console
+
+![SQS (5).jpg](screenshots%2FSQS%20%285%29.jpg)
+![SQS (6).jpg](screenshots%2FSQS%20%286%29.jpg)
+
+6) Deleting a queue
+
+```bash
+aws sqs delete-queue \
+--queue-url https://eu-north-1.queue.amazonaws.com/590184137042/yourhostel-queue \
+--region eu-north-1
+```
+
+## 5. Secrets Manager
+1) Creating a secret via the web console
+
+![SecretsManager (1).jpg](screenshots%2FSecretsManager%20%281%29.jpg)
+
+2) Retrieving a secret value via AWS CLI
+```bash
+aws secretsmanager get-secret-value \
+--secret-id yourhostel-name-key \
+--region eu-north-1
+```
+
+![SecretsManager (2).jpg](screenshots%2FSecretsManager%20%282%29.jpg)
+
+3) Changing the secret value via AWS CLI
+```bash
+aws secretsmanager update-secret \
+--secret-id yourhostel-name-key \
+--secret-string '{"newkey":"newvalue"}' \
+--region eu-north-1
+```
+
+![SecretsManager (3).jpg](screenshots%2FSecretsManager%20%283%29.jpg)
+
+4) Retrieving an updated secret value via the web console
+
+![SecretsManager (4).jpg](screenshots%2FSecretsManager%20%284%29.jpg)
+
+5) Deleting a secret via AWS CLI without retention period
+```bash
+aws secretsmanager delete-secret \
+--secret-id yourhostel-name-key \
+--force-delete-without-recovery \
 --region eu-north-1
 ```
