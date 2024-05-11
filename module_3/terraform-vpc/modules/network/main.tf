@@ -1,5 +1,8 @@
+variable "vpc_id" {}
+variable "igw_id" {}
+
 resource "aws_subnet" "yourhostel_subnet" {
-  vpc_id            = aws_vpc.yourhostel_vpc.id
+  vpc_id            = var.vpc_id
   cidr_block        = "10.0.1.0/24"
   availability_zone = "eu-north-1a"
 
@@ -9,11 +12,11 @@ resource "aws_subnet" "yourhostel_subnet" {
 }
 
 resource "aws_route_table" "yourhostel_route_table" {
-  vpc_id = aws_vpc.yourhostel_vpc.id
+  vpc_id = var.vpc_id
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.yourhostel_igw.id
+    gateway_id = var.igw_id
   }
 
   tags = {
@@ -25,3 +28,4 @@ resource "aws_route_table_association" "a" {
   subnet_id      = aws_subnet.yourhostel_subnet.id
   route_table_id = aws_route_table.yourhostel_route_table.id
 }
+
