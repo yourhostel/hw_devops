@@ -15,3 +15,12 @@ resource "aws_internet_gateway" "yourhostel_igw" {
     Name = "yourhostel-igw"
   }
 }
+
+output "vpc_id" {
+  value = aws_vpc.yourhostel_vpc.id
+}
+
+output "igw_id" {
+  value = aws_internet_gateway.yourhostel_igw.id
+}
+
