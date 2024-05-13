@@ -7,12 +7,12 @@ resource "aws_instance" "yourhostel_web" {
   key_name                    = "YourHostelKey"
 
   user_data = <<-EOF
-              #!/bin/bash
-              yum update -y
-              yum install -y nginx
-              systemctl start nginx
-              systemctl enable nginx
-            EOF
+                #!/bin/bash
+                yum update -y
+                sudo amazon-linux-extras install -y nginx1
+                sudo systemctl start nginx
+                sudo systemctl enable nginx
+              EOF
 
   tags = {
     Name = "yourhostel-web-server"
