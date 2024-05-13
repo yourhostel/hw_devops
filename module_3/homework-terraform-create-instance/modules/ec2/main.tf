@@ -9,9 +9,9 @@ resource "aws_instance" "yourhostel_web" {
   user_data = <<-EOF
                 #!/bin/bash
                 yum update -y
-                sudo amazon-linux-extras install -y nginx1
-                sudo systemctl start nginx
-                sudo systemctl enable nginx
+                amazon-linux-extras install -y nginx1
+                systemctl start nginx
+                systemctl enable nginx
               EOF
 
   tags = {
