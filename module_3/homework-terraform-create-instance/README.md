@@ -28,3 +28,9 @@ terraform apply
 ![tr (5).jpg](screenshots%2Ftr%20%285%29.jpg)
 
 ## Backend
+
+- [***config***](https://github.com/yourhostel/hw_devops/blob/main/module_3/homework-terraform-create-instance/backend.tf)
+
+![bk (1).jpg](screenshots%2Fbk%20%281%29.jpg)
+
+![bk (2).jpg](screenshots%2Fbk%20%282%29.jpg)
