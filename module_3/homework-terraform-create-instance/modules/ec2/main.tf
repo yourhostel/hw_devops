@@ -8,11 +8,11 @@ resource "aws_instance" "yourhostel_web" {
 
   user_data = <<-EOF
               #!/bin/bash
-              apt update
-              apt install -y nginx
+              yum update -y
+              yum install -y nginx
               systemctl start nginx
               systemctl enable nginx
-              EOF
+            EOF
 
   tags = {
     Name = "yourhostel-web-server"
