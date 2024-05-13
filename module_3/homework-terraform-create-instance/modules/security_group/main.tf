@@ -1,6 +1,6 @@
 resource "aws_security_group" "yourhostel_allow_ports" {
   vpc_id = var.vpc_id
-  description = "Дозволяє доступ з будь-якого місця до вказаних портів"
+  description = "Allows access from any location to the specified ports"
 
   dynamic "ingress" {
     for_each = var.open_ports
