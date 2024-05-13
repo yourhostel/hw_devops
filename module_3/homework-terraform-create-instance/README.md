@@ -13,11 +13,11 @@ terraform apply
 
 ![tr (1).jpg](screenshots%2Ftr%20%281%29.jpg)
 
-- [***vpc***]({{repo}}/modules/vpc)
+- [***vpc***]({repo}/modules/vpc)
 
 ![tr (2).jpg](screenshots%2Ftr%20%282%29.jpg)
 
-- [***security_group***]({{repo}}/modules/security_group/main.tf)
+- [***security_group***](repo/modules/security_group/main.tf)
 
 - [***List of ports to be opened***]({{repo}}/variables.tf)
 
