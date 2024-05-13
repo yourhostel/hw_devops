@@ -1,4 +1,4 @@
 variable "open_ports" {
-  description = "Список портів, які будуть відкриті"
+  description = "List of ports to be opened"
   type        = list(number)
 }

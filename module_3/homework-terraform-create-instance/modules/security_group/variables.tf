@@ -1,9 +1,9 @@
 variable "vpc_id" {
-  description = "ID VPC, де буде створена група безпеки"
+  description = "ID of the VPC where the security group will be created"
   type        = string
 }
 
 variable "open_ports" {
-  description = "Список портів, які будуть відкриті"
+  description = "List of ports to be opened"
   type        = list(number)
 }

@@ -1,4 +1,4 @@
 output "instance_ip" {
-  description = "Публічна IP адреса EC2 інстансу"
+  description = "The public IP address of the EC2 instance"
   value       = module.yourhostel_ec2.instance_ip
 }

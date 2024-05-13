@@ -1,9 +1,9 @@
 variable "subnet_id" {
-  description = "ID підмережі, де буде розташовано інстанс"
+  description = "The ID of the subnet where the instance will be located"
   type        = string
 }
 
 variable "security_group_id" {
-  description = "ID групи безпеки для інстансу"
+  description = "The security group ID for the instance"
   type        = string
 }
