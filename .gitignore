@@ -161,3 +161,40 @@ cython_debug/
 
 # Docker Registry data directory
 data/
+
+# Ignore Terraform files
+*.tfstate
+*.tfstate.backup
+*.terraform/
+*.tfvars
+
+# Ignore Ansible files
+*.retry
+*.vault_pass
+*.vault_password
+*.log
+
+# Ignore AWS credentials and other secrets
+aws_credentials.sh
+*.pem
+*.key
+*.secrets
+*.env
+
+# Ignore other sensitive files
+secrets.yml
+credentials.yml
+
+# Ignore Python files
+__pycache__/
+*.pyc
+
+# Ignore IDE and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Ignore temporary files
+*.tmp
+*.temp
