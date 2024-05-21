@@ -1,4 +1,4 @@
-resource "aws_instance" "yourhostel_web" {
+resource "aws_instance" "yourhostel-ansible-test" {
   ami           = "ami-05fd03138da450caf"
   instance_type = "t3.micro"
   subnet_id     = var.subnet_id
