@@ -2,13 +2,29 @@
 - hosts: webservers
   become: yes
   tasks:
-    - name: Ensure Nginx is installed
+    - name: Ensure htop is installed
       yum:
-        name: nginx
+        name: htop
         state: present
 
-    - name: Start and enable Nginx service
-      service:
-        name: nginx
-        state: started
-        enabled: yes
+    - name: Ensure tree is installed
+      yum:
+        name: tree
+        state: present
+
+    - name: Display htop version
+      command: htop --version
+      register: htop_version
+
+    - name: Display tree version
+      command: tree --version
+      register: tree_version
+
+    - name: Print htop version
+      debug:
+        msg: "{{ htop_version.stdout }}"
+
+    - name: Print tree version
+      debug:
+        msg: "{{ tree_version.stdout }}"
+
