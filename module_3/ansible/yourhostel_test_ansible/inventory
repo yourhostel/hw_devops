@@ -1,2 +1,2 @@
 [webservers]
-web1 ansible_host=$(cat ip_address.txt)
+web1 ansible_host=13.50.4.156 ansible_port=22
