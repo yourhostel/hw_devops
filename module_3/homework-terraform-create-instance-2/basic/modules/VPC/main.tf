@@ -1,4 +1,4 @@
-# VPC/main.tf
+# modules/VPC/main.tf
 
 resource "aws_vpc" "yourhostel_vpc" {
   cidr_block = var.vpc_cidr
@@ -52,7 +52,7 @@ resource "aws_nat_gateway" "yourhostel_nat" {
 }
 
 resource "aws_eip" "yourhostel_eip" {
-  vpc = true
+  domain = "vpc"
 
   tags = {
     Name = "${var.name}-eip"

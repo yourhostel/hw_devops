@@ -1,4 +1,4 @@
-# VPC/outputs.tf
+# modules/VPC/outputs.tf
 
 output "vpc_id" {
   value = aws_vpc.yourhostel_vpc.id

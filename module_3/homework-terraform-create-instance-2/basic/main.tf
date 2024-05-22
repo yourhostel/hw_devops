@@ -1,3 +1,5 @@
+# main.tf
+
 module "yourhostel_vpc" {
   source                = "./modules/VPC"
   name                  = var.name

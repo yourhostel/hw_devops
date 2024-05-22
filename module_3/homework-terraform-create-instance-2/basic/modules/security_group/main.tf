@@ -1,3 +1,5 @@
+# modules/security_group/main.tf
+
 resource "aws_security_group" "yourhostel_allow_ports" {
   vpc_id      = var.vpc_id
   description = "Allows access from any location to the specified ports"
