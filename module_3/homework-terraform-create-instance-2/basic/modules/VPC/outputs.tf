@@ -11,3 +11,11 @@ output "public_subnets" {
 output "private_subnets" {
   value = aws_subnet.yourhostel_private_subnet.*.id
 }
+
+output "public_subnet_names" {
+  value = aws_subnet.yourhostel_public_subnet[*].tags.Name
+}
+
+output "private_subnet_names" {
+  value = aws_subnet.yourhostel_private_subnet[*].tags.Name
+}
