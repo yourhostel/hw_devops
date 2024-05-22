@@ -4,7 +4,6 @@ module "yourhostel_vpc" {
   vpc_cidr              = var.vpc_cidr
   private_subnets_cidrs = var.private_subnets_cidrs
   public_subnets_cidrs  = var.public_subnets_cidrs
-  security_group_id     = module.yourhostel_security_group.security_group_id
   region                = var.region
 }
 
