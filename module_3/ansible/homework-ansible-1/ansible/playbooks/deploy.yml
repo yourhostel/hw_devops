@@ -1,0 +1,8 @@
+---
+- name: Deploy Docker and Nginx
+  hosts: all
+  become: true
+
+  roles:
+    - role: docker
+    - role: nginx
