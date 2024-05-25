@@ -10,8 +10,24 @@
     mode: '0755'
   become: true
 
+- name: so that Docker Compose is executable
+  file:
+    path: /usr/local/bin/docker-compose
+    mode: '0755'
+    owner: root
+    group: root
+  become: true
+
+- name: so that Docker Compose is available in PATH
+  command: ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+  args:
+    creates: /usr/bin/docker-compose
+  become: true
+
 - name: Ensure Docker is running
   systemd:
     name: docker
     state: started
     enabled: yes
+  become: true
+
