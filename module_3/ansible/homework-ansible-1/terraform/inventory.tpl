@@ -1,6 +1,6 @@
 [all]
 %{ for instance in instances ~}
-${instance} ansible_host=${instance}
+${instance} ansible_host=${instance} ansible_port=22
 %{ endfor ~}
 
 [all:vars]
