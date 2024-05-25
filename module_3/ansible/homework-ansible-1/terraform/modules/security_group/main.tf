@@ -3,11 +3,15 @@
 resource "aws_security_group" "this" {
   vpc_id = var.vpc_id
 
-  ingress {
-    from_port   = var.open_ports[0]
-    to_port     = var.open_ports[0]
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+  dynamic ingress {
+    for_each = toset(var.open_ports)
+
+    content {
+      from_port   = ingress.value
+      to_port     = ingress.value
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
   }
 
   egress {
