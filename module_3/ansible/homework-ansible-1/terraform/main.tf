@@ -25,7 +25,7 @@ module "ec2" {
 
 resource "local_file" "inventory" {
   content = templatefile("${path.module}/inventory.tpl", {
-    instances = module.ec2.instances
+    instances = module.ec2.public_ips
   })
   filename = "${path.module}/../ansible/inventory.ini"
 }

@@ -1,6 +1,6 @@
 [all]
 %{ for instance in instances ~}
-${instance.tags.Name} ansible_host=${instance.public_ip}
+${instance} ansible_host=${instance}
 %{ endfor ~}
 
 [all:vars]
