@@ -23,7 +23,9 @@ ansible-playbook playbooks/deploy.yml
 ```
 
 ![2024-05-26_013617.jpg](screenshots%2F2024-05-26_013617.jpg)
+![2024-05-26_021941.jpg](screenshots%2F2024-05-26_021941.jpg)
 ![2024-05-26_013746.jpg](screenshots%2F2024-05-26_013746.jpg)
+![2024-05-26_021901.jpg](screenshots%2F2024-05-26_021901.jpg)
 ![2024-05-26_013759.jpg](screenshots%2F2024-05-26_013759.jpg)
 ![2024-05-26_013839.jpg](screenshots%2F2024-05-26_013839.jpg)
 ![2024-05-26_014121.jpg](screenshots%2F2024-05-26_014121.jpg)
