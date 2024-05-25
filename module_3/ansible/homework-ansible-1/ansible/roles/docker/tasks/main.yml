@@ -1,15 +1,11 @@
 ---
 - name: Install Docker
-  apt:
-    name: docker.io
-    state: present
-    update_cache: yes
+  command: amazon-linux-extras install docker -y
+  become: true
 
 - name: Install Docker Compose
-  apt:
-    name: docker-compose
-    state: present
-    update_cache: yes
+  command: amazon-linux-extras install docker-compose -y
+  become: true
 
 - name: Ensure Docker is running
   systemd:
