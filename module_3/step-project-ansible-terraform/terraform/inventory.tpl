@@ -8,7 +8,9 @@ ${instance} ansible_host=${instance} ansible_port=22
 [all:vars]
 ansible_user=ec2-user
 ansible_ssh_private_key_file=~/.ssh/YourHostelKey.pem
-nginx_port=${nginx_port}
+prometheus_port=${prometheus_port}
+grafana_port=${grafana_port}
+node_exporter_port=${node_exporter_port}
 name=${name}
 instances=${jsonencode(instances)}
 open_ports=${jsonencode(open_ports)}
