@@ -66,47 +66,5 @@
             wget https://github.com/prometheus/node_exporter/releases/download/v1.3.1/node_exporter-1.3.1.linux-amd64.tar.gz
             tar -xvf node_exporter-1.3.1.linux-amd64.tar.gz
             mv node_exporter-1.3.1.linux-amd64 node_exporter
-            chown -R node_exporter:node_exporter /opt/node_exporter
+            chown -R node_exporter:node
 
-        - name: Create Node Exporter service
-          copy:
-            dest: /etc/systemd/system/node_exporter.service
-            content: |
-              [Unit]
-              Description=Node Exporter
-              After=network.target
-
-              [Service]
-              User=node_exporter
-              ExecStart=/opt/node_exporter/node_exporter
-
-              [Install]
-              WantedBy=multi-user.target
-
-        - name: Enable and start Node Exporter service
-          systemd:
-            name: node_exporter
-            enabled: yes
-            state: started
-
-- hosts: all
-  become: yes
-  tasks:
-    - name: Install Grafana
-      when: inventory_hostname == groups['all'][0]
-      block:
-        - name: Install Grafana repository
-          yum:
-            name: https://packages.grafana.com/oss/rpm/grafana.repo
-            state: present
-
-        - name: Install Grafana
-          yum:
-            name: grafana
-            state: present
-
-        - name: Enable and start Grafana service
-          systemd:
-            name: grafana-server
-            enabled: yes
-            state: started
