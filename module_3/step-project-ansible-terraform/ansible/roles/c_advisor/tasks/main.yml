@@ -1,2 +1,18 @@
 # ansible/roles/c_advisor/tasks/main.yml
 
+---
+- name: Install cAdvisor
+  shell: |
+    docker run -d \
+      --name=cadvisor \
+      --volume=/:/rootfs:ro \
+      --volume=/var/run:/var/run:ro \
+      --volume=/sys:/sys:ro \
+      --volume=/var/lib/docker/:/var/lib/docker:ro \
+      --volume=/cgroup:/cgroup:ro \
+      --publish=8080:8080 \
+      --detach=true \
+      google/cadvisor:latest
+  when: inventory_hostname in ["prometheus_server", "target2"]
+
+

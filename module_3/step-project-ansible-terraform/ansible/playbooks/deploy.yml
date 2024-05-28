@@ -1,96 +1,25 @@
 # ansible/playbooks/deploy.yml
 
 ---
-- name: Setup Prometheus and Node Exporter
+- name: Setup Prometheus, Grafana, Node Exporter, and cAdvisor
   hosts: all
   become: yes
-  tasks:
-    - name: Update and install dependencies
-      package:
-        name: "{{ item }}"
-        state: present
-      loop:
-        - amazon-linux-extras
-        - wget
-        - tar
+  roles:
+    - node_exporter
 
-    - name: Create Prometheus user
-      user:
-        name: prometheus
-        state: present
-        shell: /sbin/nologin
+- name: Setup Prometheus on observer
+  hosts: prometheus_server
+  become: yes
+  roles:
+    - prometheus
+    - grafana
+    - c_advisor
 
-    - name: Download and install Prometheus
-      shell: |
-        cd /opt
-        wget https://github.com/prometheus/prometheus/releases/download/v2.26.0/prometheus-2.26.0.linux-amd64.tar.gz
-        tar -xvf prometheus-2.26.0.linux-amd64.tar.gz
-        mv prometheus-2.26.0.linux-amd64 prometheus
-      when: inventory_hostname == "prometheus_server"
-
-    - name: Create Prometheus service
-      copy:
-        dest: /etc/systemd/system/prometheus.service
-        content: |
-          [Unit]
-          Description=Prometheus
-          Wants=network-online.target
-          After=network-online.target
-
-          [Service]
-          User=prometheus
-          ExecStart=/opt/prometheus/prometheus --config.file=/opt/prometheus/prometheus.yml --storage.tsdb.path=/opt/prometheus/data
-
-          [Install]
-          WantedBy=default.target
-      when: inventory_hostname == "prometheus_server"
-
-    - name: Enable and start Prometheus service
-      systemd:
-        name: prometheus
-        enabled: yes
-        state: started
-      when: inventory_hostname == "prometheus_server"
-
-    - name: Create Node Exporter user and group
-      user:
-        name: node_exporter
-        state: present
-        shell: /sbin/nologin
-
-    - name: Download and install Node Exporter
-      shell: |
-        cd /opt
-        if [ ! -d "node_exporter" ]; then
-          wget https://github.com/prometheus/node_exporter/releases/download/v1.3.1/node_exporter-1.3.1.linux-amd64.tar.gz
-          tar -xvf node_exporter-1.3.1.linux-amd64.tar.gz
-          mv node_exporter-1.3.1.linux-amd64 node_exporter
-        fi
-        chown -R node_exporter:node_exporter /opt/node_exporter
-      args:
-        executable: /bin/bash
-
-    - name: Create Node Exporter service
-      copy:
-        dest: /etc/systemd/system/node_exporter.service
-        content: |
-          [Unit]
-          Description=Node Exporter
-          Wants=network-online.target
-          After=network-online.target
-
-          [Service]
-          User=node_exporter
-          ExecStart=/opt/node_exporter/node_exporter
-
-          [Install]
-          WantedBy=default.target
-
-    - name: Enable and start Node Exporter service
-      systemd:
-        name: node_exporter
-        enabled: yes
-        state: started
+- name: Setup cAdvisor on target2
+  hosts: target2
+  become: yes
+  roles:
+    - c_advisor
 
 
 

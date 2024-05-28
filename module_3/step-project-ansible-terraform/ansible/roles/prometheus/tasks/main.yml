@@ -1,1 +1,41 @@
 # ansible/roles/node_exporter/tasks/main.yml
+
+---
+- name: Create Prometheus user
+  user:
+    name: prometheus
+    state: present
+    shell: /sbin/nologin
+
+- name: Download and install Prometheus
+  shell: |
+    cd /opt
+    wget https://github.com/prometheus/prometheus/releases/download/v2.26.0/prometheus-2.26.0.linux-amd64.tar.gz
+    tar -xvf prometheus-2.26.0.linux-amd64.tar.gz
+    mv prometheus-2.26.0.linux-amd64 prometheus
+  when: inventory_hostname == "prometheus_server"
+
+- name: Create Prometheus service
+  copy:
+    dest: /etc/systemd/system/prometheus.service
+    content: |
+      [Unit]
+      Description=Prometheus
+      Wants=network-online.target
+      After=network-online.target
+
+      [Service]
+      User=prometheus
+      ExecStart=/opt/prometheus/prometheus --config.file=/opt/prometheus/prometheus.yml --storage.tsdb.path=/opt/prometheus/data
+
+      [Install]
+      WantedBy=default.target
+  when: inventory_hostname == "prometheus_server"
+
+- name: Enable and start Prometheus service
+  systemd:
+    name: prometheus
+    enabled: yes
+    state: started
+  when: inventory_hostname == "prometheus_server"
+
