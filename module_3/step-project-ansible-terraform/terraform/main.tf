@@ -66,11 +66,6 @@ EOT
   }
 }
 
-resource "local_file" "ansible_hash_file" {
-  filename = "${path.module}/../ansible/ansible_hash.txt"
-  content  = file("${path.module}/../ansible/ansible_hash.txt")
-}
-
 resource "null_resource" "run_ansible" {
   provisioner "local-exec" {
     command = "ANSIBLE_CONFIG=${path.module}/../ansible/ansible.cfg ansible-playbook ${path.module}/../ansible/playbooks/deploy.yml"
@@ -78,8 +73,7 @@ resource "null_resource" "run_ansible" {
 
   depends_on = [
     null_resource.wait_for_instances,
-    null_resource.generate_ansible_hash,
-    local_file.ansible_hash_file
+    null_resource.generate_ansible_hash
   ]
 
   triggers = {
@@ -89,6 +83,6 @@ resource "null_resource" "run_ansible" {
     node_exporter_port = var.node_exporter_port
     cadvisor_port      = var.cadvisor_port
     open_ports         = join(",", var.open_ports)
-    ansible_hash       = filesha256("${path.module}/../ansible")
+    ansible_hash       = trimspace(file("${path.module}/../ansible/ansible_hash.txt"))
   }
 }
