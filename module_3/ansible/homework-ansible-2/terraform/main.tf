@@ -25,13 +25,13 @@ module "ec2" {
 
 resource "local_file" "inventory" {
   content = templatefile("${path.module}/inventory.tpl", {
-    instances = jsonencode([
+    instances = [
       for ip in module.ec2.public_ips :
       {
         public_ip = ip,
         port = var.nginx_port
       }
-    ]),
+    ],
     nginx_port = var.nginx_port,
     name = var.name,
     open_ports = jsonencode(var.open_ports)
