@@ -5,5 +5,21 @@
 </head>
 <body>
     <h1>Hello from {{ name }}!</h1>
+
+    <h2>Instances and their Public Ports</h2>
+    <ul>
+    {% for instance in instances %}
+        <li>
+            <a href="http://{{ instance.public_ip }}:{{ instance.port }}">http://{{ instance.public_ip }}:{{ instance.port }}</a>
+        </li>
+    {% endfor %}
+    </ul>
+
+    <h2>Open Ports</h2>
+    <ul>
+    {% for port in open_ports %}
+        <li>{{ port }}</li>
+    {% endfor %}
+    </ul>
 </body>
 </html>
