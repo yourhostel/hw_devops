@@ -53,18 +53,12 @@
             enabled: yes
             state: started
 
-    - name: Install Node Exporter
-      block:
-        - name: Create Node Exporter user
-          user:
-            name: node_exporter
-            shell: /sbin/nologin
+    - name: Download and install Node Exporter
+      shell: |
+        cd /opt
+        wget https://github.com/prometheus/node_exporter/releases/download/v1.3.1/node_exporter-1.3.1.linux-amd64.tar.gz
+        tar -xvf node_exporter-1.3.1.linux-amd64.tar.gz
+        mv node_exporter-1.3.1.linux-amd64 node_exporter
+        chown -R node_exporter:node /opt/node_exporter
 
-        - name: Download and install Node Exporter
-          shell: |
-            cd /opt
-            wget https://github.com/prometheus/node_exporter/releases/download/v1.3.1/node_exporter-1.3.1.linux-amd64.tar.gz
-            tar -xvf node_exporter-1.3.1.linux-amd64.tar.gz
-            mv node_exporter-1.3.1.linux-amd64 node_exporter
-            chown -R node_exporter:node
 
