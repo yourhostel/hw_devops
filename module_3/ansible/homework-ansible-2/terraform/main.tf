@@ -58,6 +58,7 @@ resource "null_resource" "run_ansible" {
 
   triggers = {
     instance_ids = join(",", module.ec2.instances)
-    timestamp = timestamp()  # Додавання поточної позначки часу як тригер
+    nginx_port   = var.nginx_port,
+    open_ports   = join(",", var.open_ports)
   }
 }
