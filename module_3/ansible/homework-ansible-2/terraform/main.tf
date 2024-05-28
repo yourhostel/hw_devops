@@ -29,7 +29,7 @@ resource "local_file" "inventory" {
     instance_ids = module.ec2.instances,
     nginx_port = var.nginx_port,
     name = var.name,
-    open_ports = var.open_ports
+    open_ports = concat([var.nginx_port], var.open_ports)
   })
   filename = "${path.module}/../ansible/inventory.ini"
 }
