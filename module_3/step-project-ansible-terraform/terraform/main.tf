@@ -68,5 +68,6 @@ resource "null_resource" "run_ansible" {
     node_exporter_port = var.node_exporter_port
     cadvisor_port      = var.cadvisor_port
     open_ports         = join(",", var.open_ports)
+    ansible_hash       = filesha256("${path.module}/../ansible")
   }
 }
