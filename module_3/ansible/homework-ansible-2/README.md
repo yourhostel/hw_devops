@@ -1,4 +1,4 @@
-# homework-20240523
+# homework-20240526
 [link](https://gitlab.com/dan-it/groups/devops2/homework/-/blob/main/homework-20240526.md)
 
 ![a-2 (1).jpg](screenshots%2Fa-2%20%281%29.jpg)
