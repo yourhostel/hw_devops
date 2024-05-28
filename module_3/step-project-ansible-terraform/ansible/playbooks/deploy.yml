@@ -4,22 +4,20 @@
 - name: Setup Prometheus, Grafana, Node Exporter, and cAdvisor
   hosts: all
   become: yes
+  vars:
+    prometheus_host: "{{ groups['all'][0] }}"
+    grafana_host: "{{ groups['all'][0] }}"
+    cadvisor_hosts: "{{ groups['all'][1:] }}"
+    node_exporter_hosts: "{{ groups['all'] }}"
   roles:
-    - node_exporter
-
-- name: Setup Prometheus on observer
-  hosts: prometheus_server
-  become: yes
-  roles:
-    - prometheus
-    - grafana
-    - c_advisor
-
-- name: Setup cAdvisor on target2
-  hosts: target2
-  become: yes
-  roles:
-    - c_advisor
+    - role: prometheus
+      when: inventory_hostname == prometheus_host
+    - role: grafana
+      when: inventory_hostname == grafana_host
+    - role: c_advisor
+      when: inventory_hostname in cadvisor_hosts
+    - role: node_exporter
+      when: inventory_hostname in node_exporter_hosts
 
 
 

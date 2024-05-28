@@ -1,18 +1,32 @@
 # ansible/roles/c_advisor/tasks/main.yml
 
 ---
-- name: Install cAdvisor
+- name: Download and install cAdvisor
   shell: |
-    docker run -d \
-      --name=cadvisor \
-      --volume=/:/rootfs:ro \
-      --volume=/var/run:/var/run:ro \
-      --volume=/sys:/sys:ro \
-      --volume=/var/lib/docker/:/var/lib/docker:ro \
-      --volume=/cgroup:/cgroup:ro \
-      --publish=8080:8080 \
-      --detach=true \
-      google/cadvisor:latest
-  when: inventory_hostname in ["prometheus_server", "target2"]
+    cd /opt
+    wget https://github.com/google/cadvisor/releases/download/v0.38.7/cadvisor -O cadvisor
+    chmod +x cadvisor
+
+- name: Create cAdvisor service
+  copy:
+    dest: /etc/systemd/system/cadvisor.service
+    content: |
+      [Unit]
+      Description=cAdvisor
+      Wants=network-online.target
+      After=network-online.target
+
+      [Service]
+      ExecStart=/opt/cadvisor -port {{ cadvisor_port }}
+
+      [Install]
+      WantedBy=default.target
+
+- name: Start and enable cAdvisor service
+  systemd:
+    name: cadvisor
+    enabled: yes
+    state: started
+
 
 
