@@ -66,6 +66,11 @@ EOT
   }
 }
 
+resource "local_file" "ansible_hash" {
+  filename = "${path.module}/../ansible/ansible_hash.txt"
+  content  = file("${path.module}/../ansible/ansible_hash.txt")
+}
+
 resource "null_resource" "run_ansible" {
   provisioner "local-exec" {
     command = "ANSIBLE_CONFIG=${path.module}/../ansible/ansible.cfg ansible-playbook ${path.module}/../ansible/playbooks/deploy.yml"
