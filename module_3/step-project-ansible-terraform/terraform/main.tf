@@ -9,7 +9,7 @@ module "security_group" {
   source  = "./modules/security_group"
   name    = var.name
   vpc_id  = module.vpc.vpc_id
-  open_ports = concat([var.nginx_port], var.open_ports)
+  open_ports = var.open_ports
 }
 
 module "ec2" {
@@ -27,9 +27,11 @@ resource "local_file" "inventory" {
   content = templatefile("${path.module}/inventory.tpl", {
     instances = module.ec2.public_ips,
     instance_ids = module.ec2.instances,
-    nginx_port = var.nginx_port,
+    prometheus_port = var.prometheus_port,
+    grafana_port = var.grafana_port,
+    node_exporter_port = var.node_exporter_port,
     name = var.name,
-    open_ports = concat([var.nginx_port], var.open_ports)
+    open_ports = var.open_ports
   })
   filename = "${path.module}/../ansible/inventory.ini"
 }
@@ -59,8 +61,10 @@ resource "null_resource" "run_ansible" {
   depends_on = [null_resource.wait_for_instances]
 
   triggers = {
-    instance_ids = join(",", module.ec2.instances)
-    nginx_port   = var.nginx_port,
-    open_ports   = join(",", var.open_ports)
+    instance_ids      = join(",", module.ec2.instances)
+    prometheus_port   = var.prometheus_port
+    grafana_port      = var.grafana_port
+    node_exporter_port = var.node_exporter_port
+    open_ports        = join(",", var.open_ports)
   }
 }
