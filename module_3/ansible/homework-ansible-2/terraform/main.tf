@@ -34,7 +34,7 @@ resource "local_file" "inventory" {
     ],
     nginx_port = var.nginx_port,
     name = var.name,
-    open_ports = jsonencode(var.open_ports)
+    open_ports = var.open_ports
   })
   filename = "${path.module}/../ansible/inventory.ini"
 }
