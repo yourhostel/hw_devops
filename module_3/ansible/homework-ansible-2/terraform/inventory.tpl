@@ -10,5 +10,5 @@ ansible_user=ec2-user
 ansible_ssh_private_key_file=~/.ssh/YourHostelKey.pem
 nginx_port=${nginx_port}
 name=${name}
-instances=${instances}
-open_ports=${open_ports}
+instances=%{ jsondecode(instances) %}
+open_ports=%{ jsondecode(open_ports) %}
