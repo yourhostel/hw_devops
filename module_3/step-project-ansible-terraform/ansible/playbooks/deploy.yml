@@ -1,64 +1,96 @@
 # ansible/playbooks/deploy.yml
 
 ---
-- hosts: all
+- name: Setup Prometheus and Node Exporter
+  hosts: all
   become: yes
   tasks:
     - name: Update and install dependencies
-      yum:
+      package:
         name: "{{ item }}"
         state: present
-      with_items:
+      loop:
         - amazon-linux-extras
         - wget
         - tar
 
-- hosts: all
-  become: yes
-  tasks:
-    - name: Install Prometheus
-      when: inventory_hostname == groups['all'][0]
-      block:
-        - name: Create Prometheus user
-          user:
-            name: prometheus
-            shell: /sbin/nologin
+    - name: Create Prometheus user
+      user:
+        name: prometheus
+        state: present
+        shell: /sbin/nologin
 
-        - name: Download and install Prometheus
-          shell: |
-            cd /opt
-            wget https://github.com/prometheus/prometheus/releases/download/v2.31.1/prometheus-2.31.1.linux-amd64.tar.gz
-            tar -xvf prometheus-2.31.1.linux-amd64.tar.gz
-            mv prometheus-2.31.1.linux-amd64 prometheus
-            chown -R prometheus:prometheus /opt/prometheus
+    - name: Download and install Prometheus
+      shell: |
+        cd /opt
+        wget https://github.com/prometheus/prometheus/releases/download/v2.26.0/prometheus-2.26.0.linux-amd64.tar.gz
+        tar -xvf prometheus-2.26.0.linux-amd64.tar.gz
+        mv prometheus-2.26.0.linux-amd64 prometheus
+      when: inventory_hostname == "prometheus_server"
 
-        - name: Create Prometheus service
-          copy:
-            dest: /etc/systemd/system/prometheus.service
-            content: |
-              [Unit]
-              Description=Prometheus
-              After=network.target
+    - name: Create Prometheus service
+      copy:
+        dest: /etc/systemd/system/prometheus.service
+        content: |
+          [Unit]
+          Description=Prometheus
+          Wants=network-online.target
+          After=network-online.target
 
-              [Service]
-              User=prometheus
-              ExecStart=/opt/prometheus/prometheus --config.file /opt/prometheus/prometheus.yml --storage.tsdb.path /opt/prometheus/data
+          [Service]
+          User=prometheus
+          ExecStart=/opt/prometheus/prometheus --config.file=/opt/prometheus/prometheus.yml --storage.tsdb.path=/opt/prometheus/data
 
-              [Install]
-              WantedBy=multi-user.target
+          [Install]
+          WantedBy=default.target
+      when: inventory_hostname == "prometheus_server"
 
-        - name: Enable and start Prometheus service
-          systemd:
-            name: prometheus
-            enabled: yes
-            state: started
+    - name: Enable and start Prometheus service
+      systemd:
+        name: prometheus
+        enabled: yes
+        state: started
+      when: inventory_hostname == "prometheus_server"
+
+    - name: Create Node Exporter user
+      user:
+        name: node_exporter
+        state: present
+        shell: /sbin/nologin
 
     - name: Download and install Node Exporter
       shell: |
         cd /opt
-        wget https://github.com/prometheus/node_exporter/releases/download/v1.3.1/node_exporter-1.3.1.linux-amd64.tar.gz
-        tar -xvf node_exporter-1.3.1.linux-amd64.tar.gz
-        mv node_exporter-1.3.1.linux-amd64 node_exporter
+        if [ ! -d "node_exporter" ]; then
+          wget https://github.com/prometheus/node_exporter/releases/download/v1.3.1/node_exporter-1.3.1.linux-amd64.tar.gz
+          tar -xvf node_exporter-1.3.1.linux-amd64.tar.gz
+          mv node_exporter-1.3.1.linux-amd64 node_exporter
+        fi
         chown -R node_exporter:node /opt/node_exporter
+      args:
+        executable: /bin/bash
+
+    - name: Create Node Exporter service
+      copy:
+        dest: /etc/systemd/system/node_exporter.service
+        content: |
+          [Unit]
+          Description=Node Exporter
+          Wants=network-online.target
+          After=network-online.target
+
+          [Service]
+          User=node_exporter
+          ExecStart=/opt/node_exporter/node_exporter
+
+          [Install]
+          WantedBy=default.target
+
+    - name: Enable and start Node Exporter service
+      systemd:
+        name: node_exporter
+        enabled: yes
+        state: started
+
 
 
