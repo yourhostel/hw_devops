@@ -54,12 +54,27 @@ EOT
   }
 }
 
+resource "null_resource" "generate_ansible_hash" {
+  provisioner "local-exec" {
+    command = <<EOT
+find ../ansible -type f -exec sha256sum {} \; | sort -k 2 | sha256sum > ../ansible/ansible_hash.txt
+EOT
+  }
+
+  triggers = {
+    always_run = "${timestamp()}"
+  }
+}
+
 resource "null_resource" "run_ansible" {
   provisioner "local-exec" {
     command = "ANSIBLE_CONFIG=${path.module}/../ansible/ansible.cfg ansible-playbook ${path.module}/../ansible/playbooks/deploy.yml"
   }
 
-  depends_on = [null_resource.wait_for_instances]
+  depends_on = [
+    null_resource.wait_for_instances,
+    null_resource.generate_ansible_hash
+  ]
 
   triggers = {
     instance_ids       = join(",", module.ec2.instances)
