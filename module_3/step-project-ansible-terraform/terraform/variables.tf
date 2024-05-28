@@ -52,3 +52,9 @@ variable "node_exporter_port" {
   type        = number
   default     = 9100
 }
+
+variable "cadvisor_port" {
+  description = "Port number for cAdvisor"
+  type        = number
+  default     = 8080
+}

@@ -30,6 +30,7 @@ resource "local_file" "inventory" {
     prometheus_port = var.prometheus_port,
     grafana_port = var.grafana_port,
     node_exporter_port = var.node_exporter_port,
+    cadvisor_port = var.cadvisor_port,
     name = var.name,
     open_ports = var.open_ports
   })
@@ -61,10 +62,11 @@ resource "null_resource" "run_ansible" {
   depends_on = [null_resource.wait_for_instances]
 
   triggers = {
-    instance_ids      = join(",", module.ec2.instances)
-    prometheus_port   = var.prometheus_port
-    grafana_port      = var.grafana_port
+    instance_ids       = join(",", module.ec2.instances)
+    prometheus_port    = var.prometheus_port
+    grafana_port       = var.grafana_port
     node_exporter_port = var.node_exporter_port
-    open_ports        = join(",", var.open_ports)
+    cadvisor_port      = var.cadvisor_port
+    open_ports         = join(",", var.open_ports)
   }
 }
