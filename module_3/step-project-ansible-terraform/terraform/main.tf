@@ -66,7 +66,7 @@ EOT
   }
 }
 
-resource "local_file" "ansible_hash" {
+resource "local_file" "ansible_hash_file" {
   filename = "${path.module}/../ansible/ansible_hash.txt"
   content  = file("${path.module}/../ansible/ansible_hash.txt")
 }
@@ -78,7 +78,8 @@ resource "null_resource" "run_ansible" {
 
   depends_on = [
     null_resource.wait_for_instances,
-    null_resource.generate_ansible_hash
+    null_resource.generate_ansible_hash,
+    local_file.ansible_hash_file
   ]
 
   triggers = {
