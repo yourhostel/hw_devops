@@ -32,10 +32,29 @@ resource "local_file" "inventory" {
   filename = "${path.module}/../ansible/inventory.ini"
 }
 
+resource "null_resource" "wait_for_instances" {
+  provisioner "local-exec" {
+    command = <<EOT
+for ip in ${join(" ", module.ec2.public_ips)}; do
+  for i in {1..10}; do
+    nc -zv $ip 22 && break
+    sleep 5
+  done
+done
+EOT
+  }
+
+  triggers = {
+    instance_ids = join(",", module.ec2.instances)
+  }
+}
+
 resource "null_resource" "run_ansible" {
   provisioner "local-exec" {
     command = "ANSIBLE_CONFIG=${path.module}/../ansible/ansible.cfg ansible-playbook ${path.module}/../ansible/playbooks/deploy.yml"
   }
+
+  depends_on = [null_resource.wait_for_instances]
 
   triggers = {
     instance_ids = join(",", module.ec2.instances)
