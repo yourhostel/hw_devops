@@ -54,11 +54,16 @@ EOT
   }
 }
 
-resource "local_file" "ansible_hash" {
-  content = <<EOT
-${trimspace(shell("find ../ansible -type f -exec sha256sum {} \\; | sort -k 2 | sha256sum"))}
+resource "null_resource" "generate_ansible_hash" {
+  provisioner "local-exec" {
+    command = <<EOT
+find ../ansible -type f -exec sha256sum {} \; | sort -k 2 | sha256sum > ../ansible/ansible_hash.txt
 EOT
-  filename = "${path.module}/../ansible/ansible_hash.txt"
+  }
+
+  triggers = {
+    always_run = "${timestamp()}"
+  }
 }
 
 resource "null_resource" "run_ansible" {
@@ -68,7 +73,7 @@ resource "null_resource" "run_ansible" {
 
   depends_on = [
     null_resource.wait_for_instances,
-    local_file.ansible_hash
+    null_resource.generate_ansible_hash
   ]
 
   triggers = {
