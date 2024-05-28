@@ -1,0 +1,10 @@
+{# ansible/roles/nginx/templates/docker-compose.yml.j2 #}
+
+version: '3'
+services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - "{{ nginx_port }}:80"
+    volumes:
+      - /opt/nginx/index.html:/usr/share/nginx/html/index.html

@@ -1,0 +1,22 @@
+# ansible/roles/nginx/tasks/main.yml
+
+---
+- name: Create directory for Docker Compose
+  file:
+    path: /opt/nginx
+    state: directory
+
+- name: Copy Docker Compose file
+  template:
+    src: docker-compose.yml.j2
+    dest: /opt/nginx/docker-compose.yml
+
+- name: Copy custom index page
+  template:
+    src: index.html.j2
+    dest: /opt/nginx/index.html
+
+- name: Start Nginx with Docker Compose
+  command: docker-compose up -d
+  args:
+    chdir: /opt/nginx
