@@ -1,4 +1,4 @@
-# ansible/roles/node_exporter/tasks/main.yml
+# ansible/roles/prometheus/tasks/main.yml
 
 ---
 - name: Create Prometheus user
@@ -17,6 +17,15 @@
     fi
   args:
     executable: /bin/bash
+  when: inventory_hostname == prometheus_host
+
+- name: Change ownership of Prometheus directory
+  file:
+    path: /opt/prometheus
+    state: directory
+    owner: prometheus
+    group: prometheus
+    recurse: yes
   when: inventory_hostname == prometheus_host
 
 - name: Create Prometheus configuration file
@@ -51,6 +60,7 @@
     enabled: yes
     state: started
   when: inventory_hostname == prometheus_host
+
 
 
 

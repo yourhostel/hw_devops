@@ -1,4 +1,4 @@
-# ansible/roles/prometheus/tasks/main.yml
+# ansible/roles/node_exporter/tasks/main.yml
 
 ---
 - name: Create Node Exporter user and group
