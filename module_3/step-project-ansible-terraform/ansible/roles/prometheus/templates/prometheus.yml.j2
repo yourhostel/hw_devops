@@ -4,7 +4,7 @@ global:
 scrape_configs:
   - job_name: 'prometheus'
     static_configs:
-      - targets: ['localhost:{{ prometheus_port }}']
+      - targets: ['{{ hostvars[inventory_hostname].ansible_host }}:{{ prometheus_port }}']
 
   - job_name: 'node_exporter'
     static_configs:
@@ -15,7 +15,7 @@ scrape_configs:
   - job_name: 'cadvisor'
     static_configs:
       - targets: {% for host in groups['all'] %}
+        {% if host in cadvisor_hosts %}
         - '{{ hostvars[host].ansible_host }}:{{ cadvisor_port }}'{% if not loop.last %},{% endif %}
+        {% endif %}
         {% endfor %}
-
-
