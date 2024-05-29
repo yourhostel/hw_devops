@@ -31,7 +31,7 @@
 - name: Create Prometheus configuration file
   template:
     src: prometheus.json.j2
-    dest: /opt/prometheus/prometheus.yml
+    dest: /opt/prometheus/prometheus.json
   when: inventory_hostname == prometheus_host
 
 - name: Create Prometheus service
