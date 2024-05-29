@@ -7,7 +7,7 @@
   vars:
     prometheus_host: "{{ groups['all'][0] }}"
     grafana_host: "{{ groups['all'][0] }}"
-    cadvisor_hosts: "{{ groups['all'][1:] }}"
+    cadvisor_hosts: "{{ groups['all'][0], groups['all'][2] }}"
     node_exporter_hosts: "{{ groups['all'] }}"
   roles:
     - role: prometheus
