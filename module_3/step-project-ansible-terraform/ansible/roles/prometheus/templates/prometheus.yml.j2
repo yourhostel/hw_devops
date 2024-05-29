@@ -17,8 +17,9 @@ scrape_configs:
     static_configs:
       - targets:
         {% for host in groups['all'] %}
-        {% if host == groups['all'][0] or host == groups['all'][-1] %}
+        {% if host == groups['all'][0] or host == groups['all'][2] %}
         - '{{ hostvars[host].ansible_host }}:{{ cadvisor_port }}'
         {% endif %}
         {% endfor %}
+
 
