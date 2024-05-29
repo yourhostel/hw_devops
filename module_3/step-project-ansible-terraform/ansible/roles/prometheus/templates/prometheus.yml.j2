@@ -4,18 +4,21 @@ global:
 scrape_configs:
   - job_name: 'prometheus'
     static_configs:
-      - targets: ['{{ hostvars[inventory_hostname].ansible_host }}:{{ prometheus_port }}']
+      - targets: ['{{ hostvars[groups["all"][0]].ansible_host }}:{{ prometheus_port }}']
 
   - job_name: 'node_exporter'
     static_configs:
-      - targets: {% for host in groups['all'] %}
-        - '{{ hostvars[host].ansible_host }}:{{ node_exporter_port }}'{% if not loop.last %},{% endif %}
+      - targets:
+        {% for host in groups['all'] %}
+        - '{{ hostvars[host].ansible_host }}:{{ node_exporter_port }}'
         {% endfor %}
 
   - job_name: 'cadvisor'
     static_configs:
-      - targets: {% for host in groups['all'] %}
-        {% if host in cadvisor_hosts %}
-        - '{{ hostvars[host].ansible_host }}:{{ cadvisor_port }}'{% if not loop.last %},{% endif %}
+      - targets:
+        {% for host in groups['all'] %}
+        {% if host == groups['all'][0] or host == groups['all'][-1] %}
+        - '{{ hostvars[host].ansible_host }}:{{ cadvisor_port }}'
         {% endif %}
         {% endfor %}
+
