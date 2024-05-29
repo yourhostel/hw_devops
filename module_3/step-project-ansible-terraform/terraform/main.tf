@@ -57,7 +57,7 @@ EOT
 resource "null_resource" "generate_ansible_hash" {
   provisioner "local-exec" {
     command = <<EOT
-find ../ansible -type f -exec sha256sum {} \; | sort -k 2 | sha256sum > ../ansible/ansible_hash.txt
+find ../ansible -type f -exec sha256sum {} \\; | sort -k 2 | sha256sum > ../ansible/ansible_hash.txt
 EOT
   }
 
@@ -83,6 +83,6 @@ resource "null_resource" "run_ansible" {
     node_exporter_port = var.node_exporter_port
     cadvisor_port      = var.cadvisor_port
     open_ports         = join(",", var.open_ports)
-    ansible_hash       = filemd5("${path.module}/../ansible/ansible_hash.txt")
+    ansible_hash       = timestamp()
   }
 }
