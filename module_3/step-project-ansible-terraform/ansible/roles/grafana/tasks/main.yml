@@ -1,10 +1,13 @@
 # ansible/roles/grafana/tasks/main.yml
 
 ---
+- name: Add Grafana GPG key
+  shell: |
+    sudo rpm --import https://rpm.grafana.com/gpg.key
+  when: inventory_hostname == prometheus_host
+
 - name: Install Grafana
   shell: |
-    cd /tmp
-    wget https://dl.grafana.com/oss/release/grafana_7.5.7_amd64.deb
     sudo yum install -y yum-utils
     sudo yum-config-manager --add-repo https://rpm.grafana.com
     sudo yum install grafana -y
