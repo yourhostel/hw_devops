@@ -6,6 +6,7 @@
     name: prometheus
     state: present
     shell: /sbin/nologin
+  when: inventory_hostname == prometheus_host
 
 - name: Download and install Prometheus
   shell: |
@@ -13,7 +14,7 @@
     wget https://github.com/prometheus/prometheus/releases/download/v2.26.0/prometheus-2.26.0.linux-amd64.tar.gz
     tar -xvf prometheus-2.26.0.linux-amd64.tar.gz
     mv prometheus-2.26.0.linux-amd64 prometheus
-  when: inventory_hostname == "prometheus_server"
+  when: inventory_hostname == prometheus_host
 
 - name: Create Prometheus service
   copy:
@@ -30,12 +31,13 @@
 
       [Install]
       WantedBy=default.target
-  when: inventory_hostname == "prometheus_server"
+  when: inventory_hostname == prometheus_host
 
 - name: Enable and start Prometheus service
   systemd:
     name: prometheus
     enabled: yes
     state: started
-  when: inventory_hostname == "prometheus_server"
+  when: inventory_hostname == prometheus_host
+
 
