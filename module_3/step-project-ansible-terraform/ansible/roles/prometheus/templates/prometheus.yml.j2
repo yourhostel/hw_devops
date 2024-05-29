@@ -12,3 +12,10 @@ scrape_configs:
         - '{{ hostvars[host].ansible_host }}:{{ node_exporter_port }}'{% if not loop.last %},{% endif %}
         {% endfor %}
 
+  - job_name: 'cadvisor'
+    static_configs:
+      - targets: {% for host in groups['all'] %}
+        - '{{ hostvars[host].ansible_host }}:{{ cadvisor_port }}'{% if not loop.last %},{% endif %}
+        {% endfor %}
+
+
