@@ -10,9 +10,11 @@
 - name: Download and install Prometheus
   shell: |
     cd /opt
-    wget https://github.com/prometheus/prometheus/releases/download/v2.26.0/prometheus-2.26.0.linux-amd64.tar.gz
-    tar -xvf prometheus-2.26.0.linux-amd64.tar.gz
-    mv prometheus-2.26.0.linux-amd64 prometheus
+    if [ ! -d "prometheus" ]; then
+      wget https://github.com/prometheus/prometheus/releases/download/v2.26.0/prometheus-2.26.0.linux-amd64.tar.gz
+      tar -xvf prometheus-2.26.0.linux-amd64.tar.gz
+      mv prometheus-2.26.0.linux-amd64 prometheus
+    fi
   args:
     executable: /bin/bash
 

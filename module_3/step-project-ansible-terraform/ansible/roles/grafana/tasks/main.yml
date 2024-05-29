@@ -1,19 +1,21 @@
 # ansible/roles/grafana/tasks/main.yml
 
----
 - name: Add Grafana GPG key
   shell: |
     sudo rpm --import https://rpm.grafana.com/gpg.key
 
 - name: Install Grafana
   shell: |
-    sudo yum install -y yum-utils
-    sudo yum-config-manager --add-repo https://rpm.grafana.com
-    sudo yum install grafana -y
+    if ! yum list installed grafana >/dev/null 2>&1; then
+      sudo yum install -y yum-utils
+      sudo yum-config-manager --add-repo https://rpm.grafana.com
+      sudo yum install grafana -y
+    fi
 
 - name: Start Grafana service
   systemd:
     name: grafana-server
     enabled: yes
     state: started
+
 
