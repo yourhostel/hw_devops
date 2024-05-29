@@ -57,7 +57,7 @@ EOT
 resource "null_resource" "generate_ansible_hash" {
   provisioner "local-exec" {
     command = <<EOT
-find ../ansible -type f -exec sha256sum {} \\; | sort -k 2 | sha256sum > ../ansible/ansible_hash.txt
+find ../ansible -type f -exec sha256sum {} \; | sort -k 2 | sha256sum > ../ansible/ansible_hash.txt
 EOT
   }
 
