@@ -66,13 +66,6 @@ EOT
   }
 }
 
-resource "local_file" "ansible_hash_file" {
-  filename = "${path.module}/../ansible/ansible_hash.txt"
-  content  = file("${path.module}/../ansible/ansible_hash.txt")
-
-  depends_on = [null_resource.generate_ansible_hash]
-}
-
 resource "null_resource" "run_ansible" {
   provisioner "local-exec" {
     command = "ANSIBLE_CONFIG=${path.module}/../ansible/ansible.cfg ansible-playbook ${path.module}/../ansible/playbooks/deploy.yml"
@@ -80,7 +73,7 @@ resource "null_resource" "run_ansible" {
 
   depends_on = [
     null_resource.wait_for_instances,
-    local_file.ansible_hash_file
+    null_resource.generate_ansible_hash
   ]
 
   triggers = {
