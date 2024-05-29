@@ -4,19 +4,15 @@
 - name: Add Grafana GPG key
   shell: |
     sudo rpm --import https://rpm.grafana.com/gpg.key
-  when: inventory_hostname == prometheus_host
 
 - name: Install Grafana
   shell: |
     sudo yum install -y yum-utils
     sudo yum-config-manager --add-repo https://rpm.grafana.com
     sudo yum install grafana -y
-  when: inventory_hostname == prometheus_host
 
 - name: Start Grafana service
   systemd:
     name: grafana-server
     enabled: yes
     state: started
-  when: inventory_hostname == prometheus_host
-

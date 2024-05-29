@@ -15,7 +15,6 @@
     mv prometheus-2.26.0.linux-amd64 prometheus
   args:
     executable: /bin/bash
-  when: inventory_hostname == prometheus_host
 
 - name: Create Prometheus service
   copy:
@@ -32,14 +31,13 @@
 
       [Install]
       WantedBy=default.target
-  when: inventory_hostname == prometheus_host
 
 - name: Enable and start Prometheus service
   systemd:
     name: prometheus
     enabled: yes
     state: started
-  when: inventory_hostname == prometheus_host
+
 
 
 
