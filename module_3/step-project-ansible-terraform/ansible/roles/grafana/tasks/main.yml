@@ -19,3 +19,4 @@
     enabled: yes
     state: started
   when: inventory_hostname == prometheus_host
+
