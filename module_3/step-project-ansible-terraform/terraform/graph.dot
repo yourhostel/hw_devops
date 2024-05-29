@@ -1,0 +1,39 @@
+digraph G {
+  rankdir = "RL";
+  node [shape = rect, fontname = "sans-serif"];
+  "local_file.inventory" [label="local_file.inventory"];
+  "null_resource.generate_ansible_hash" [label="null_resource.generate_ansible_hash"];
+  "null_resource.run_ansible" [label="null_resource.run_ansible"];
+  "null_resource.wait_for_instances" [label="null_resource.wait_for_instances"];
+  subgraph "cluster_module.ec2" {
+    label = "module.ec2"
+    fontname = "sans-serif"
+    "module.ec2.aws_instance.this" [label="aws_instance.this"];
+  }
+  subgraph "cluster_module.security_group" {
+    label = "module.security_group"
+    fontname = "sans-serif"
+    "module.security_group.aws_security_group.this" [label="aws_security_group.this"];
+  }
+  subgraph "cluster_module.vpc" {
+    label = "module.vpc"
+    fontname = "sans-serif"
+    "module.vpc.aws_internet_gateway.this" [label="aws_internet_gateway.this"];
+    "module.vpc.aws_route_table.public" [label="aws_route_table.public"];
+    "module.vpc.aws_route_table_association.public" [label="aws_route_table_association.public"];
+    "module.vpc.aws_subnet.public" [label="aws_subnet.public"];
+    "module.vpc.aws_vpc.this" [label="aws_vpc.this"];
+  }
+  "local_file.inventory" -> "module.ec2.aws_instance.this";
+  "null_resource.run_ansible" -> "null_resource.generate_ansible_hash";
+  "null_resource.run_ansible" -> "null_resource.wait_for_instances";
+  "null_resource.wait_for_instances" -> "module.ec2.aws_instance.this";
+  "module.ec2.aws_instance.this" -> "module.security_group.aws_security_group.this";
+  "module.ec2.aws_instance.this" -> "module.vpc.aws_subnet.public";
+  "module.security_group.aws_security_group.this" -> "module.vpc.aws_vpc.this";
+  "module.vpc.aws_internet_gateway.this" -> "module.vpc.aws_vpc.this";
+  "module.vpc.aws_route_table.public" -> "module.vpc.aws_internet_gateway.this";
+  "module.vpc.aws_route_table_association.public" -> "module.vpc.aws_route_table.public";
+  "module.vpc.aws_route_table_association.public" -> "module.vpc.aws_subnet.public";
+  "module.vpc.aws_subnet.public" -> "module.vpc.aws_vpc.this";
+}
