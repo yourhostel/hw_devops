@@ -41,6 +41,10 @@ resource "aws_internet_gateway" "this" {
     CreatedBy = "${var.name}-automation"
     Purpose   = "step3"
   }
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_route_table" "public" {
@@ -64,7 +68,12 @@ resource "aws_route_table_association" "public" {
 
   subnet_id      = element(module.vpc.public_subnets, count.index)
   route_table_id = aws_route_table.public.id
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
+
 
 
 
