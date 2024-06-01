@@ -10,7 +10,7 @@ resource "aws_instance" "this" {
   subnet_id              = element(var.subnet_ids, count.index)
 
   tags = {
-    Name      = "${var.name}-ec2-${count.index + 1}"
+    Name      = "${var.name}-step-project-3-${count.index + 1}"
     Owner     = var.name
     CreatedBy = "${var.name}-automation"
     Purpose   = "step3"
