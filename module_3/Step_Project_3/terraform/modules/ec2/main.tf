@@ -9,7 +9,7 @@ resource "aws_instance" "this" {
   security_groups = [var.security_group_id]
 
   tags = {
-    Name      = "${var.name}-ec2-${count.index + 1}"
+    Name      = "${var.name}-step-project-3-${count.index + 1}"
     Owner     = var.name
     CreatedBy = "${var.name}-automation"
     Purpose   = "step3"
