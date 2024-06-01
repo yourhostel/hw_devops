@@ -8,6 +8,7 @@ resource "aws_instance" "this" {
   key_name               = var.key_name
   vpc_security_group_ids = [var.security_group_id]
   subnet_id              = element(var.subnet_ids, count.index)
+  associate_public_ip_address = true
 
   tags = {
     Name      = "${var.name}-step-project-3-${count.index + 1}"
@@ -32,6 +33,7 @@ resource "aws_instance" "this" {
     }
   }
 }
+
 
 
 
