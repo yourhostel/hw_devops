@@ -4,8 +4,6 @@ provider "aws" {
   region = var.aws_region
 }
 
-provider "template" {}
-
 terraform {
   required_providers {
     local = {

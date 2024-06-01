@@ -1,35 +1,15 @@
 # Step_Project_3/terraform/main.tf
 
 module "vpc" {
-  source = "terraform-aws-modules/vpc/aws"
-  version = "5.8.1"
+  source = "./modules/vpc"
+  name   = var.name
 
-  name                 = var.name
-  cidr                 = var.vpc_cidr
-  azs                  = var.vpc_azs
-  private_subnets      = var.vpc_private_subnets
-  public_subnets       = var.vpc_public_subnets
-  enable_nat_gateway   = var.enable_nat_gateway
-  single_nat_gateway   = var.single_nat_gateway
-
-  tags = {
-    Name      = var.name
-    Owner     = var.name
-    CreatedBy = "${var.name}-automation"
-    Purpose   = "step3"
-  }
-  public_subnet_tags = {
-    Name      = "${var.name}-public"
-    Owner     = "${var.name}"
-    CreatedBy = "${var.name}-automation"
-    Purpose   = "step3"
-  }
-  private_subnet_tags = {
-    Name      = "${var.name}-private"
-    Owner     = "${var.name}"
-    CreatedBy = "${var.name}-automation"
-    Purpose   = "step3"
-  }
+  vpc_cidr            = var.vpc_cidr
+  vpc_azs             = var.vpc_azs
+  vpc_private_subnets = var.vpc_private_subnets
+  vpc_public_subnets  = var.vpc_public_subnets
+  enable_nat_gateway  = var.enable_nat_gateway
+  single_nat_gateway  = var.single_nat_gateway
 }
 
 module "security_group" {
@@ -55,58 +35,13 @@ module "ec2" {
   private_key     = var.private_key
 }
 
-resource "aws_lb" "this" {
-  name               = "${var.name}-lb"
-  internal           = false
-  load_balancer_type = "application"
-  security_groups    = [module.security_group.security_group_id]
-  subnets            = module.vpc.public_subnets
-
-  tags = {
-    Name      = "${var.name}-lb"
-    Owner     = var.name
-    CreatedBy = "${var.name}-automation"
-    Purpose   = "step3"
-  }
-}
-
-resource "aws_lb_target_group" "this" {
-  name     = "${var.name}-tg"
-  port     = 80
-  protocol = "HTTP"
-  vpc_id   = module.vpc.vpc_id
-
-  health_check {
-    path                = "/"
-    protocol            = "HTTP"
-    interval            = 30
-    timeout             = 5
-    healthy_threshold   = 3
-    unhealthy_threshold = 3
-  }
-
-  tags = {
-    Name      = "${var.name}-tg"
-    Owner     = var.name
-    CreatedBy = "${var.name}-automation"
-    Purpose   = "step3"
-  }
-}
-
-resource "aws_lb_listener" "this" {
-  load_balancer_arn = aws_lb.this.arn
-  port              = 80
-  protocol          = "HTTP"
-  default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.this.arn
-  }
-}
-
-resource "aws_lb_target_group_attachment" "this" {
-  target_group_arn = aws_lb_target_group.this.arn
-  target_id        = element(module.ec2.instance_ids, 0)
-  port             = 80
+module "load_balancer" {
+  source           = "./modules/load_balancer"
+  name             = var.name
+  vpc_id           = module.vpc.vpc_id
+  public_subnets   = module.vpc.public_subnets
+  security_group_id = module.security_group.security_group_id
+  instance_ids     = module.ec2.instance_ids
 }
 
 resource "local_file" "ansible_inventory" {

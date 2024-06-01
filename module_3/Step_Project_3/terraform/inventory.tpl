@@ -1,8 +1,8 @@
 # terraform/inventory.tpl
 
 [all]
-{% for instance in ec2_instances %}
-{{ instance.public_ip }} ansible_host={{ instance.public_ip }} ansible_user={{ ansible_user }} ansible_port={{ ansible_port }} ansible_ssh_private_key_file={{ private_key }}
+{% for ip in public_ips %}
+{{ ip }} ansible_host={{ ip }} ansible_user={{ ansible_user }} ansible_port={{ ansible_port }} ansible_ssh_private_key_file={{ private_key }}
 {% endfor %}
 
 [all:vars]
