@@ -1,10 +1,5 @@
 # Step_Project_3/terraform/outputs.tf
 
-output "inventory" {
-  description = "Ansible inventory file content"
-  value       = local_file.ansible_inventory.content
-}
-
 output "security_group_id" {
   description = "The ID of the security group"
   value       = module.security_group.security_group_id

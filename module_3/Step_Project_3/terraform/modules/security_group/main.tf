@@ -2,7 +2,7 @@
 
 resource "aws_security_group" "this" {
   name        = "${var.name}-sg"
-  description = "Security group for EC2 instances"
+  description = "Security group for ${var.name} project"
   vpc_id      = var.vpc_id
 
   ingress {
@@ -13,29 +13,8 @@ resource "aws_security_group" "this" {
   }
 
   ingress {
-    from_port   = var.prometheus_port
-    to_port     = var.prometheus_port
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port   = var.grafana_port
-    to_port     = var.grafana_port
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port   = var.node_exporter_port
-    to_port     = var.node_exporter_port
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port   = var.cadvisor_port
-    to_port     = var.cadvisor_port
+    from_port   = 80
+    to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -48,12 +27,13 @@ resource "aws_security_group" "this" {
   }
 
   tags = {
-    Name      = "${var.name}-sg"
-    Owner     = var.name
-    CreatedBy = "${var.name}-automation"
-    Purpose   = "step3"
+    Name       = "${var.name}-sg"
+    Owner      = var.name
+    CreatedBy  = var.name
+    Purpose    = "step3"
   }
 }
+
 
 
 
