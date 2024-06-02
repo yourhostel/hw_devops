@@ -19,8 +19,8 @@ resource "aws_instance" "this" {
 
   provisioner "remote-exec" {
     inline = [
-      "sudo apt-get update -y",
-      "sudo apt-get install -y docker.io",
+      "sudo yum update -y",
+      "sudo amazon-linux-extras install docker -y",
       "sudo systemctl start docker",
       "sudo systemctl enable docker"
     ]
