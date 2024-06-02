@@ -1,4 +1,4 @@
-# Step_Project_3/terraform/vpc/variables.tf
+# Step_Project_3/terraform/modules/vpc/variables.tf
 
 variable "name" {
   description = "The name prefix for all resources."
@@ -34,6 +34,7 @@ variable "single_nat_gateway" {
   description = "Whether to create a single NAT gateway."
   type        = bool
 }
+
 
 
 
