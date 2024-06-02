@@ -18,12 +18,14 @@ module "vpc" {
     CreatedBy = "${var.name}-automation"
     Purpose   = "step3"
   }
+
   public_subnet_tags = {
     Name      = "${var.name}-public"
     Owner     = "${var.name}"
     CreatedBy = "${var.name}-automation"
     Purpose   = "step3"
   }
+
   private_subnet_tags = {
     Name      = "${var.name}-private"
     Owner     = "${var.name}"

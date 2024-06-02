@@ -20,10 +20,6 @@ output "internet_gateway_id" {
   value       = length(data.aws_internet_gateway.existing.id) > 0 ? data.aws_internet_gateway.existing.id : aws_internet_gateway.this[0].id
 }
 
-output "public_route_table_id" {
-  description = "The ID of the public route table."
-  value       = aws_route_table.public.id
-}
 
 
 
