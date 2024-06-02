@@ -32,7 +32,16 @@ module "vpc" {
   }
 }
 
+data "aws_internet_gateway" "existing" {
+  filter {
+    name   = "attachment.vpc-id"
+    values = [module.vpc.vpc_id]
+  }
+}
+
 resource "aws_internet_gateway" "this" {
+  count = length(data.aws_internet_gateway.existing.id) == 0 ? 1 : 0
+
   vpc_id = module.vpc.vpc_id
 
   tags = {
@@ -52,7 +61,7 @@ resource "aws_route_table" "public" {
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.this.id
+    gateway_id = length(data.aws_internet_gateway.existing.id) > 0 ? data.aws_internet_gateway.existing.id : aws_internet_gateway.this[0].id
   }
 
   tags = {
@@ -73,6 +82,7 @@ resource "aws_route_table_association" "public" {
     create_before_destroy = true
   }
 }
+
 
 
 
