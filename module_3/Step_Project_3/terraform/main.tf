@@ -38,8 +38,8 @@ module "load_balancer" {
   subnet_ids          = module.vpc.public_subnets
   security_group_id   = module.security_group.security_group_id
   instance_ids        = [module.ec2.instance_ids[0]]
-  azs                 = var.vpc_azs
 }
+
 
 output "inventory" {
   value = templatefile("inventory.tpl", {

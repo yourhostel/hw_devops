@@ -2,7 +2,6 @@
 
 resource "aws_elb" "this" {
   name               = "${var.name}-lb"
-  availability_zones = var.azs
   security_groups    = [var.security_group_id]
   subnets            = var.subnet_ids
 
@@ -30,6 +29,7 @@ resource "aws_elb" "this" {
     Purpose    = "step3"
   }
 }
+
 
 
 

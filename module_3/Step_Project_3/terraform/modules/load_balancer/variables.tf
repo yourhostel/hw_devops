@@ -8,10 +8,6 @@ variable "vpc_id" {
   type = string
 }
 
-variable "azs" {
-  type = list(string)
-}
-
 variable "subnet_ids" {
   type = list(string)
 }
