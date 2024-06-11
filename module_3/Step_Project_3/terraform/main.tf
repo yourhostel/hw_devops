@@ -69,11 +69,7 @@ resource "null_resource" "ansible_playbook" {
   ]
 
   provisioner "local-exec" {
-        command = <<EOT
-echo "Inventory content:"
-cat ../ansible/inventory.ini
-ansible-playbook -i ../ansible/inventory.ini ../ansible/playbooks/deploy.yml
-EOT
+    command = "ansible-playbook -i ../ansible/inventory.ini ../ansible/playbooks/deploy.yml"
   }
 }
 
