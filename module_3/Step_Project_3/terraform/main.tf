@@ -62,14 +62,25 @@ resource "local_file" "inventory" {
   filename = "${path.module}/../ansible/inventory.ini"
 }
 
+resource "null_resource" "wait_for_inventory" {
+  provisioner "local-exec" {
+    command = "sleep 30"
+  }
+  depends_on = [local_file.inventory]
+}
+
 resource "null_resource" "ansible_playbook" {
   depends_on = [
     module.ec2,
-    local_file.inventory
+    null_resource.wait_for_inventory
   ]
 
   provisioner "local-exec" {
-    command = "ansible-playbook -i ../ansible/inventory.ini ../ansible/playbooks/deploy.yml"
+    command = <<EOT
+ANSIBLE_CONFIG=${path.module}/../ansible/ansible.cfg \
+ansible-playbook -i ${path.module}/../ansible/inventory.ini \
+${path.module}/../ansible/playbooks/deploy.yml
+EOT
   }
 }
 
