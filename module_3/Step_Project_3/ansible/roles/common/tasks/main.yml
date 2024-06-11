@@ -1,7 +1,6 @@
 # ansible/roles/common/tasks/main.yml
 
 ---
----
 - name: Ensure Python dependencies are installed
   yum:
     name: python3
