@@ -1,0 +1,18 @@
+# ansible/roles/common/tasks/main.yml
+
+---
+- name: Ensure Python dependencies are installed
+  yum:
+    name:
+      - python38
+      - python38-pip
+    state: present
+
+- name: Upgrade pip
+  command: "python3.8 -m pip install --upgrade pip"
+
+- name: Install Docker SDK for Python
+  pip:
+    name: docker
+    state: present
+    executable: "python3.8 -m pip"
