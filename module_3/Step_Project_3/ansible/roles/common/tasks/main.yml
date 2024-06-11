@@ -14,3 +14,10 @@
     name: docker
     state: present
     executable: "pip3"
+
+- name: Install compatible urllib3
+  pip:
+    name: "urllib3==1.26.14"
+    state: present
+    executable: "pip3"
+
