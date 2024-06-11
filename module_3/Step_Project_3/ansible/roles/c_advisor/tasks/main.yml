@@ -1,5 +1,15 @@
 # ansible/roles/c_advisor/tasks/main.yml
 ---
+- name: Ensure Python dependencies are installed
+  yum:
+    name: python3-pip
+    state: present
+
+- name: Install Docker SDK for Python
+  pip:
+    name: docker
+    state: present
+
 - name: Run cAdvisor container
   docker_container:
     name: cadvisor

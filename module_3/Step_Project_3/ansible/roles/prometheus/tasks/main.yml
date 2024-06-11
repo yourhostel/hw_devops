@@ -1,14 +1,15 @@
 # ansible/roles/prometheus/tasks/main.yml
----
-- name: Create Prometheus configuration directory
-  file:
-    path: /etc/prometheus
-    state: directory
 
-- name: Copy Prometheus configuration file
-  template:
-    src: prometheus.json.j2
-    dest: /etc/prometheus/prometheus.json
+---
+- name: Ensure Python dependencies are installed
+  yum:
+    name: python3-pip
+    state: present
+
+- name: Install Docker SDK for Python
+  pip:
+    name: docker
+    state: present
 
 - name: Run Prometheus container
   docker_container:
@@ -18,7 +19,14 @@
       - "{{ prometheus_port }}:{{ prometheus_port }}"
     volumes:
       - /etc/prometheus:/etc/prometheus
-    command: "--config.file=/etc/prometheus/prometheus.json"
+    command: "--config.file=/etc/prometheus/prometheus.yml"
+
+- name: Copy Prometheus configuration file
+  template:
+    src: prometheus.json.j2
+    dest: /etc/prometheus/prometheus.yml
+
+
 
 
 
