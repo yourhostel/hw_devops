@@ -1,14 +1,21 @@
 # ansible/roles/node_exporter/tasks/main.yml
 ---
 - name: Ensure Python dependencies are installed
-  yum:
-    name: python3-pip
+  amazon_linux_extras:
+    name: "python3.8"
     state: present
+
+- name: Install pip for Python 3.8
+  command: "python3.8 -m ensurepip"
+
+- name: Upgrade pip
+  command: "python3.8 -m pip install --upgrade pip"
 
 - name: Install Docker SDK for Python
   pip:
     name: docker
     state: present
+    executable: "python3.8 -m pip"
 
 - name: Run Node Exporter container
   docker_container:
