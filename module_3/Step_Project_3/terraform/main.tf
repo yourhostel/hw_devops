@@ -62,25 +62,32 @@ resource "local_file" "inventory" {
   filename = "${path.module}/../ansible/inventory.ini"
 }
 
-resource "null_resource" "wait_for_inventory" {
+resource "null_resource" "wait_for_ssh" {
+  count = length(module.ec2.public_ips)
+
   provisioner "local-exec" {
-    command = "sleep 30"
+    command = <<EOT
+    for i in {1..30}; do
+      nc -zv ${element(module.ec2.public_ips, count.index)} 22 && break
+      echo "Waiting for SSH to be available on ${element(module.ec2.public_ips, count.index)}..."
+      sleep 5
+    done
+    EOT
   }
-  depends_on = [local_file.inventory]
 }
 
 resource "null_resource" "ansible_playbook" {
   depends_on = [
     module.ec2,
-    null_resource.wait_for_inventory
+    null_resource.wait_for_ssh
   ]
 
   provisioner "local-exec" {
     command = <<EOT
-ANSIBLE_CONFIG=${path.module}/../ansible/ansible.cfg \
-ansible-playbook -i ${path.module}/../ansible/inventory.ini \
-${path.module}/../ansible/playbooks/deploy.yml
-EOT
+    ANSIBLE_CONFIG=${path.module}/../ansible/ansible.cfg \
+    ansible-playbook -i ${path.module}/../ansible/inventory.ini \
+    ${path.module}/../ansible/playbooks/deploy.yml
+    EOT
   }
 }
 
