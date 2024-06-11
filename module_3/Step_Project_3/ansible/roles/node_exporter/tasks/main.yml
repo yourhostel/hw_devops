@@ -1,0 +1,18 @@
+---
+- name: Install Docker
+  yum:
+    name: docker
+    state: present
+
+- name: Start Docker
+  systemd:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: Run Node Exporter
+  docker_container:
+    name: node_exporter
+    image: prom/node-exporter
+    ports:
+      - "9100:9100"
