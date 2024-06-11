@@ -1,8 +1,10 @@
+# ansible/roles/node_exporter/tasks/main.yml
 ---
-- name: Run Node Exporter
+- name: Run Node Exporter container
   docker_container:
     name: node_exporter
-    image: prom/node-exporter
+    image: prom/node-exporter:latest
     ports:
       - "{{ node_exporter_port }}:{{ node_exporter_port }}"
+
 

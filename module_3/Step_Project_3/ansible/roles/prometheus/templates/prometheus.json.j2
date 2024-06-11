@@ -1,3 +1,4 @@
+# ansible/roles/prometheus/templates/prometheus.json.j2
 {
   "global": {
     "scrape_interval": "15s"
@@ -16,9 +17,9 @@
       "static_configs": [
         {
           "targets": [
-            {%- for host in groups['all'] %}
+            {% for host in groups['all'] %}
             "{{ hostvars[host].ansible_host }}:{{ node_exporter_port }}"{% if not loop.last %},{% endif %}
-            {%- endfor %}
+            {% endfor %}
           ]
         }
       ]
@@ -28,16 +29,17 @@
       "static_configs": [
         {
           "targets": [
-            {%- for host in groups['all'] %}
-            {%- if host == groups['all'][0] or host == groups['all'][2] %}
+            {% for host in groups['all'] %}
+            {% if host == groups['all'][0] or host == groups['all'][2] %}
             "{{ hostvars[host].ansible_host }}:{{ cadvisor_port }}"{% if not loop.last %},{% endif %}
-            {%- endif %}
-            {%- endfor %}
+            {% endif %}
+            {% endfor %}
           ]
         }
       ]
     }
   ]
 }
+
 
 
