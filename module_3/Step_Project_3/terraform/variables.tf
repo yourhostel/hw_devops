@@ -1,4 +1,4 @@
-# homework-ansible-1/terraform/variables.tf
+# Step_Project_3/terraform/variables.tf
 
 variable "name" {
   type        = string
