@@ -1,16 +1,63 @@
 ---
-- name: Run Prometheus
-  docker_container:
+- name: Create Prometheus user
+  user:
     name: prometheus
-    image: prom/prometheus
-    ports:
-      - "{{ prometheus_port }}:{{ prometheus_port }}"
-    volumes:
-      - /etc/prometheus:/etc/prometheus
-    command: "--config.file=/etc/prometheus/prometheus.yml"
+    state: present
+    shell: /sbin/nologin
 
-- name: Copy Prometheus config
+- name: Download and install Prometheus
+  shell: |
+    cd /opt
+    if [ ! -d "prometheus" ]; then
+      wget https://github.com/prometheus/prometheus/releases/download/v2.26.0/prometheus-2.26.0.linux-amd64.tar.gz
+      tar -xvf prometheus-2.26.0.linux-amd64.tar.gz
+      mv prometheus-2.26.0.linux-amd64 prometheus
+    fi
+  args:
+    executable: /bin/bash
+  when: inventory_hostname == prometheus_host
+
+- name: Change ownership of Prometheus directory
+  file:
+    path: /opt/prometheus
+    state: directory
+    owner: prometheus
+    group: prometheus
+    recurse: yes
+  when: inventory_hostname == prometheus_host
+
+- name: Create Prometheus configuration file
   template:
     src: prometheus.yml.j2
-    dest: /etc/prometheus/prometheus.yml
+    dest: /opt/prometheus/prometheus.yml
+  when: inventory_hostname == prometheus_host
+
+- name: Create Prometheus service
+  copy:
+    dest: /etc/systemd/system/prometheus.service
+    content: |
+      [Unit]
+      Description=Prometheus
+      Wants=network-online.target
+      After=network-online.target
+
+      [Service]
+      User=prometheus
+      ExecStart=/opt/prometheus/prometheus \
+      --config.file=/opt/prometheus/prometheus.yml \
+      --storage.tsdb.path=/opt/prometheus/data \
+      --web.listen-address=0.0.0.0:{{ prometheus_port }}
+
+      [Install]
+      WantedBy=default.target
+  when: inventory_hostname == prometheus_host
+
+- name: Enable and start Prometheus service
+  systemd:
+    name: prometheus
+    enabled: yes
+    state: started
+  when: inventory_hostname == prometheus_host
+
+
 
