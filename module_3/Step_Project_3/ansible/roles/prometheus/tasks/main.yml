@@ -1,21 +1,10 @@
 ---
-- name: Install Docker
-  yum:
-    name: docker
-    state: present
-
-- name: Start Docker
-  systemd:
-    name: docker
-    state: started
-    enabled: yes
-
 - name: Run Prometheus
   docker_container:
     name: prometheus
     image: prom/prometheus
     ports:
-      - "9090:9090"
+      - "{{ prometheus_port }}:{{ prometheus_port }}"
     volumes:
       - /etc/prometheus:/etc/prometheus
     command: "--config.file=/etc/prometheus/prometheus.yml"
@@ -24,3 +13,4 @@
   template:
     src: prometheus.yml.j2
     dest: /etc/prometheus/prometheus.yml
+

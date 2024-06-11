@@ -40,18 +40,43 @@ module "load_balancer" {
   instance_ids        = [module.ec2.instance_ids[0]]
 }
 
+resource "local_file" "inventory" {
+  content = templatefile("${path.module}/inventory.tpl", {
+    public_ips       = module.ec2.public_ips,
+    ansible_user     = var.ansible_user,
+    ansible_port     = var.ansible_port,
+    private_key      = var.private_key,
+    prometheus_port  = var.prometheus_port,
+    grafana_port     = var.grafana_port,
+    node_exporter_port = var.node_exporter_port,
+    cadvisor_port    = var.cadvisor_port
+  })
+  filename = "${path.module}/../ansible/inventory.ini"
+}
+
+resource "null_resource" "ansible_playbook" {
+  depends_on = [
+    module.ec2,
+    local_file.inventory
+  ]
+
+  provisioner "local-exec" {
+    command = "ansible-playbook -i ../ansible/inventory.ini ../ansible/playbooks/deploy.yml"
+  }
+}
 
 output "inventory" {
   value = templatefile("inventory.tpl", {
-    public_ips       = module.ec2.public_ips
-    ansible_user     = var.ansible_user
-    ansible_port     = var.ansible_port
-    private_key      = var.private_key
-    prometheus_port  = var.prometheus_port
-    grafana_port     = var.grafana_port
-    node_exporter_port = var.node_exporter_port
+    public_ips       = module.ec2.public_ips,
+    ansible_user     = var.ansible_user,
+    ansible_port     = var.ansible_port,
+    private_key      = var.private_key,
+    prometheus_port  = var.prometheus_port,
+    grafana_port     = var.grafana_port,
+    node_exporter_port = var.node_exporter_port,
     cadvisor_port    = var.cadvisor_port
   })
 }
+
 
 

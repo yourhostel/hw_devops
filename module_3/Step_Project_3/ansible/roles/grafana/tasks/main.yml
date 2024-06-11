@@ -1,18 +1,8 @@
 ---
-- name: Install Docker
-  yum:
-    name: docker
-    state: present
-
-- name: Start Docker
-  systemd:
-    name: docker
-    state: started
-    enabled: yes
-
 - name: Run Grafana
   docker_container:
     name: grafana
     image: grafana/grafana
     ports:
-      - "3000:3000"
+      - "{{ grafana_port }}:{{ grafana_port }}"
+

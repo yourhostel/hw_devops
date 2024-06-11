@@ -1,18 +1,7 @@
 ---
-- name: Install Docker
-  yum:
-    name: docker
-    state: present
-
-- name: Start Docker
-  systemd:
-    name: docker
-    state: started
-    enabled: yes
-
 - name: Run cAdvisor
   docker_container:
     name: cadvisor
     image: google/cadvisor
     ports:
-      - "8080:8080"
+      - "{{ cadvisor_port }}:{{ cadvisor_port }}"
