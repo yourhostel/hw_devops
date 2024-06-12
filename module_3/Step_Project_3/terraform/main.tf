@@ -96,17 +96,16 @@ resource "null_resource" "ansible_playbook" {
   }
 }
 
-output "inventory" {
-  value = templatefile("inventory.tpl", {
-    public_ips       = module.ec2.public_ips,
-    ansible_user     = var.ansible_user,
-    ansible_port     = var.ansible_port,
-    private_key      = var.private_key,
-    prometheus_port  = var.prometheus_port,
-    grafana_port     = var.grafana_port,
-    node_exporter_port = var.node_exporter_port,
-    cadvisor_port    = var.cadvisor_port
-  })
+output "api_endpoints" {
+  value = {
+    prometheus = "http://${element(module.ec2.public_ips, 0)}:${var.prometheus_port}"
+    grafana = "http://${element(module.ec2.public_ips, 0)}:${var.grafana_port}"
+    cadvisor_1 = "http://${element(module.ec2.public_ips, 0)}:${var.cadvisor_port}"
+    cadvisor_2 = "http://${element(module.ec2.public_ips, 2)}:${var.cadvisor_port}"
+    node_exporter_1 = "http://${element(module.ec2.public_ips, 0)}:${var.node_exporter_port}"
+    node_exporter_2 = "http://${element(module.ec2.public_ips, 1)}:${var.node_exporter_port}"
+    node_exporter_3 = "http://${element(module.ec2.public_ips, 2)}:${var.node_exporter_port}"
+  }
 }
 
 
