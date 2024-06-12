@@ -4,7 +4,75 @@
 ## Project Overview
 This project involves creating a scalable monitoring infrastructure on AWS using Terraform and Ansible. The setup includes a VPC, security groups, EC2 instances with Docker installed, and the deployment of Prometheus, Grafana, Node Exporter, and cAdvisor.
 
+## Automated Provisioning Logic
+
+### Inventory File Management
+- The project automatically verifies the existence of the `inventory.ini` file.
+- If found, it deletes the existing `inventory.ini` file and generates a new one with the updated infrastructure details.
+
+```inventory.tpl
+# terraform/inventory.tpl
+
+[all]
+%{ for ip in public_ips ~}
+${ip} ansible_host=${ip} ansible_user=${ansible_user} ansible_port=${ansible_port} ansible_ssh_private_key_file=${private_key}
+%{ endfor ~}
+
+[all:vars]
+prometheus_port=${prometheus_port}
+grafana_port=${grafana_port}
+node_exporter_port=${node_exporter_port}
+cadvisor_port=${cadvisor_port}
+```
+### SSH Connectivity Check
+- Before running the Ansible playbook, the project verifies SSH connectivity to all EC2 instances.
+- The `null_resource "wait_for_ssh"` resource checks if SSH is available on each instance.
+- It tries to connect to the instance for up to 30 attempts, pausing for 5 seconds between each attempt.
+
+```tf
+resource "null_resource" "wait_for_ssh" {
+  count = length(module.ec2.public_ips)
+
+  provisioner "local-exec" {
+    command = <<EOT
+    for i in {1..30}; do
+      nc -zv ${element(module.ec2.public_ips, count.index)} 22 && break
+      echo "Waiting for SSH to be available on ${element(module.ec2.public_ips, count.index)}..."
+      sleep 5
+    done
+    EOT
+  }
+}
+```
+
+### Ansible Provisioning
+- Once SSH connectivity is confirmed, the Ansible playbook is triggered.
+- The `null_resource "ansible_playbook"` resource runs the Ansible playbook to configure Prometheus, Grafana, Node Exporter, and cAdvisor on the EC2 instances.
+
+```tf
+resource "null_resource" "ansible_playbook" {
+  depends_on = [
+    module.ec2,
+    null_resource.wait_for_ssh
+  ]
+
+  provisioner "local-exec" {
+    command = <<EOT
+    ANSIBLE_CONFIG=${path.module}/../ansible/ansible.cfg \
+    ansible-playbook -i ${path.module}/../ansible/inventory.ini \
+    ${path.module}/../ansible/playbooks/deploy.yml
+    EOT
+  }
+}
+```
 ### Outputs:
+
+- `api_endpoints`: Provides URLs for accessing Prometheus, Grafana, and cAdvisor on the EC2 instances.
+- `instance_ids`: Lists the IDs of the created EC2 instances.
+- `instance_public_ips`: Lists the public IP addresses of the created EC2 instances.
+- `security_group_id`: The ID of the created security group.
+- `vpc_id`: The ID of the created VPC.
+
 ![step_project_3 (1).jpg](screenshots%2Fstep_project_3%20%281%29.jpg)
 ###  prometheus http://16.16.215.106:9090
 ![step_project_3 (2).jpg](screenshots%2Fstep_project_3%20%282%29.jpg)
@@ -41,14 +109,6 @@ from [module load_balancer](https://github.com/yourhostel/hw_devops/tree/main/mo
 ![step_project_3 (12).jpg](screenshots%2Fstep_project_3%20%2812%29.jpg)
 ### diagram
 ![infrastructure_diagram.png](diagram%2Finfrastructure_diagram.png)
-
-#### Outputs
-
-- `api_endpoints`: Provides URLs for accessing Prometheus, Grafana, and cAdvisor on the EC2 instances.
-- `instance_ids`: Lists the IDs of the created EC2 instances.
-- `instance_public_ips`: Lists the public IP addresses of the created EC2 instances.
-- `security_group_id`: The ID of the created security group.
-- `vpc_id`: The ID of the created VPC.
 
 #### example of project variables terraform.tfvars
 
