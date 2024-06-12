@@ -15,6 +15,11 @@ module "security_group" {
   source = "./modules/security_group"
   name   = var.name
   vpc_id = module.vpc.vpc_id
+
+  prometheus_port    = var.prometheus_port
+  grafana_port       = var.grafana_port
+  node_exporter_port = var.node_exporter_port
+  cadvisor_port      = var.cadvisor_port
 }
 
 module "ec2" {
