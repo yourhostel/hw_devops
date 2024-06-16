@@ -1,4 +1,4 @@
-# nginx-service.yaml
+# first-test/nginx-service.yaml
 
 apiVersion: v1
 kind: Service
