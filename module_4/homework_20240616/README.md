@@ -7,7 +7,7 @@ This work uses the same [manifest for nginx](https://github.com/yourhostel/hw_de
 kubectl port-forward pod/yourhostel-nginx-deployment-585449566-k5zmp 8090:80 --address 192.168.88.244
 ``` 
 command, the cluster is configured using [kind-config.yaml](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework_20240616/kind-config.yaml) and the [nginx-service.yaml](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework_20240616/nginx-service.yaml) service is added to control traffic routing.
-The port was also replaced from 8089 to 30007 and now a service of the NodePort type provides access to all pods corresponding to the `app=nginx` selector through the specified port `3007` on each cluster node.
+The port was also replaced from 8089 to 30007 and now a service of the NodePort type provides access to all pods corresponding to the `app=nginx` selector through the specified port `30007` on each cluster node.
 
 ### Network Diagram
 
