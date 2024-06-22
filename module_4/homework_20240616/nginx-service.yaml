@@ -1,10 +1,12 @@
+# homework_20240616/nginx-service.yaml
+
 apiVersion: v1
 kind: Service
 metadata:
   name: nginx-service
 spec:
   selector:
-    app: nginx
+    app: nginx # All pods matching the app=nginx selector
   ports:
     - protocol: TCP
       port: 80
