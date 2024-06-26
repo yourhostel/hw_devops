@@ -1,0 +1,13 @@
+# homework-20240620/volumes/yourhostel-pvc.yaml
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: yourhostel-pvc
+  namespace: yourhostel-namespace
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi

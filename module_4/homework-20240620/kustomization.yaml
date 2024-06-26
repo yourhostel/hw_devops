@@ -1,0 +1,7 @@
+# homework-20240620/kustomization.yaml
+
+resources:
+  - namespaces/namespace.yaml
+  - volumes/yourhostel-pvc.yaml
+  - deployments/yourhostel-nginx-deployment.yaml
+  - services/yourhostel-nginx-service.yaml

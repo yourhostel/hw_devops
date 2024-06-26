@@ -1,0 +1,29 @@
+# homework-20240620/deployments/yourhostel-nginx-deployment.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: yourhostel-nginx-deployment
+  namespace: yourhostel-namespace
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: yourhostel-nginx
+  template:
+    metadata:
+      labels:
+        app: yourhostel-nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - mountPath: "/usr/share/nginx/html"
+          name: yourhostel-volume
+      volumes:
+      - name: yourhostel-volume
+        persistentVolumeClaim:
+          claimName: yourhostel-pvc
