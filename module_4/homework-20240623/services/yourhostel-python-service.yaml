@@ -5,16 +5,15 @@ kind: Service
 metadata:
   name: yourhostel-python-service
   namespace: yourhostel-namespace
-  annotations:
-    service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
     app: yourhostel-python
   ports:
     - protocol: TCP
       port: 80
       targetPort: 5000
+      nodePort: 30007
 
 
 
