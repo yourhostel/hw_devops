@@ -1,0 +1,6 @@
+# homework-20240623/kustomization.yaml
+
+resources:
+  - namespaces/namespace.yaml
+  - deployments/yourhostel-python-deployment.yaml
+  - services/yourhostel-python-service.yaml

@@ -1,0 +1,15 @@
+# homework-20240623/services/yourhostel-python-service.yaml
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: yourhostel-python-service
+  namespace: yourhostel-namespace
+spec:
+  selector:
+    app: yourhostel-python
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
+  type: LoadBalancer

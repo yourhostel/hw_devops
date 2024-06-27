@@ -1,0 +1,36 @@
+# homework-20240623/deployments/yourhostel-python-deployment.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: yourhostel-python-deployment
+  namespace: yourhostel-namespace
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: yourhostel-python
+  template:
+    metadata:
+      labels:
+        app: yourhostel-python
+    spec:
+      containers:
+      - name: flask-web-server
+        image: yourhostel/flask-web-server:latest
+        ports:
+        - containerPort: 5000
+        livenessProbe:
+          httpGet:
+            path: /liveness
+            port: 5000
+          initialDelaySeconds: 3
+          periodSeconds: 3
+        readinessProbe:
+          httpGet:
+            path: /readiness
+            port: 5000
+          initialDelaySeconds: 3
+          periodSeconds: 3
+
+
