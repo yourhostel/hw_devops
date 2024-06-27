@@ -5,6 +5,9 @@ kind: Service
 metadata:
   name: yourhostel-python-service
   namespace: yourhostel-namespace
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+    externalTrafficPolicy: Local
 spec:
   type: LoadBalancer
   selector:
@@ -13,6 +16,7 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 5000
+  loadBalancerIP: 16.16.220.63
 
 
 
