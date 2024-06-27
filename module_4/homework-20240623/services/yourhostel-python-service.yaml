@@ -7,6 +7,7 @@ metadata:
   namespace: yourhostel-namespace
   annotations:
     service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+    service.beta.kubernetes.io/aws-load-balancer-security-groups: "sg-04e86da8883f8eb31"
 spec:
   type: LoadBalancer
   selector:
@@ -15,6 +16,7 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 5000
+
 
 
 
