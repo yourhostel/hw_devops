@@ -9,7 +9,7 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-  - host: yourhostel.example.com
+  - host: k8s-yourhost-yourhost-b7894307af-1bd66ca2e46afb8c.elb.eu-north-1.amazonaws.com
     http:
       paths:
       - path: /
