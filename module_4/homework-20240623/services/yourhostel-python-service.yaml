@@ -5,6 +5,8 @@ kind: Service
 metadata:
   name: yourhostel-python-service
   namespace: yourhostel-namespace
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-internal: "0.0.0.0/0"
 spec:
   type: LoadBalancer
   externalTrafficPolicy: Cluster
@@ -14,3 +16,6 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 5000
+
+
+
