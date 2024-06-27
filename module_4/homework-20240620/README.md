@@ -15,7 +15,7 @@ homework-20240620
 │ └── yourhostel-pvc.yaml
 └── kustomization.yaml
 ```
-- At the root of the project
+### At the root of the project
 ```yaml
 # homework-20240620/kustomization.yaml
 
@@ -25,7 +25,6 @@ resources:
   - deployments/yourhostel-nginx-deployment.yaml
   - services/yourhostel-nginx-service.yaml
   - volumes/busybox-pod.yaml
-
 ```
 ```bash
 kubectl apply -k .
@@ -49,30 +48,30 @@ kubectl get svc -n yourhostel-namespace
 ```
 ![kub_3 (5).jpg](screenshots%2Fkub_3%20%285%29.jpg)
 
-- Copying a test HTML file to PVC
+### Copying a test HTML file to PVC
 ```bash
 kubectl exec -it busybox --namespace=yourhostel-namespace -- /bin/sh
 ```
 ![kub_3 (6).jpg](screenshots%2Fkub_3%20%286%29.jpg)
 ![kub_3 (7).jpg](screenshots%2Fkub_3%20%287%29.jpg)
 
-- Delete pod busybox and verifying that nginx returns test HTML
+### Delete pod busybox and verifying that nginx returns test HTML
 ```bash
 kubectl delete pod busybox --namespace=yourhostel-namespace
 ```
 ![kub_3 (8).jpg](screenshots%2Fkub_3%20%288%29.jpg)
 ![kub_3 (9).jpg](screenshots%2Fkub_3%20%289%29.jpg)
 
-- Removing Pod from nginx
+### Removing Pod from nginx
 ![kub_3 (10).jpg](screenshots%2Fkub_3%20%2810%29.jpg)
 
--  Redirect to another port
+###  Redirect to another port
 ![kub_3 (11).jpg](screenshots%2Fkub_3%20%2811%29.jpg)
 
--  Let's make sure everything works
+###  Let's make sure everything works
 ![kub_3 (12).jpg](screenshots%2Fkub_3%20%2812%29.jpg)
 
-- Deleting all created resources. busybox was deleted earlier so the deletion error occurred.
+### Deleting all created resources. busybox was deleted earlier so the deletion error occurred.
 ```bash
 kubectl delete -k .
 ```
