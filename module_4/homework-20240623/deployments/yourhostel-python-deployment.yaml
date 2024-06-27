@@ -40,8 +40,6 @@ spec:
       - name: ssh-key-volume
         secret:
           secretName: ssh-key-secret
-          items:
-            - key: id_rsa
-              path: id_rsa
+
 
 
