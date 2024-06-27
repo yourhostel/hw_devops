@@ -1,0 +1,19 @@
+# homework-20240620/volumes/busybox-pod.yaml
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: busybox
+  namespace: yourhostel-namespace
+spec:
+  containers:
+  - name: busybox
+    image: busybox
+    command: ["sleep", "3600"]
+    volumeMounts:
+    - mountPath: "/mnt"
+      name: yourhostel-volume
+  volumes:
+  - name: yourhostel-volume
+    persistentVolumeClaim:
+      claimName: yourhostel-pvc

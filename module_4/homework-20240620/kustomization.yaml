@@ -5,3 +5,4 @@ resources:
   - volumes/yourhostel-pvc.yaml
   - deployments/yourhostel-nginx-deployment.yaml
   - services/yourhostel-nginx-service.yaml
+  - volumes/busybox-pod.yaml
