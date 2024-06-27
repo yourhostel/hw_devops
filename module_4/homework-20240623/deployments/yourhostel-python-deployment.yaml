@@ -32,14 +32,6 @@ spec:
             port: 5000
           initialDelaySeconds: 3
           periodSeconds: 3
-        volumeMounts:
-        - name: ssh-key-volume
-          mountPath: /root/.ssh
-          readOnly: true
-      volumes:
-      - name: ssh-key-volume
-        secret:
-          secretName: ssh-key-secret
 
 
 
