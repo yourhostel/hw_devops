@@ -6,10 +6,10 @@ metadata:
   name: yourhostel-python-service
   namespace: yourhostel-namespace
 spec:
+  type: LoadBalancer
   selector:
     app: yourhostel-python
   ports:
     - protocol: TCP
       port: 80
       targetPort: 5000
-  type: LoadBalancer
