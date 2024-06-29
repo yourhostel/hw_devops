@@ -5,8 +5,8 @@ kind: Ingress
 metadata:
   name: yourhostel-python-ingress
   namespace: yourhostel-namespace
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
+#  annotations:
+#    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   ingressClassName: nginx
   rules:
