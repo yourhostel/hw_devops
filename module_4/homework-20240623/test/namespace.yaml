@@ -1,6 +1,0 @@
-# homework-20240623/namespaces/namespace.yaml
-
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: yourhostel-namespace
