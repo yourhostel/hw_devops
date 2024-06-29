@@ -1,0 +1,36 @@
+# homework-20240623/ingress/yourhostel-python-ingress.yaml
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: yourhostel-python-ingress
+  namespace: yourhostel-namespace
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: yourhostel-python-service
+            port:
+              number: 80
+      - path: /readiness
+        pathType: Prefix
+        backend:
+          service:
+            name: yourhostel-python-service
+            port:
+              number: 80
+      - path: /liveness
+        pathType: Prefix
+        backend:
+          service:
+            name: yourhostel-python-service
+            port:
+              number: 80
+
