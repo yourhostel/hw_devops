@@ -1,0 +1,14 @@
+# test-service.yaml
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: test-service
+  namespace: yourhostel-namespace
+spec:
+  selector:
+    app: test
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
