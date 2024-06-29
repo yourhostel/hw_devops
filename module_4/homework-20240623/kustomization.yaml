@@ -5,3 +5,4 @@ resources:
   - deployments/yourhostel-python-deployment.yaml
   - services/yourhostel-python-service.yaml
   - ingress/yourhostel-python-ingress.yaml
+  - ingress/ingressclass.yaml
