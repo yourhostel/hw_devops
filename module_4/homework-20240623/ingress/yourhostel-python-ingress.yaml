@@ -18,19 +18,19 @@ spec:
           service:
             name: yourhostel-python-service
             port:
-              number: 80
+              number: 5000
       - path: /readiness
         pathType: Prefix
         backend:
           service:
             name: yourhostel-python-service
             port:
-              number: 80
+              number: 5000
       - path: /liveness
         pathType: Prefix
         backend:
           service:
             name: yourhostel-python-service
             port:
-              number: 80
+              number: 5000
 
