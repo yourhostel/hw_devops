@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: yourhostel-nginx-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: yourhostel-nginx
+  template:
+    metadata:
+      labels:
+        app: yourhostel-nginx
+    spec:
+      containers:
+      - name: yourhostel-nginx
+        image: yourhostel/yourhostel-nginx:latest
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - name: config-volume
+          mountPath: /etc/nginx/conf.d
+      volumes:
+      - name: config-volume
+        configMap:
+          name: yourhostel-nginx-config
+      imagePullSecrets:
+      - name: yourhostel-regcred
