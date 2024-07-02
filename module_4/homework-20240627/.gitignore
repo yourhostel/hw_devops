@@ -1,0 +1,8 @@
+# Ignore Docker config file
+.dockerconfigjson
+
+# Ignore swap files created by text editors
+*.swp
+
+# Ignore Kubernetes secret file with sensitive data
+yourhostel-regcred-secret.yaml
