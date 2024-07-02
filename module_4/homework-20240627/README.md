@@ -1,4 +1,4 @@
-# Kubernetes Deploy App
+# Kubernetes ConfigMaps Secrets
 
 [homework-20240627](https://gitlab.com/dan-it/groups/devops2/homework/-/blob/main/homework-20240627.md)
 ## Pull the standard NGINX image:
