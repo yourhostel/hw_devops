@@ -17,7 +17,14 @@ ingress:
       paths:
         - /
 
+serviceAccount:
+  create: true
+  name: ""
+  annotations: {}
+  automount: true
+
 resources: {}
 nodeSelector: {}
 tolerations: []
 affinity: []
+
