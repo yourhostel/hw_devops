@@ -28,10 +28,19 @@ autoscaling:
   minReplicas: 1
   maxReplicas: 100
   targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
 
 resources: {}
 nodeSelector: {}
 tolerations: []
 affinity: {}
+
+ingress-nginx:
+  controller:
+    enabled: true
+    service:
+      type: LoadBalancer
+
+
 
 
