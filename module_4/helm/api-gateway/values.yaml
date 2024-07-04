@@ -32,6 +32,6 @@ autoscaling:
 resources: {}
 nodeSelector: {}
 tolerations: []
-affinity: []
+affinity: {}
 
 
