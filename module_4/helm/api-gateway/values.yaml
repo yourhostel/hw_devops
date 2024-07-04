@@ -1,45 +1,4 @@
-replicaCount: 2
-
-image:
-  repository: nginx
-  tag: latest
-  pullPolicy: IfNotPresent
-
-service:
-  type: LoadBalancer
-  port: 80
-
-ingress:
-  enabled: true
-  annotations: {}
-  hosts:
-    - host: api.example.com
-      paths:
-        - /
-
-serviceAccount:
-  create: true
-  name: ""
-  annotations: {}
-  automount: true
-
-autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 100
-  targetCPUUtilizationPercentage: 80
-  targetMemoryUtilizationPercentage: 80
-
-resources: {}
-nodeSelector: {}
-tolerations: []
-affinity: {}
-
-ingress-nginx:
-  controller:
-    enabled: true
-    service:
-      type: LoadBalancer
+ифыр
 
 
 
