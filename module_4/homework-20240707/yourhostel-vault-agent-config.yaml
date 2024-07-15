@@ -1,0 +1,34 @@
+# homework-20240707/yourhostel-vault-agent-config.yaml
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: yourhostel-vault-agent-config
+  namespace: yourhostel-database
+data:
+  config.hcl: |
+    auto_auth {
+      method "kubernetes" {
+        mount_path = "auth/kubernetes"
+        config = {
+          role = "yourhostel-role"
+        }
+      }
+    }
+
+    sink "file" {
+      config = {
+        path = "/vault/secrets/yourhostel-secret"
+      }
+    }
+
+    template {
+      source = "/vault/config/secret.tmpl"
+      destination = "/vault/secrets/yourhostel-env"
+    }
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: yourhostel-postgres-sa
+  namespace: yourhostel-database

@@ -1,0 +1,29 @@
+# homework-20240707/yourhostel-vault-install.yaml
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: yourhostel-vault
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: vault-install
+  namespace: yourhostel-vault
+spec:
+  template:
+    spec:
+      containers:
+      - name: vault-install
+        image: alpine
+        command: ["/bin/sh", "-c"]
+        args:
+        - |
+          apk add --no-cache curl && \
+          curl https://helm.sh/get-helm-3 | bash && \
+          helm repo add hashicorp https://helm.releases.hashicorp.com && \
+          helm repo update && \
+          helm install yourhostel-vault hashicorp/vault --namespace yourhostel-vault && \
+          kubectl wait --for=condition=available --timeout=600s deployment/yourhostel-vault --namespace yourhostel-vault
+      restartPolicy: OnFailure
+
