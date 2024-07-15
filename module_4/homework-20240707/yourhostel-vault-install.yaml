@@ -17,7 +17,7 @@ metadata:
   name: vault-installer-role
 rules:
 - apiGroups: [""]
-  resources: ["serviceaccounts", "pods", "pods/log", "secrets"]
+  resources: ["serviceaccounts", "pods", "pods/log", "secrets", "configmaps"]
   verbs: ["get", "list", "watch", "create", "delete"]
 - apiGroups: ["apps"]
   resources: ["deployments"]
@@ -63,6 +63,7 @@ spec:
           helm install yourhostel-vault hashicorp/vault --namespace yourhostel-vault && \
           kubectl wait --for=condition=available --timeout=600s deployment/yourhostel-vault --namespace yourhostel-vault
       restartPolicy: OnFailure
+
 
 
 
