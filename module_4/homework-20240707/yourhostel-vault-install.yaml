@@ -25,6 +25,9 @@ rules:
 - apiGroups: ["batch"]
   resources: ["jobs"]
   verbs: ["get", "list", "watch", "create", "delete"]
+- apiGroups: ["rbac.authorization.k8s.io"]
+  resources: ["clusterroles", "clusterrolebindings"]
+  verbs: ["get", "list", "watch", "create", "delete"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -63,6 +66,7 @@ spec:
           helm install yourhostel-vault hashicorp/vault --namespace yourhostel-vault && \
           kubectl wait --for=condition=available --timeout=600s deployment/yourhostel-vault --namespace yourhostel-vault
       restartPolicy: OnFailure
+
 
 
 
