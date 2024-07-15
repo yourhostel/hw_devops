@@ -5,6 +5,40 @@ kind: Namespace
 metadata:
   name: yourhostel-vault
 ---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: vault-installer-sa
+  namespace: yourhostel-vault
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: vault-installer-role
+rules:
+- apiGroups: [""]
+  resources: ["serviceaccounts", "pods", "pods/log", "secrets"]
+  verbs: ["get", "list", "watch", "create", "delete"]
+- apiGroups: ["apps"]
+  resources: ["deployments"]
+  verbs: ["get", "list", "watch", "create", "delete"]
+- apiGroups: ["batch"]
+  resources: ["jobs"]
+  verbs: ["get", "list", "watch", "create", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: vault-installer-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: vault-installer-role
+subjects:
+- kind: ServiceAccount
+  name: vault-installer-sa
+  namespace: yourhostel-vault
+---
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -13,6 +47,7 @@ metadata:
 spec:
   template:
     spec:
+      serviceAccountName: vault-installer-sa
       containers:
       - name: vault-install
         image: alpine
@@ -28,6 +63,7 @@ spec:
           helm install yourhostel-vault hashicorp/vault --namespace yourhostel-vault && \
           kubectl wait --for=condition=available --timeout=600s deployment/yourhostel-vault --namespace yourhostel-vault
       restartPolicy: OnFailure
+
 
 
 
