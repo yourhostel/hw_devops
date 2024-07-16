@@ -7,3 +7,4 @@ resources:
   - yourhostel-postgres.yaml
   - yourhostel-vault-agent-config.yaml
   - yourhostel-secret-test.yaml
+  - yourhostel-vault-agent-deployment.yaml
