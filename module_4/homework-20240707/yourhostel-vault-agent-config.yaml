@@ -1,36 +1,30 @@
 # homework-20240707/yourhostel-vault-agent-config.yaml
 
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: v1
+kind: ConfigMap
 metadata:
-  name: yourhostel-vault-agent
+  name: yourhostel-vault-agent-config
   namespace: yourhostel-database
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: yourhostel-vault-agent
-  template:
-    metadata:
-      labels:
-        app: yourhostel-vault-agent
-    spec:
-      serviceAccountName: yourhostel-postgres-sa
-      containers:
-      - name: vault-agent
-        image: hashicorp/vault-k8s:latest
-        args:
-          - "agent-inject"
-          - "-config=/vault/config/config.hcl"
-        volumeMounts:
-          - name: vault-config
-            mountPath: /vault/config
-          - name: vault-secrets
-            mountPath: /vault/secrets
-      volumes:
-        - name: vault-config
-          configMap:
-            name: yourhostel-vault-agent-config
-        - name: vault-secrets
-          emptyDir: {}
+data:
+  config.hcl: |
+    auto_auth {
+      method "kubernetes" {
+        mount_path = "auth/kubernetes"
+        config = {
+          role = "yourhostel-role"
+        }
+      }
+    }
+
+    sink "file" {
+      config = {
+        path = "/vault/secrets/yourhostel-secret"
+      }
+    }
+
+    template {
+      source = "/vault/config/secret.tmpl"
+      destination = "/vault/secrets/yourhostel-env"
+    }
+
 
