@@ -1,9 +1,0 @@
-# homework-20240707/postgres/kustomization.yaml
-
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-resources:
-  - yourhostel-postgres.yaml
-  - yourhostel-secret-test.yaml
-  - yourhostel-vault-agent-deployment.yaml
