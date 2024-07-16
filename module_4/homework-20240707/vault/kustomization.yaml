@@ -5,5 +5,7 @@ kind: Kustomization
 
 resources:
   - namespace.yaml
+  - yourhostel-postgres-sa.yaml
   - yourhostel-vault-agent-config.yaml
+  - yourhostel-vault-agent-deployment.yaml
   - yourhostel-vault-auth-rbac.yaml

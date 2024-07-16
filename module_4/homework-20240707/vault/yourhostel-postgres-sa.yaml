@@ -1,0 +1,7 @@
+# homework-20240707/vault/yourhostel-postgres-sa.yaml
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: yourhostel-postgres-sa
+  namespace: yourhostel-database
