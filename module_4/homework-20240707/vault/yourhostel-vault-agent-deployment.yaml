@@ -1,4 +1,4 @@
-# homework-20240707/yourhostel-vault-agent-deployment.yaml
+# homework-20240707/vault/yourhostel-vault-agent-deployment.yaml
 
 apiVersion: apps/v1
 kind: Deployment

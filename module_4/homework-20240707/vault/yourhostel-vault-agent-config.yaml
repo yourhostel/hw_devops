@@ -1,4 +1,4 @@
-# homework-20240707/yourhostel-vault-agent-config.yaml
+# homework-20240707/vault/yourhostel-vault-agent-config.yaml
 
 apiVersion: v1
 kind: ConfigMap
