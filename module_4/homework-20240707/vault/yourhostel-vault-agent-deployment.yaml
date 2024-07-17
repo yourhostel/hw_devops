@@ -19,6 +19,9 @@ spec:
       containers:
       - name: vault-agent
         image: hashicorp/vault-k8s:latest
+        args:
+          - "agent-inject"
+          - "-config=/vault/config/config.hcl"
         env:
           - name: VAULT_ADDR
             value: "http://yourhostel-vault.yourhostel-vault.svc:8200"
