@@ -27,4 +27,10 @@ data:
       destination = "/vault/secrets/yourhostel-env"
     }
 
+  secret.tmpl: |
+    POSTGRES_DB={{ with secret "secret/data/yourhostel-secret" }}{{ .Data.data.POSTGRES_DB }}{{ end }}
+    POSTGRES_USER={{ with secret "secret/data/yourhostel-secret" }}{{ .Data.data.POSTGRES_USER }}{{ end }}
+    POSTGRES_PASSWORD={{ with secret "secret/data/yourhostel-secret" }}{{ .Data.data.POSTGRES_PASSWORD }}{{ end }}
+
+
 
