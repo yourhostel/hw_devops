@@ -21,12 +21,9 @@ spec:
         image: hashicorp/vault-k8s:latest
         args:
           - "agent-inject"
-          - "-config=/vault/config/config.hcl"
         env:
           - name: VAULT_ADDR
             value: "http://yourhostel-vault.yourhostel-vault.svc:8200"
-          - name: VAULT_AGENT_CONFIG_PATH
-            value: "/vault/config/config.hcl"
         volumeMounts:
           - name: vault-config
             mountPath: /vault/config
