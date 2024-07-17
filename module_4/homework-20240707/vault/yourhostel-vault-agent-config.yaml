@@ -15,22 +15,22 @@ data:
         }
       }
     }
-
     sink "file" {
       config = {
         path = "/vault/secrets/yourhostel-secret"
       }
     }
-
     template {
       source = "/vault/config/secret.tmpl"
       destination = "/vault/secrets/yourhostel-env"
     }
-
   secret.tmpl: |
-    POSTGRES_DB={{ with secret "secret/data/yourhostel-secret" }}{{ .Data.data.POSTGRES_DB }}{{ end }}
-    POSTGRES_USER={{ with secret "secret/data/yourhostel-secret" }}{{ .Data.data.POSTGRES_USER }}{{ end }}
-    POSTGRES_PASSWORD={{ with secret "secret/data/yourhostel-secret" }}{{ .Data.data.POSTGRES_PASSWORD }}{{ end }}
+    {{ with secret "secret/data/yourhostel-secret" }}
+    POSTGRES_DB={{ .Data.data.POSTGRES_DB }}
+    POSTGRES_USER={{ .Data.data.POSTGRES_USER }}
+    POSTGRES_PASSWORD={{ .Data.data.POSTGRES_PASSWORD }}
+    {{ end }}
+
 
 
 
