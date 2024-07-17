@@ -18,9 +18,8 @@ spec:
       serviceAccountName: yourhostel-postgres-sa
       containers:
       - name: vault-agent
-        image: hashicorp/vault-k8s:latest
-        command:
-          - "vault"
+        image: hashicorp/vault:latest
+        args:
           - "agent"
           - "-config=/vault/config/config.hcl"
         env:
