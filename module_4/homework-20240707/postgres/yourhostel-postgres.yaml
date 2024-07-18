@@ -65,25 +65,40 @@ spec:
         env:
         - name: POSTGRES_DB
           valueFrom:
-            secretKeyRef:
-              name: yourhostel-postgres-secret
+            configMapKeyRef:
+              name: yourhostel-env-config
               key: POSTGRES_DB
         - name: POSTGRES_USER
           valueFrom:
-            secretKeyRef:
-              name: yourhostel-postgres-secret
+            configMapKeyRef:
+              name: yourhostel-env-config
               key: POSTGRES_USER
         - name: POSTGRES_PASSWORD
           valueFrom:
-            secretKeyRef:
-              name: yourhostel-postgres-secret
+            configMapKeyRef:
+              name: yourhostel-env-config
               key: POSTGRES_PASSWORD
         volumeMounts:
         - mountPath: "/var/lib/postgresql/data"
           name: postgres-storage
+        - mountPath: "/vault/secrets"
+          name: vault-secrets
       volumes:
       - name: postgres-storage
         persistentVolumeClaim:
           claimName: yourhostel-pvc
+      - name: vault-secrets
+        emptyDir: {}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: yourhostel-env-config
+  namespace: yourhostel-database
+data:
+  POSTGRES_DB: "{{ .Data.data.POSTGRES_DB }}"
+  POSTGRES_USER: "{{ .Data.data.POSTGRES_USER }}"
+  POSTGRES_PASSWORD: "{{ .Data.data.POSTGRES_PASSWORD }}"
+
 
 
