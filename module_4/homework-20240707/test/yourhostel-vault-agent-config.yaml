@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: yourhostel-vault-agent-config
+  namespace: yourhostel-database
+data:
+  config.hcl: |
+    auto_auth {
+      method "kubernetes" {
+        mount_path = "auth/kubernetes"
+        config = {
+          role = "yourhostel-role"
+        }
+      }
+    }
+    sink "file" {
+      config = {
+        path = "/vault/secrets/yourhostel-secret"
+      }
+    }
+    template {
+      source = "/vault/config/secret.tmpl"
+      destination = "/vault/secrets/yourhostel-env"
+    }
+  secret.tmpl: |
+    {{ with secret "secret/data/yourhostel-secret" }}
+    POSTGRES_DB={{ .Data.data.POSTGRES_DB }}
+    POSTGRES_USER={{ .Data.data.POSTGRES_USER }}
+    POSTGRES_PASSWORD={{ .Data.data.POSTGRES_PASSWORD }}
+    {{ end }}
