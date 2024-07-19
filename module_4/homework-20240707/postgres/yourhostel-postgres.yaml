@@ -99,6 +99,3 @@ data:
   POSTGRES_DB: "{{ .Data.data.POSTGRES_DB }}"
   POSTGRES_USER: "{{ .Data.data.POSTGRES_USER }}"
   POSTGRES_PASSWORD: "{{ .Data.data.POSTGRES_PASSWORD }}"
-
-
-

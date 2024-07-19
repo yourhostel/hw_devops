@@ -12,6 +12,8 @@ data:
         mount_path = "auth/kubernetes"
         config = {
           role = "yourhostel-role"
+          kubernetes_host = "http://kubernetes.default.svc"
+          kubernetes_ca_cert = "/vault/secrets/kube-ca/ca.crt"
         }
       }
     }
@@ -30,6 +32,7 @@ data:
     POSTGRES_USER={{ .Data.data.POSTGRES_USER }}
     POSTGRES_PASSWORD={{ .Data.data.POSTGRES_PASSWORD }}
     {{ end }}
+
 
 
 
