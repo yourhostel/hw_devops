@@ -1,5 +1,6 @@
 # homework-20240707/vault/yourhostel-vault-agent-deployment.yaml
 
+# Пример конфигурации Vault Agent
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -15,33 +16,19 @@ spec:
       labels:
         app: yourhostel-vault-agent
     spec:
-      serviceAccountName: yourhostel-postgres-sa
+      serviceAccountName: vault-auth
       containers:
-      - name: vault-agent
-        image: hashicorp/vault:latest
-        args:
-          - "agent"
-          - "-config=/vault/config/config.hcl"
-        env:
-          - name: VAULT_ADDR
-            value: "http://vault.vault.svc.cluster.local:8200"
-        volumeMounts:
-          - name: vault-config
-            mountPath: /vault/config
-          - name: vault-secrets
-            mountPath: /vault/secrets
-          - name: kube-ca
-            mountPath: /vault/secrets/kube-ca/ca.crt
-            subPath: ca.crt
+        - name: vault-agent
+          image: hashicorp/vault:latest
+          volumeMounts:
+            - name: vault-config
+              mountPath: /vault/config
+          command: ["vault", "agent", "-config=/vault/config/vault-agent-config.hcl"]
       volumes:
         - name: vault-config
           configMap:
             name: yourhostel-vault-agent-config
-        - name: vault-secrets
-          emptyDir: {}
-        - name: kube-ca
-          secret:
-            secretName: kube-ca-secret
+
 
 
 
