@@ -1,4 +1,4 @@
-# homework-20240707/yourhostel-vault-auth-rbac.yaml
+# homework-20240707/vault/yourhostel-vault-auth-rbac.yaml
 
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
