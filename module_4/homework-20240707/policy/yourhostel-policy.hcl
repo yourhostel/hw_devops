@@ -1,3 +1,7 @@
+path "auth/kubernetes/login" {
+  capabilities = ["create", "update", "read"]
+}
+
 path "secret/data/*" {
   capabilities = ["read"]
 }
