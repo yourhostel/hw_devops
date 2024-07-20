@@ -7,21 +7,24 @@ metadata:
   namespace: yourhostel-database
 data:
   config.hcl: |
+    exit_after_auth = false
+    pid_file = "/tmp/pidfile"
+
     auto_auth {
       method "kubernetes" {
         mount_path = "auth/kubernetes"
         config = {
           role = "yourhostel-role"
-          kubernetes_host = "http://kubernetes.default.svc"
-          kubernetes_ca_cert = "/vault/secrets/kube-ca/ca.crt"
+        }
+      }
+
+      sink "file" {
+        config = {
+          path = "/vault/secrets/yourhostel-secret"
         }
       }
     }
-    sink "file" {
-      config = {
-        path = "/vault/secrets/yourhostel-secret"
-      }
-    }
+
     template {
       source = "/vault/config/secret.tmpl"
       destination = "/vault/secrets/yourhostel-env"
@@ -32,6 +35,8 @@ data:
     POSTGRES_USER={{ .Data.data.POSTGRES_USER }}
     POSTGRES_PASSWORD={{ .Data.data.POSTGRES_PASSWORD }}
     {{ end }}
+
+
 
 
 
