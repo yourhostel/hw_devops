@@ -20,27 +20,11 @@ spec:
         vault.hashicorp.com/agent-inject-secret-username: 'secret/postgres#username'
         vault.hashicorp.com/agent-inject-secret-password: 'secret/postgres#password'
     spec:
-      serviceAccountName: postgres-sa
+      serviceAccountName: vault-auth  # Использует ServiceAccount для аутентификации
       containers:
       - name: postgres
         image: postgres:latest
-        env:
-        - name: POSTGRES_USER
-          valueFrom:
-            secretKeyRef:
-              name: vault-agent-injector-secret
-              key: username
-        - name: POSTGRES_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: vault-agent-injector-secret
-              key: password
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: postgres-sa
-  namespace: default
+
 
 
 
