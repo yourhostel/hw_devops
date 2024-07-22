@@ -28,19 +28,26 @@ spec:
         - name: POSTGRES_USER
           valueFrom:
             secretKeyRef:
-              name: postgres-secrets
+              name: vault-agent-injector-secret
               key: username
         - name: POSTGRES_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: postgres-secrets
+              name: vault-agent-injector-secret
               key: password
+        volumeMounts:
+        - name: vault-secrets
+          mountPath: /vault/secrets
+      volumes:
+      - name: vault-secrets
+        emptyDir: {}
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: postgres-sa
   namespace: default
+
 
 
 
