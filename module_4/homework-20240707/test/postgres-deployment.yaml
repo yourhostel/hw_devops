@@ -35,15 +35,13 @@ spec:
             secretKeyRef:
               name: vault-agent-injector-secret
               key: password
-      volumes:
-      - name: vault-secrets
-        emptyDir: {}
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: postgres-sa
   namespace: default
+
 
 
 
