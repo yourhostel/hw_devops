@@ -28,12 +28,12 @@ spec:
         - name: POSTGRES_USER
           valueFrom:
             secretKeyRef:
-              name: vault-agent-injector-secret
+              name: postgres-secrets
               key: username
         - name: POSTGRES_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: vault-agent-injector-secret
+              name: postgres-secrets
               key: password
 ---
 apiVersion: v1
@@ -41,5 +41,6 @@ kind: ServiceAccount
 metadata:
   name: postgres-sa
   namespace: default
+
 
 
