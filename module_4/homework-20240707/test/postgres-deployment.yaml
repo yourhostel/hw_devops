@@ -35,9 +35,6 @@ spec:
             secretKeyRef:
               name: vault-agent-injector-secret
               key: password
-        volumeMounts:
-        - name: vault-secrets
-          mountPath: /vault/secrets
       volumes:
       - name: vault-secrets
         emptyDir: {}
