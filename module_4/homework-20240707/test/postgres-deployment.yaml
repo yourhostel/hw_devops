@@ -1,3 +1,18 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: postgres-secrets
+  namespace: default
+annotations:
+  vault.hashicorp.com/agent-inject: 'true'
+  vault.hashicorp.com/role: 'postgres-role'
+  vault.hashicorp.com/agent-inject-secret-username: 'secret/data/postgres#username'
+  vault.hashicorp.com/agent-inject-secret-password: 'secret/data/postgres#password'
+type: Opaque
+data:
+  username: YWRtaW4=
+  password: cGFzc3dvcmQ=
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -12,8 +27,13 @@ spec:
     metadata:
       labels:
         app: postgres
+      annotations:
+        vault.hashicorp.com/agent-inject: 'true'
+        vault.hashicorp.com/role: 'postgres-role'
+        vault.hashicorp.com/agent-inject-secret-username: 'secret/data/postgres#username'
+        vault.hashicorp.com/agent-inject-secret-password: 'secret/data/postgres#password'
     spec:
-      serviceAccountName: vault-auth
+      serviceAccountName: postgres-sa
       containers:
       - name: postgres
         image: postgres:latest
@@ -21,12 +41,11 @@ spec:
         - name: POSTGRES_USER
           valueFrom:
             secretKeyRef:
-              name: postgresql-config
+              name: postgres-secrets
               key: username
         - name: POSTGRES_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: postgresql-config
+              name: postgres-secrets
               key: password
-        ports:
-        - containerPort: 5432
+
