@@ -17,8 +17,8 @@ spec:
       annotations:
         vault.hashicorp.com/agent-inject: 'true'
         vault.hashicorp.com/role: 'postgres-role'
-        vault.hashicorp.com/agent-inject-secret-username: 'secret/data/postgres#data.username'
-        vault.hashicorp.com/agent-inject-secret-password: 'secret/data/postgres#data.password'
+        vault.hashicorp.com/agent-inject-secret-username: 'secret/postgres#username'
+        vault.hashicorp.com/agent-inject-secret-password: 'secret/postgres#password'
     spec:
       serviceAccountName: postgres-sa
       containers:
@@ -47,6 +47,8 @@ kind: ServiceAccount
 metadata:
   name: postgres-sa
   namespace: default
+
+
 
 
 
