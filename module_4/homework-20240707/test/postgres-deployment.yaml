@@ -21,6 +21,7 @@ spec:
   containers:
     - name: payroll
       image: postgres:latest
+      command: ["sh", "-c", "tail -f /var/log/postgresql/postgresql.log"]
 
 
 
