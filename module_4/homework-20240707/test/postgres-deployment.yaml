@@ -18,18 +18,27 @@ spec:
       annotations:
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/role: "internal-app"
-        vault.hashicorp.com/agent-inject-secret-database-config: "internal/database/config"
+        vault.hashicorp.com/agent-inject-secret-database-config: "internal/data/database/config"
         vault.hashicorp.com/agent-inject-template-DB_USERNAME: |
           {{- with secret "internal/data/database/config" -}}
-            export DB_USERNAME="{{ .Data.data.username }}"
-          {{- end }}
-        vault.hashicorp.com/agent-inject-template-DB_PASSWORD: |
-          {{- with secret "internal/data/database/config" -}}
-            export DB_PASSWORD="{{ .Data.data.password }}"
+          localhost:5432:postgres:{{ .Data.data.username }}:{{ .Data.data.password }}
           {{- end }}
     spec:
+      terminationGracePeriodSeconds: 10
       serviceAccountName: internal-app
+      initContainers:
       containers:
         - name: postgres
           image: postgres:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5432
+          env:
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+          volumeMounts:
+            - name: postgredb
+              mountPath: /var/lib/postgresql/data
+              readOnly: false
+
 
