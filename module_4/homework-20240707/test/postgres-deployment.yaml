@@ -21,22 +21,12 @@ spec:
   containers:
     - name: payroll
       image: postgres:latest
-      env:
-        - name: POSTGRES_USER
-          valueFrom:
-            secretKeyRef:
-              name: vault-secrets
-              key: POSTGRES_USER
-        - name: POSTGRES_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: vault-secrets
-              key: POSTGRES_PASSWORD
-        - name: POSTGRES_DB
-          valueFrom:
-            secretKeyRef:
-              name: vault-secrets
-              key: POSTGRES_DB
+      envFrom:
+        - configMapRef:
+            name: vault-secrets
+      volumeMounts:
+        - name: vault-secrets
+          mountPath: /vault/secrets
   volumes:
     - name: vault-secrets
       emptyDir: {}
