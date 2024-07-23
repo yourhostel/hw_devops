@@ -24,18 +24,18 @@ spec:
       env:
         - name: POSTGRES_USER
           valueFrom:
-            configMapKeyRef:
-              name: database-config
+            secretKeyRef:
+              name: vault-secrets
               key: POSTGRES_USER
         - name: POSTGRES_PASSWORD
           valueFrom:
-            configMapKeyRef:
-              name: database-config
+            secretKeyRef:
+              name: vault-secrets
               key: POSTGRES_PASSWORD
         - name: POSTGRES_DB
           valueFrom:
-            configMapKeyRef:
-              name: database-config
+            secretKeyRef:
+              name: vault-secrets
               key: POSTGRES_DB
   volumes:
     - name: vault-secrets
