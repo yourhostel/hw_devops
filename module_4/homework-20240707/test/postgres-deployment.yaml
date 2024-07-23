@@ -1,51 +1,35 @@
 # postgres-deployment.yaml
 
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: v1
+kind: Pod
 metadata:
-  name: postgres-internal-app
-  labels:
-    app: postgres
+  name: myapp-pod
+  annotations:
+    vault.hashicorp.com/agent-inject: "true"
+    vault.hashicorp.com/role: "internal-app"
+    vault.hashicorp.com/agent-inject-secret-database-config: "internal/database/config"
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: postgres
-  template:
-    metadata:
-      labels:
-        app: postgres
-      annotations:
-        vault.hashicorp.com/agent-inject: 'true'
-        vault.hashicorp.com/role: 'internal-app'
-        vault.hashicorp.com/agent-inject-secret-database-config.txt: 'internal/data/database/config'
-        vault.hashicorp.com/agent-inject-template-database-config.txt: |
-          {{- with secret "internal/data/database/config" -}}
-          export POSTGRES_USER="{{ .Data.data.username }}"
-          export POSTGRES_PASSWORD="{{ .Data.data.password }}"
-          {{- end }}
-    spec:
-      serviceAccountName: internal-app
-      containers:
-      - name: postgres
-        image: postgres:latest
-        ports:
-        - containerPort: 5432
-        env:
-        - name: POSTGRES_USER
-          value: "dummy-user"  # Temporary dummy values to make sure container starts
-        - name: POSTGRES_PASSWORD
-          value: "dummy-password"  # Temporary dummy values to make sure container starts
-        volumeMounts:
-        - name: postgres-data
-          mountPath: /var/lib/postgresql/data
+  serviceAccountName: internal-app
+  containers:
+    - name: myapp
+      image: myapp-image:latest
+      env:
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: vault-secrets
+              key: username
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: vault-secrets
+              key: password
+      volumeMounts:
         - name: vault-secrets
           mountPath: /vault/secrets
-      volumes:
-      - name: postgres-data
-        emptyDir: {}
-      - name: vault-secrets
-        emptyDir: {}
+  volumes:
+    - name: vault-secrets
+      emptyDir: {}
 
 
 
