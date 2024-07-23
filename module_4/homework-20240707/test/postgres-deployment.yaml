@@ -1,43 +1,35 @@
 # postgres-deployment.yaml
 
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: v1
+kind: Pod
 metadata:
-  name: secret-demo
-  labels:
-    app: secret-demo
+  name: postgres
+  namespace: default
+  annotations:
+    vault.hashicorp.com/agent-inject: "true"
+    vault.hashicorp.com/agent-inject-secret-database-config: "internal/database/config"
+    vault.hashicorp.com/agent-inject-template-database-config: |
+      {
+        "username": "{{ .Data.data.username }}",
+        "password": "{{ .Data.data.password }}"
+      }
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: secret-demo
-  template:
-    metadata:
-      labels:
-        app: secret-demo
-      annotations:
-        vault.hashicorp.com/agent-inject: 'true'
-        vault.hashicorp.com/agent-inject-status: 'update'
-        vault.hashicorp.com/role: 'internal-app'
-        vault.hashicorp.com/agent-inject-secret-database-config.txt: 'internal/database/config'
-        vault.hashicorp.com/agent-inject-template-database-config.txt: |
-          {{- with secret "internal/database/config" -}}
-          export USERNAME={{ .Data.username }}
-          export PASSWORD={{ .Data.password }}
-          {{- end -}}
-    spec:
-      serviceAccountName: internal-app
-      containers:
-        - name: busybox
-          image: busybox
-          command: [ "sh", "-c", "source /vault/secrets/database-config.txt && env && sleep 3600" ]
-          volumeMounts:
-            - name: vault-secrets
-              mountPath: /vault/secrets
-              readOnly: true
-      volumes:
-        - name: vault-secrets
-          emptyDir: {}
+  serviceAccountName: internal-app
+  containers:
+  - name: postgres
+    image: postgres:13
+    env:
+    - name: POSTGRES_DB
+      value: mydatabase
+    volumeMounts:
+    - name: vault-secrets
+      mountPath: /vault/secrets
+      readOnly: true
+  volumes:
+  - name: vault-secrets
+    emptyDir:
+      medium: Memory
+
 
 
 
