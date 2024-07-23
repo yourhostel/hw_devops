@@ -30,13 +30,7 @@ spec:
         env:
         - name: POSTGRES_DB
           value: "postgres"
-        volumeMounts:
-        - name: vault-secrets
-          mountPath: /vault/secrets
-          readOnly: true
-      volumes:
-      - name: vault-secrets
-        emptyDir: {}
+
 
 
 
