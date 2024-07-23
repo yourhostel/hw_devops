@@ -17,10 +17,28 @@ spec:
       annotations:
         vault.hashicorp.com/agent-inject: 'true'
         vault.hashicorp.com/role: 'postgres-role'
-        vault.hashicorp.com/agent-inject-secret-username: 'secret/postgres#username'
-        vault.hashicorp.com/agent-inject-secret-password: 'secret/postgres#password'
+        vault.hashicorp.com/agent-inject-template-username: |
+          {{- with secret "secret/postgres" -}}
+          export POSTGRES_USER="{{ .Data.data.username }}"
+          {{- end -}}
+        vault.hashicorp.com/agent-inject-template-password: |
+          {{- with secret "secret/postgres" -}}
+          export POSTGRES_PASSWORD="{{ .Data.data.password }}"
+          {{- end -}}
     spec:
       serviceAccountName: postgres-sa
       containers:
       - name: postgres
         image: postgres:latest
+        env:
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: vault-agent-injector-secret
+              key: username
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: vault-agent-injector-secret
+              key: password
+
