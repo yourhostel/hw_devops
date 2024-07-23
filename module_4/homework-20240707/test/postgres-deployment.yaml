@@ -1,64 +1,45 @@
 # postgres-deployment.yaml
 
-apiVersion: v1
-kind: Pod
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: payroll
+  name: postgres-internal-app
   labels:
-    app: payroll
-  annotations:
-    vault.hashicorp.com/agent-inject: 'true'
-    vault.hashicorp.com/role: 'internal-app'
-    vault.hashicorp.com/agent-inject-secret-database-config.txt: 'internal/data/database/config'
-    vault.hashicorp.com/agent-inject-template-database-config.txt: |
-      {{- with secret "internal/data/database/config" -}}
-      POSTGRES_USER={{ .Data.data.username }}
-      POSTGRES_PASSWORD={{ .Data.data.password }}
-      POSTGRES_DB=database
-      {{- end -}}
+    app: postgres
 spec:
-  serviceAccountName: internal-app
-  containers:
-    - name: payroll
-      image: postgres:latest
-      command: ["sh", "-c", "tail -f /var/log/postgresql/postgresql.log"]
-
-
-
-
-#apiVersion: apps/v1
-#kind: Deployment
-#metadata:
-#  name: postgres
-#  namespace: default
-#spec:
-#  replicas: 1
-#  selector:
-#    matchLabels:
-#      app: postgres
-#  template:
-#    metadata:
-#      labels:
-#        app: postgres
-#      annotations:
-#        vault.hashicorp.com/agent-inject: 'true'
-#        vault.hashicorp.com/role: 'postgres-role'
-#        vault.hashicorp.com/agent-inject-secret-database-config: 'secret/data/postgres'
-#        vault.hashicorp.com/agent-inject-template-database-config: |
-#          {{- with secret "secret/data/postgres" -}}
-#          postgresql://{{ .Data.data.username }}:{{ .Data.data.password }}@postgres:5432/wizard
-#          {{- end -}}
-#    spec:
-#      serviceAccountName: postgres-sa
-#      containers:
-#      - name: postgres
-#        image: postgres:latest
-#        env:
-#        - name: POSTGRES_DB
-#          value: "postgres"
-
-
-
-
-
-
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/role: "internal-app"
+        vault.hashicorp.com/agent-inject-secret-database-config.txt: "internal/data/database/config"
+        vault.hashicorp.com/agent-inject-template-database-config.txt: |
+          {{- with secret "internal/data/database/config" -}}
+          export POSTGRES_USER="{{ .Data.data.username }}"
+          export POSTGRES_PASSWORD="{{ .Data.data.password }}"
+          {{- end }}
+    spec:
+      serviceAccountName: internal-app
+      containers:
+      - name: postgres
+        image: postgres:latest
+        env:
+          - name: POSTGRES_USER
+            value: "dummy"
+          - name: POSTGRES_PASSWORD
+            value: "dummy"
+        ports:
+          - containerPort: 5432
+        volumeMounts:
+        - name: postgres-storage
+          mountPath: /var/lib/postgresql/data
+      volumes:
+      - name: postgres-storage
+        persistentVolumeClaim:
+          claimName: postgres-pvc
