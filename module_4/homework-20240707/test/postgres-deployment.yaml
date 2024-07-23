@@ -21,7 +21,4 @@ spec:
     image: postgres:latest
     env:
       - name: DATABASE_URL
-        valueFrom:
-          secretKeyRef:
-            name: database-config.txt
-            key: DATABASE_URL
+        value: "/vault/secrets/database-config.txt"
