@@ -1,32 +1,25 @@
 # postgres-deployment.yaml
 
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: v1
+kind: Pod
 metadata:
-  name: postgres-app
+  name: payroll
   labels:
-    app: postgres-app
+    app: payroll
+  annotations:
+    vault.hashicorp.com/agent-inject: 'true'
+    vault.hashicorp.com/role: 'internal-app'
+    vault.hashicorp.com/agent-inject-secret-database-config.txt: 'internal/data/database/config'
+    vault.hashicorp.com/agent-inject-template-database-config.txt: |
+      {{- with secret "internal/data/database/config" -}}
+      postgresql://{{ .Data.data.username }}:{{ .Data.data.password }}@postgres:5432/wizard
+      {{- end -}}
 spec:
-  selector:
-    matchLabels:
-      app: postgres-app
-  replicas: 1
-  template:
-    metadata:
-      labels:
-        app: postgres-app
-    spec:
-      serviceAccountName: postgres
-      containers:
-        - name: postgres-app
-          image: postgres:latest
-          env:
-            - name: POSTGRES_USER
-              value: user
-            - name: POSTGRES_PASSWORD
-              value: "1234"
-            - name: POSTGRES_DB
-              value: db
+  serviceAccountName: internal-app
+  containers:
+    - name: payroll
+      image: postgres:latest
+
 
 
 #apiVersion: apps/v1
