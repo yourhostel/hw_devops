@@ -20,11 +20,11 @@ spec:
         vault.hashicorp.com/role: "internal-app"
         vault.hashicorp.com/agent-inject-secret-database-config: "internal/database/config"
         vault.hashicorp.com/agent-inject-template-DB_USERNAME: |
-          {{- with secret "internal/database/config" -}}
+          {{- with secret "internal/data/database/config" -}}
             export DB_USERNAME="{{ .Data.data.username }}"
           {{- end }}
         vault.hashicorp.com/agent-inject-template-DB_PASSWORD: |
-          {{- with secret "internal/database/config" -}}
+          {{- with secret "internal/data/database/config" -}}
             export DB_PASSWORD="{{ .Data.data.password }}"
     spec:
       serviceAccountName: internal-app
