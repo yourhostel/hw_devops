@@ -19,9 +19,9 @@ spec:
         vault.hashicorp.com/agent-inject: 'true'
         vault.hashicorp.com/agent-inject-status: 'update'
         vault.hashicorp.com/role: 'internal-app'
-        vault.hashicorp.com/agent-inject-secret-database-config.txt: 'internal/data/database/config'
+        vault.hashicorp.com/agent-inject-secret-database-config.txt: 'internal/database/config'
         vault.hashicorp.com/agent-inject-template-database-config.txt: |
-          {{- with secret "internal/data/database/config" -}}
+          {{- with secret "internal/database/config" -}}
           export USERNAME={{ .Data.username }}
           export PASSWORD={{ .Data.password }}
           {{- end -}}
@@ -38,6 +38,7 @@ spec:
       volumes:
         - name: vault-secrets
           emptyDir: {}
+
 
 
 
