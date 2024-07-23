@@ -17,9 +17,13 @@ metadata:
       POSTGRES_DB=database
       {{- end -}}
 spec:
+  serviceAccountName: internal-app
+  containers:
+    - name: payroll
+      image: postgres:latest
   volumes:
     - name: vault-secrets
-      emptyDir: {}
+      emptyDir: { }
 
 
 
