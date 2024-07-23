@@ -12,13 +12,31 @@ metadata:
     vault.hashicorp.com/agent-inject-secret-database-config.txt: 'internal/data/database/config'
     vault.hashicorp.com/agent-inject-template-database-config.txt: |
       {{- with secret "internal/data/database/config" -}}
-      postgresql://{{ .Data.data.username }}:{{ .Data.data.password }}@postgres:5432/wizard
+      POSTGRES_USER={{ .Data.data.username }}
+      POSTGRES_PASSWORD={{ .Data.data.password }}
+      POSTGRES_DB=database
       {{- end -}}
 spec:
   serviceAccountName: internal-app
   containers:
     - name: payroll
       image: postgres:latest
+      env:
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: database-secrets
+              key: POSTGRES_USER
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: database-secrets
+              key: POSTGRES_PASSWORD
+        - name: POSTGRES_DB
+          valueFrom:
+            secretKeyRef:
+              name: database-secrets
+              key: POSTGRES_DB
 
 
 
