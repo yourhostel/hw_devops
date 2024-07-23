@@ -19,11 +19,11 @@ spec:
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/role: "internal-app"
         vault.hashicorp.com/agent-inject-secret-database-config: "internal/database/config"
-        vault.hashicorp.com/agent-inject-template-username: |
+        vault.hashicorp.com/agent-inject-template-DB_USERNAME: |
           {{- with secret "internal/database/config" -}}
             export DB_USERNAME="{{ .Data.data.username }}"
           {{- end }}
-        vault.hashicorp.com/agent-inject-template-password: |
+        vault.hashicorp.com/agent-inject-template-DB_PASSWORD: |
           {{- with secret "internal/database/config" -}}
             export DB_PASSWORD="{{ .Data.data.password }}"
     spec:
@@ -36,18 +36,13 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: vault-secrets
-                  key: username
+                  key: DB_USERNAME
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: vault-secrets
-                  key: password
-          volumeMounts:
-            - name: vault-secrets
-              mountPath: /vault/secrets
-      volumes:
-        - name: vault-secrets
-          emptyDir: {}
+                  key: DB_PASSWORD
+
 
 
 
