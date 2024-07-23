@@ -12,6 +12,8 @@ spec:
       app: postgres
   template:
     metadata:
+      labels:
+        app: postgres
       annotations:
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/role: "postgres-role"
@@ -28,15 +30,9 @@ spec:
         image: postgres:latest
         env:
         - name: POSTGRES_USER
-          valueFrom:
-            secretKeyRef:
-              name: database-config
-              key: POSTGRES_USER
+          value: "{{ .Data.data.username }}"
         - name: POSTGRES_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: database-config
-              key: POSTGRES_PASSWORD
+          value: "{{ .Data.data.password }}"
         - name: POSTGRES_DB
           value: "postgres"
 
