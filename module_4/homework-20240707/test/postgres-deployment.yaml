@@ -17,26 +17,9 @@ metadata:
       POSTGRES_DB=database
       {{- end -}}
 spec:
-  serviceAccountName: internal-app
-  containers:
-    - name: payroll
-      image: postgres:latest
-      env:
-        - name: POSTGRES_USER
-          valueFrom:
-            secretKeyRef:
-              name: vault-secrets
-              key: POSTGRES_USER
-        - name: POSTGRES_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: vault-secrets
-              key: POSTGRES_PASSWORD
-        - name: POSTGRES_DB
-          valueFrom:
-            secretKeyRef:
-              name: vault-secrets
-              key: POSTGRES_DB
+  volumes:
+    - name: vault-secrets
+      emptyDir: {}
 
 
 
