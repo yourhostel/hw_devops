@@ -19,13 +19,19 @@ spec:
         vault.hashicorp.com/role: 'postgres-role'
         vault.hashicorp.com/agent-inject-secret-postgres: 'secret/data/postgres'
         vault.hashicorp.com/agent-inject-template-postgres: |
-          POSTGRES_USER={{- with secret "secret/data/postgres" -}}{{ .Data.data.username }}{{- end }}
-          POSTGRES_PASSWORD={{- with secret "secret/data/postgres" -}}{{ .Data.data.password }}{{- end }}
+          {{- with secret "secret/data/postgres" }}
+          POSTGRES_USER="{{ .Data.data.username }}"
+          POSTGRES_PASSWORD="{{ .Data.data.password }}"
+          {{- end }}
     spec:
       serviceAccountName: postgres-sa
       containers:
       - name: postgres
         image: postgres:latest
+        env:
+        - name: POSTGRES_DB
+          value: "postgres"  # Optional: Default database name
+
 
 
 
