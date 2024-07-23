@@ -16,6 +16,7 @@ spec:
       labels:
         app: postgres
       annotations:
+        # Аннотации для инъекции секретов Vault
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/role: "internal-app"
         vault.hashicorp.com/agent-inject-secret-database-config.txt: "internal/data/database/config"
@@ -31,9 +32,15 @@ spec:
         image: postgres:latest
         env:
           - name: POSTGRES_USER
-            value: "dummy"
+            valueFrom:
+              secretKeyRef:
+                name: database-config
+                key: username
           - name: POSTGRES_PASSWORD
-            value: "dummy"
+            valueFrom:
+              secretKeyRef:
+                name: database-config
+                key: password
         ports:
           - containerPort: 5432
         volumeMounts:
@@ -41,5 +48,5 @@ spec:
           mountPath: /var/lib/postgresql/data
       volumes:
       - name: postgres-storage
-        persistentVolumeClaim:
-          claimName: postgres-pvc
+        emptyDir: {}
+
