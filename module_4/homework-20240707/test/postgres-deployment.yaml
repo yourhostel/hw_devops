@@ -4,6 +4,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: postgres-internal-app
+  labels:
+    app: postgres
 spec:
   replicas: 1
   selector:
@@ -11,6 +13,8 @@ spec:
       app: postgres
   template:
     metadata:
+      labels:
+        app: postgres
       annotations:
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/role: "internal-app"
@@ -36,6 +40,7 @@ spec:
       volumes:
         - name: vault-secrets
           emptyDir: {}
+
 
 
 
