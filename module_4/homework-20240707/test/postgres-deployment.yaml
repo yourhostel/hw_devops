@@ -21,9 +21,12 @@ spec:
   containers:
     - name: payroll
       image: postgres:latest
+      volumeMounts:
+        - name: unique-vault-secrets
+          mountPath: /vault/secrets
   volumes:
-    - name: vault-secrets
-      emptyDir: { }
+    - name: unique-vault-secrets
+      emptyDir: {}
 
 
 
