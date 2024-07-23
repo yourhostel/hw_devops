@@ -32,13 +32,8 @@ spec:
         image: postgres:latest
         env:
         - name: POSTGRES_USER
-          valueFrom:
-            secretKeyRef:
-              name: vault-agent-injector-secret
-              key: username
+          value: null
         - name: POSTGRES_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: vault-agent-injector-secret
-              key: password
+          value: null
+
 
