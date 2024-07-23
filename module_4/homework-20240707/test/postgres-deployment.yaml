@@ -16,18 +16,21 @@ spec:
       labels:
         app: secret-demo
       annotations:
-        vault.hashicorp.com/agent-inject-secret-my-secret: "secret/my-secret"
-        vault.hashicorp.com/agent-inject-template-my-secret: |
-          {
-            "username": "{{ with secret "secret/my-secret" }}{{ .Data.username }}{{ end }}",
-            "password": "{{ with secret "secret/my-secret" }}{{ .Data.password }}{{ end }}"
-          }
+        vault.hashicorp.com/agent-inject: 'true'
+        vault.hashicorp.com/agent-inject-status: 'update'
+        vault.hashicorp.com/role: 'internal-app'
+        vault.hashicorp.com/agent-inject-secret-database-config.txt: 'internal/data/database/config'
+        vault.hashicorp.com/agent-inject-template-database-config.txt: |
+          {{- with secret "internal/data/database/config" -}}
+          export USERNAME={{ .Data.username }}
+          export PASSWORD={{ .Data.password }}
+          {{- end -}}
     spec:
       serviceAccountName: internal-app
       containers:
         - name: busybox
           image: busybox
-          command: [ "sh", "-c", "sleep 3600" ]
+          command: [ "sh", "-c", "source /vault/secrets/database-config.txt && env && sleep 3600" ]
           volumeMounts:
             - name: vault-secrets
               mountPath: /vault/secrets
@@ -35,5 +38,6 @@ spec:
       volumes:
         - name: vault-secrets
           emptyDir: {}
+
 
 
