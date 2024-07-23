@@ -16,11 +16,10 @@ spec:
       labels:
         app: postgres
       annotations:
-        # Аннотации для инъекции секретов Vault
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/role: "internal-app"
-        vault.hashicorp.com/agent-inject-secret-database-config.txt: "internal/data/database/config"
-        vault.hashicorp.com/agent-inject-template-database-config.txt: |
+        vault.hashicorp.com/agent-inject-secret-postgres-config: "internal/data/database/config"
+        vault.hashicorp.com/agent-inject-template-postgres-config: |
           {{- with secret "internal/data/database/config" -}}
           export POSTGRES_USER="{{ .Data.data.username }}"
           export POSTGRES_PASSWORD="{{ .Data.data.password }}"
@@ -33,20 +32,13 @@ spec:
         env:
           - name: POSTGRES_USER
             valueFrom:
-              secretKeyRef:
-                name: database-config
-                key: username
+              fieldRef:
+                fieldPath: metadata.annotations['vault.hashicorp.com/agent-inject-secret-postgres-config#username']
           - name: POSTGRES_PASSWORD
             valueFrom:
-              secretKeyRef:
-                name: database-config
-                key: password
+              fieldRef:
+                fieldPath: metadata.annotations['vault.hashicorp.com/agent-inject-secret-postgres-config#password']
         ports:
           - containerPort: 5432
-        volumeMounts:
-        - name: postgres-storage
-          mountPath: /var/lib/postgresql/data
-      volumes:
-      - name: postgres-storage
-        emptyDir: {}
+
 
