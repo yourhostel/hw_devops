@@ -37,12 +37,6 @@ spec:
             secretKeyRef:
               name: vault-secrets
               key: POSTGRES_DB
-      volumeMounts:
-        - name: vault-secrets
-          mountPath: /vault/secrets
-  volumes:
-    - name: vault-secrets
-      emptyDir: {}
 
 
 
