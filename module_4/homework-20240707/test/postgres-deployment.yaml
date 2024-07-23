@@ -26,7 +26,6 @@ spec:
     spec:
       terminationGracePeriodSeconds: 10
       serviceAccountName: internal-app
-      initContainers:
       containers:
         - name: postgres
           image: postgres:latest
@@ -40,5 +39,6 @@ spec:
             - name: postgredb
               mountPath: /var/lib/postgresql/data
               readOnly: false
-
-
+      volumes:
+        - name: postgredb
+          emptyDir: {}
