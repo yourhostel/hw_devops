@@ -15,26 +15,19 @@ spec:
       labels:
         app: postgres
       annotations:
-        vault.hashicorp.com/agent-inject: "true"
-        vault.hashicorp.com/role: "postgres-role"
-        vault.hashicorp.com/agent-inject-secret-POSTGRES_USER: "secret/postgres#username"
-        vault.hashicorp.com/agent-inject-secret-POSTGRES_PASSWORD: "secret/postgres#password"
+        vault.hashicorp.com/agent-inject: 'true'
+        vault.hashicorp.com/role: 'postgres-role'
+        vault.hashicorp.com/agent-inject-secret-database-config: 'secret/data/postgres'
+        vault.hashicorp.com/agent-inject-template-database-config: |
+          {{- with secret "secret/data/postgres" -}}
+          postgresql://{{ .Data.data.username }}:{{ .Data.data.password }}@postgres:5432/wizard
+          {{- end -}}
     spec:
       serviceAccountName: postgres-sa
       containers:
       - name: postgres
         image: postgres:latest
         env:
-        - name: POSTGRES_USER
-          valueFrom:
-            secretKeyRef:
-              name: vault-secrets
-              key: POSTGRES_USER
-        - name: POSTGRES_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: vault-secrets
-              key: POSTGRES_PASSWORD
         - name: POSTGRES_DB
           value: "postgres"
         volumeMounts:
@@ -44,6 +37,7 @@ spec:
       volumes:
       - name: vault-secrets
         emptyDir: {}
+
 
 
 
