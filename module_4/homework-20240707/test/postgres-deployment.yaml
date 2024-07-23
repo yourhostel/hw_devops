@@ -18,11 +18,12 @@ spec:
       annotations:
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/role: "internal-app"
-        vault.hashicorp.com/agent-inject-secret-postgres-config: "internal/data/database/config"
-        vault.hashicorp.com/agent-inject-template-postgres-config: |
-          {{- with secret "internal/data/database/config" -}}
-          export POSTGRES_USER="{{ .Data.data.username }}"
-          export POSTGRES_PASSWORD="{{ .Data.data.password }}"
+        # Указываем Vault инжектировать данные секрета напрямую в файл
+        vault.hashicorp.com/agent-inject-secret-env.sh: "internal/data/database/config"
+        vault.hashicorp.com/agent-inject-template-env.sh: |
+          {{- with secret "internal/data/database/config" }}
+          echo export POSTGRES_USER='{{ .Data.data.username }}' >> /vault/secrets/env.sh
+          echo export POSTGRES_PASSWORD='{{ .Data.data.password }}' >> /vault/secrets/env.sh
           {{- end }}
     spec:
       serviceAccountName: internal-app
@@ -31,14 +32,19 @@ spec:
         image: postgres:latest
         env:
           - name: POSTGRES_USER
-            valueFrom:
-              fieldRef:
-                fieldPath: metadata.annotations['vault.hashicorp.com/agent-inject-secret-postgres-config#username']
+            value: dummy # Эти значения будут перезаписаны из env.sh
           - name: POSTGRES_PASSWORD
-            valueFrom:
-              fieldRef:
-                fieldPath: metadata.annotations['vault.hashicorp.com/agent-inject-secret-postgres-config#password']
+            value: dummy
         ports:
           - containerPort: 5432
+        volumeMounts:
+          - name: vault-secrets
+            mountPath: /vault/secrets
+        command: ["/bin/bash", "-c"]
+        args: ["source /vault/secrets/env.sh && docker-entrypoint.sh postgres"]
+      volumes:
+      - name: vault-secrets
+        emptyDir: {}
+
 
 
