@@ -21,11 +21,11 @@ spec:
         vault.hashicorp.com/agent-inject-secret-postgres-password: "internal/database/config#password"
         vault.hashicorp.com/agent-inject-template-postgres-user: |
           {{- with secret "internal/data/database/config" -}}
-          POSTGRES_USER="{{ .Data.data.username }}"
+          export POSTGRES_USER="{{ .Data.data.username }}"
           {{- end }}
         vault.hashicorp.com/agent-inject-template-postgres-password: |
           {{- with secret "internal/data/database/config" -}}
-          POSTGRES_PASSWORD="{{ .Data.data.password }}"
+          export POSTGRES_PASSWORD="{{ .Data.data.password }}"
           {{- end }}
     spec:
       serviceAccountName: postgres-sa
@@ -37,12 +37,13 @@ spec:
           valueFrom:
             secretKeyRef:
               name: postgres-user
-              key: username
+              key: POSTGRES_USER
         - name: POSTGRES_PASSWORD
           valueFrom:
             secretKeyRef:
               name: postgres-password
-              key: password
+              key: POSTGRES_PASSWORD
         - name: POSTGRES_DB
           value: "postgres"
+
 
