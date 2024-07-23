@@ -3,33 +3,55 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: postgres
-  namespace: default
+   name: postgres-app
+   labels:
+      app: postgres-app
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: postgres
-  template:
-    metadata:
-      labels:
-        app: postgres
+   selector:
+      matchLabels:
+      app: postgres-app
+   replicas: 1
+   template:
+      metadata:
       annotations:
-        vault.hashicorp.com/agent-inject: 'true'
-        vault.hashicorp.com/role: 'postgres-role'
-        vault.hashicorp.com/agent-inject-secret-database-config: 'secret/data/postgres'
-        vault.hashicorp.com/agent-inject-template-database-config: |
-          {{- with secret "secret/data/postgres" -}}
-          postgresql://{{ .Data.data.username }}:{{ .Data.data.password }}@postgres:5432/wizard
-          {{- end -}}
-    spec:
-      serviceAccountName: postgres-sa
+      labels:
+         app: postgres-app
+      spec:
+      serviceAccountName: postgres
       containers:
-      - name: postgres
-        image: postgres:latest
-        env:
-        - name: POSTGRES_DB
-          value: "postgres"
+         - name: postgres-app
+           image: postgres:latest
+
+#apiVersion: apps/v1
+#kind: Deployment
+#metadata:
+#  name: postgres
+#  namespace: default
+#spec:
+#  replicas: 1
+#  selector:
+#    matchLabels:
+#      app: postgres
+#  template:
+#    metadata:
+#      labels:
+#        app: postgres
+#      annotations:
+#        vault.hashicorp.com/agent-inject: 'true'
+#        vault.hashicorp.com/role: 'postgres-role'
+#        vault.hashicorp.com/agent-inject-secret-database-config: 'secret/data/postgres'
+#        vault.hashicorp.com/agent-inject-template-database-config: |
+#          {{- with secret "secret/data/postgres" -}}
+#          postgresql://{{ .Data.data.username }}:{{ .Data.data.password }}@postgres:5432/wizard
+#          {{- end -}}
+#    spec:
+#      serviceAccountName: postgres-sa
+#      containers:
+#      - name: postgres
+#        image: postgres:latest
+#        env:
+#        - name: POSTGRES_DB
+#          value: "postgres"
 
 
 
