@@ -3,30 +3,31 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: postgres-deployment
+  name: secret-demo
   labels:
-    app: postgres
+    app: secret-demo
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: postgres
+      app: secret-demo
   template:
     metadata:
       labels:
-        app: postgres
+        app: secret-demo
       annotations:
-        vault.hashicorp.com/agent-inject-secret-database-config: "internal/database/config"
-        vault.hashicorp.com/agent-inject-template-database-config: |
+        vault.hashicorp.com/agent-inject-secret-my-secret: "secret/my-secret"
+        vault.hashicorp.com/agent-inject-template-my-secret: |
           {
-            "username": "{{ with secret "internal/database/config" }}{{ .Data.username }}{{ end }}",
-            "password": "{{ with secret "internal/database/config" }}{{ .Data.password }}{{ end }}"
+            "username": "{{ with secret "secret/my-secret" }}{{ .Data.username }}{{ end }}",
+            "password": "{{ with secret "secret/my-secret" }}{{ .Data.password }}{{ end }}"
           }
     spec:
       serviceAccountName: internal-app
       containers:
-        - name: postgres
-          image: postgres:latest
+        - name: busybox
+          image: busybox
+          command: [ "sh", "-c", "sleep 3600" ]
           volumeMounts:
             - name: vault-secrets
               mountPath: /vault/secrets
@@ -34,4 +35,5 @@ spec:
       volumes:
         - name: vault-secrets
           emptyDir: {}
+
 
