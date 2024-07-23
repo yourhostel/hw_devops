@@ -9,16 +9,22 @@ metadata:
   annotations:
     vault.hashicorp.com/agent-inject: 'true'
     vault.hashicorp.com/role: 'internal-app'
-    vault.hashicorp.com/agent-inject-secret-database-config.txt: 'internal/data/database/config'
-    vault.hashicorp.com/agent-inject-template-database-config.txt: |
-      {{- with secret "internal/data/database/config" -}}
-      DATABASE_URL=postgresql://{{ .Data.data.username }}:{{ .Data.data.password }}@postgres:5432/wizard
-      {{- end -}}
+    vault.hashicorp.com/agent-inject-secret-postgres-user: 'internal/data/database/config#username'
+    vault.hashicorp.com/agent-inject-secret-postgres-password: 'internal/data/database/config#password'
 spec:
   serviceAccountName: internal-app
   containers:
   - name: postgres
     image: postgres:latest
     env:
-      - name: DATABASE_URL
-        value: "/vault/secrets/database-config.txt"
+      - name: POSTGRES_USER
+        valueFrom:
+          secretKeyRef:
+            name: postgres-user
+            key: username
+      - name: POSTGRES_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: postgres-password
+            key: password
+
