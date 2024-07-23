@@ -27,27 +27,31 @@ spec:
     spec:
       serviceAccountName: internal-app
       containers:
-      - name: postgres
-        image: postgres:latest
-        ports:
-        - containerPort: 5432
-        env:
-        - name: POSTGRES_USER
-          valueFrom:
-            secretKeyRef:
-              name: vault-database-config
-              key: username
-        - name: POSTGRES_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: vault-database-config
-              key: password
-        volumeMounts:
-        - name: postgres-data
-          mountPath: /var/lib/postgresql/data
+        - name: postgres
+          image: postgres:latest
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: database-config
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: database-config
+                  key: POSTGRES_PASSWORD
+          volumeMounts:
+            - name: vault-secrets
+              mountPath: /vault/secrets
+          command: ["/bin/sh", "-c"]
+          args:
+            - source /vault/secrets/database-config && docker-entrypoint.sh postgres
       volumes:
-      - name: postgres-data
-        emptyDir: {}
+        - name: vault-secrets
+          emptyDir: {}
+
 
 
 
