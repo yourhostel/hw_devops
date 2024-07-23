@@ -17,8 +17,8 @@ spec:
       annotations:
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/role: "postgres-role"
-        vault.hashicorp.com/agent-inject-secret-POSTGRES_USER: "internal/database/config#username"
-        vault.hashicorp.com/agent-inject-secret-POSTGRES_PASSWORD: "internal/database/config#password"
+        vault.hashicorp.com/agent-inject-secret-postgres-user: "internal/database/config#username"
+        vault.hashicorp.com/agent-inject-secret-postgres-password: "internal/database/config#password"
     spec:
       serviceAccountName: postgres-sa
       containers:
@@ -28,21 +28,12 @@ spec:
         - name: POSTGRES_USER
           valueFrom:
             secretKeyRef:
-              name: POSTGRES_USER
+              name: postgres-user
               key: username
         - name: POSTGRES_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: POSTGRES_PASSWORD
+              name: postgres-password
               key: password
         - name: POSTGRES_DB
           value: "postgres"
-
-
-
-
-
-
-
-
-
