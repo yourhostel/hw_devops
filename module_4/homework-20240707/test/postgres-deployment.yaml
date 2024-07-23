@@ -17,9 +17,9 @@ spec:
       annotations:
         vault.hashicorp.com/agent-inject: 'true'
         vault.hashicorp.com/role: 'postgres-role'
-        vault.hashicorp.com/agent-inject-secret-postgres: 'secret/data/postgres'
+        vault.hashicorp.com/agent-inject-secret-postgres: 'secret/postgres'
         vault.hashicorp.com/agent-inject-template-postgres: |
-          {{- with secret "secret/data/postgres" }}
+          {{- with secret "secret/postgres" }}
           POSTGRES_USER="{{ .Data.data.username }}"
           POSTGRES_PASSWORD="{{ .Data.data.password }}"
           {{- end }}
