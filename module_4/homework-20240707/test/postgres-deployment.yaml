@@ -20,6 +20,13 @@ spec:
       containers:
         - name: postgres-app
           image: postgres:latest
+          env:
+            - name: POSTGRES_USER
+              value: user
+            - name: POSTGRES_PASSWORD
+              value: 1234
+            - name: POSTGRES_DB
+              value: db
 
 
 #apiVersion: apps/v1
