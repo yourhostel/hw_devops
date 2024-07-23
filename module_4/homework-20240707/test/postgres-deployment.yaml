@@ -26,8 +26,8 @@ spec:
       image: postgres:latest
       env:
         - name: POSTGRES_USER
-          value: dummy
+          value: {{ .Values.username }}
         - name: POSTGRES_PASSWORD
-          value: dummy
+          value: {{ .Values.password }}
 
 
