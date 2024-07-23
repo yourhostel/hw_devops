@@ -45,11 +45,14 @@ spec:
         volumeMounts:
         - name: postgres-data
           mountPath: /var/lib/postgresql/data
+        - name: vault-secrets
+          mountPath: /vault/secrets
       volumes:
       - name: postgres-data
         emptyDir: {}
       - name: vault-secrets
         emptyDir: {}
+
 
 
 
