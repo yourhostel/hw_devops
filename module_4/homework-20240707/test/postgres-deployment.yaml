@@ -17,15 +17,16 @@ spec:
       annotations:
         vault.hashicorp.com/agent-inject: 'true'
         vault.hashicorp.com/role: 'postgres-role'
-        vault.hashicorp.com/agent-inject-secret-postgres: 'secret/postgres'
+        vault.hashicorp.com/agent-inject-secret-postgres: 'secret/data/postgres'
         vault.hashicorp.com/agent-inject-template-postgres: |
-          POSTGRES_USER={{- with secret "secret/postgres" -}}{{ .Data.data.username }}{{- end }}
-          POSTGRES_PASSWORD={{- with secret "secret/postgres" -}}{{ .Data.data.password }}{{- end }}
+          POSTGRES_USER={{- with secret "secret/data/postgres" -}}{{ .Data.data.username }}{{- end }}
+          POSTGRES_PASSWORD={{- with secret "secret/data/postgres" -}}{{ .Data.data.password }}{{- end }}
     spec:
       serviceAccountName: postgres-sa
       containers:
       - name: postgres
         image: postgres:latest
+
 
 
 
