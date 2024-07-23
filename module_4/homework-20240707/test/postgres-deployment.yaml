@@ -33,15 +33,9 @@ spec:
         - containerPort: 5432
         env:
         - name: POSTGRES_USER
-          valueFrom:
-            secretKeyRef:
-              name: vault-database-config
-              key: username
+          value: "dummy-user"  # Temporary dummy values to make sure container starts
         - name: POSTGRES_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: vault-database-config
-              key: password
+          value: "dummy-password"  # Temporary dummy values to make sure container starts
         volumeMounts:
         - name: postgres-data
           mountPath: /var/lib/postgresql/data
@@ -52,6 +46,7 @@ spec:
         emptyDir: {}
       - name: vault-secrets
         emptyDir: {}
+
 
 
 
