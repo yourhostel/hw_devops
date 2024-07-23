@@ -9,8 +9,8 @@ metadata:
   annotations:
     vault.hashicorp.com/agent-inject: 'true'
     vault.hashicorp.com/role: 'internal-app'
-    vault.hashicorp.com/agent-inject-secret-postgres-user: 'internal/database/config#username'
-    vault.hashicorp.com/agent-inject-secret-postgres-password: 'internal/database/config#password'
+    vault.hashicorp.com/agent-inject-secret-postgres-user: 'internal/data/database/config#username'
+    vault.hashicorp.com/agent-inject-secret-postgres-password: 'internal/data/database/config#password'
 spec:
   serviceAccountName: internal-app
   containers:
@@ -20,11 +20,11 @@ spec:
       - name: POSTGRES_USER
         valueFrom:
           secretKeyRef:
-            name: postgres-user
+            name: username
             key: username
       - name: POSTGRES_PASSWORD
         valueFrom:
           secretKeyRef:
-            name: postgres-password
+            name: password
             key: password
 
