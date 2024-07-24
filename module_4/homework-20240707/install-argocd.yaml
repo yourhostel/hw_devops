@@ -5,36 +5,6 @@ kind: Namespace
 metadata:
   name: argocd
 ---
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: argocd-server-sa
-  namespace: argocd
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  namespace: argocd
-  name: argocd-server-role
-rules:
-- apiGroups: [""]
-  resources: ["configmaps", "secrets", "pods", "pods/log"]
-  verbs: ["get", "list", "watch"]
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: argocd-server-rolebinding
-  namespace: argocd
-subjects:
-- kind: ServiceAccount
-  name: argocd-server-sa
-  namespace: argocd
-roleRef:
-  kind: Role
-  name: argocd-server-role
-  apiGroup: rbac.authorization.k8s.io
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -50,7 +20,6 @@ spec:
       labels:
         app: argocd-server
     spec:
-      serviceAccountName: argocd-server-sa
       containers:
       - name: argocd-server
         image: argoproj/argocd:v2.6.15
@@ -84,6 +53,7 @@ spec:
       nodePort: 32000
   selector:
     app: argocd-server
+
 
 
 
