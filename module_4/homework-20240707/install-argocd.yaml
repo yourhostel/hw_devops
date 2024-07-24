@@ -70,6 +70,13 @@ spec:
             port: 8080
           initialDelaySeconds: 10
           periodSeconds: 3
+        volumeMounts:
+        - name: argocd-config
+          mountPath: /shared/config
+      volumes:
+      - name: argocd-config
+        configMap:
+          name: argocd-cm
 ---
 apiVersion: v1
 kind: Service
@@ -84,7 +91,6 @@ spec:
       nodePort: 32000
   selector:
     app: argocd-server
-
 
 
 
