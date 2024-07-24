@@ -1,6 +1,0 @@
-# homework-20240707/vault/namespace.yaml
-
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: yourhostel-database
