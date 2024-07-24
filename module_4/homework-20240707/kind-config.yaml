@@ -2,13 +2,10 @@
 
 apiVersion: kind.x-k8s.io/v1alpha4
 kind: Cluster
-metadata:
-  name: yourhostel-cluster
-spec:
-  controlPlane:
-    extraPortMappings:
-    - containerPort: 32000
-      hostPort: 80
-  nodes:
-  - role: control-plane
-  - role: worker
+controlPlane:
+  extraPortMappings:
+  - containerPort: 32000
+    hostPort: 80
+nodes:
+- role: control-plane
+- role: worker
