@@ -1,10 +1,13 @@
-# homework-20240707/kind-config.yaml
+# kind-config.yaml
 
-kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
-nodes:
-- role: control-plane
-  extraPortMappings:
-  - containerPort: 8080
-    hostPort: 80
-- role: worker
+kind: Cluster
+metadata:
+  name: yourhostel-cluster
+spec:
+  kubernetesVersion: "1.27.16"
+  nodes:
+  - role: control-plane
+    image: kindest/node:v1.27.16
+  - role: worker
+    image: kindest/node:v1.27.16
