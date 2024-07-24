@@ -1,0 +1,19 @@
+# homework-20240707/argo-cd-service-nodeport.yaml
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: argo-cd-argocd-server
+  namespace: argocd
+spec:
+  type: NodePort
+  ports:
+    - port: 80
+      targetPort: 8080
+      nodePort: 30080
+    - port: 443
+      targetPort: 8080
+      nodePort: 30443
+  selector:
+    app.kubernetes.io/instance: argo-cd
+    app.kubernetes.io/name: argocd-server
