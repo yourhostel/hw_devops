@@ -35,6 +35,14 @@ roleRef:
   name: argocd-server-role
   apiGroup: rbac.authorization.k8s.io
 ---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-cm
+  namespace: argocd
+data:
+  application.instanceLabelKey: "argocd.argoproj.io/instance"
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -84,14 +92,7 @@ spec:
       nodePort: 32000
   selector:
     app: argocd-server
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: argocd-cm
-  namespace: argocd
-data:
-  application.instanceLabelKey: "argocd.argoproj.io/instance"
+
 
 
 
