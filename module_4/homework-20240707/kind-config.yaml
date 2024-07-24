@@ -5,6 +5,6 @@ kind: Cluster
 nodes:
 - role: control-plane
   extraPortMappings:
-  - containerPort: 80
+  - containerPort: 8080
     hostPort: 32000
 - role: worker
