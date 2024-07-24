@@ -1,7 +1,5 @@
 # homework-20240707/install-argocd.yaml
 
-# homework-20240707/install-argocd.yaml
-
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -36,14 +34,6 @@ roleRef:
   kind: Role
   name: argocd-server-role
   apiGroup: rbac.authorization.k8s.io
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: argocd-cm
-  namespace: argocd
-data:
-  application.instanceLabelKey: "argocd.argoproj.io/instance"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -80,13 +70,6 @@ spec:
             port: 8080
           initialDelaySeconds: 10
           periodSeconds: 3
-        volumeMounts:
-        - name: argocd-config
-          mountPath: /shared/config
-      volumes:
-      - name: argocd-config
-        configMap:
-          name: argocd-cm
 ---
 apiVersion: v1
 kind: Service
@@ -101,6 +84,7 @@ spec:
       nodePort: 32000
   selector:
     app: argocd-server
+
 
 
 
