@@ -17,14 +17,26 @@ spec:
         server:
           dev:
             enabled: true
-        injector:
-          affinity: {}
   destination:
     server: https://kubernetes.default.svc
     namespace: vault
+  ignoreDifferences:
+    - group: admissionregistration.k8s.io
+      kind: MutatingWebhookConfiguration
+      jsonPointers:
+        - /webhooks/0/clientConfig/caBundle
+    - group: '*'
+      kind: '*'
+      managedFieldsManagers:
+        - vault-k8s
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ApplyOutOfSyncOnly=true
+      - RespectIgnoreDifferences=true
+
 
 
