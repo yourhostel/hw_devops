@@ -1,4 +1,4 @@
-# homework-20240707/postgresql/postgresql-state-full-set.yaml
+# homework-20240707/postgresql/postgresql-state-full-set.yaml сокк
 
 apiVersion: apps/v1
 kind: StatefulSet
