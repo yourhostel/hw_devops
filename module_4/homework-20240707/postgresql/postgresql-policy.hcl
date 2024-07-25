@@ -1,3 +1,3 @@
-path "secret/postgresql/admin" {
+path "secret/*" {
   capabilities = ["read"]
 }
