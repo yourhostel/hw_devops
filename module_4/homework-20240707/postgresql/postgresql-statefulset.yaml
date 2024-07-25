@@ -45,12 +45,3 @@ spec:
             secretKeyRef:
               name: postgresql-admin-secrets
               key: POSTGRES_PASSWORD
-        volumeMounts:
-        - name: vault-secrets
-          mountPath: /vault/secrets
-      volumes:
-      - name: vault-secrets
-        emptyDir:
-          medium: Memory
-
-
