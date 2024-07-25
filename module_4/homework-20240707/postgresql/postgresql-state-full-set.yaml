@@ -4,7 +4,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: postgresql
-  namespace: yourhostel-postgresql
+  namespace: default
 spec:
   serviceName: "postgresql"
   replicas: 1
@@ -17,38 +17,40 @@ spec:
         app: postgresql
       annotations:
         vault.hashicorp.com/agent-inject: "true"
-        vault.hashicorp.com/agent-inject-secret-db-creds: "secret/data/postgresql/admin"
-        vault.hashicorp.com/agent-inject-template-db-username: |
+        vault.hashicorp.com/role: "postgresql-role"
+        vault.hashicorp.com/agent-inject-secret-admin: "secret/data/postgresql/admin"
+        vault.hashicorp.com/agent-inject-template-POSTGRES_USER: |
           {{- with secret "secret/data/postgresql/admin" -}}
-          export DB_USERNAME={{ .Data.data.username }}
-          {{- end -}}
-        vault.hashicorp.com/agent-inject-template-db-password: |
+          POSTGRES_USER={{ .Data.data.username }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-template-POSTGRES_PASSWORD: |
           {{- with secret "secret/data/postgresql/admin" -}}
-          export DB_PASSWORD={{ .Data.data.password }}
-          {{- end -}}
+          POSTGRES_PASSWORD={{ .Data.data.password }}
+          {{- end }}
     spec:
-      serviceAccountName: your-service-account
+      serviceAccountName: postgresql-sa
       containers:
       - name: postgresql
         image: postgres:latest
+        ports:
+        - containerPort: 5432
         env:
-        - name: DB_USERNAME
-          value: "/vault/secrets/db-username"
-        - name: DB_PASSWORD
-          value: "/vault/secrets/db-password"
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: postgresql-admin-secrets
+              key: POSTGRES_USER
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgresql-admin-secrets
+              key: POSTGRES_PASSWORD
         volumeMounts:
-        - name: db-creds
+        - name: vault-secrets
           mountPath: /vault/secrets
-          readOnly: true
       volumes:
-      - name: db-creds
+      - name: vault-secrets
         emptyDir:
           medium: Memory
-  volumeClaimTemplates:
-  - metadata:
-      name: postgresql-data
-    spec:
-      accessModes: ["ReadWriteOnce"]
-      resources:
-        requests:
-          storage: 1Gi
+
+
