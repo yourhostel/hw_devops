@@ -1,0 +1,54 @@
+# homework-20240707/postgresql/postgresql-state-full-set.yaml
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgresql
+  namespace: yourhostel-postgresql
+spec:
+  serviceName: "postgresql"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgresql
+  template:
+    metadata:
+      labels:
+        app: postgresql
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/agent-inject-secret-db-creds: "secret/data/postgresql/admin"
+        vault.hashicorp.com/agent-inject-template-db-username: |
+          {{- with secret "secret/data/postgresql/admin" -}}
+          export DB_USERNAME={{ .Data.data.username }}
+          {{- end -}}
+        vault.hashicorp.com/agent-inject-template-db-password: |
+          {{- with secret "secret/data/postgresql/admin" -}}
+          export DB_PASSWORD={{ .Data.data.password }}
+          {{- end -}}
+    spec:
+      serviceAccountName: your-service-account
+      containers:
+      - name: postgresql
+        image: postgres:latest
+        env:
+        - name: DB_USERNAME
+          value: "/vault/secrets/db-username"
+        - name: DB_PASSWORD
+          value: "/vault/secrets/db-password"
+        volumeMounts:
+        - name: db-creds
+          mountPath: /vault/secrets
+          readOnly: true
+      volumes:
+      - name: db-creds
+        emptyDir:
+          medium: Memory
+  volumeClaimTemplates:
+  - metadata:
+      name: postgresql-data
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 1Gi
