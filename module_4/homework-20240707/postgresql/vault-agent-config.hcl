@@ -8,7 +8,7 @@ auto_auth {
 }
 
 template {
-  source = "secret/postgresql/admin"
+  source = "secret/data/postgresql/admin"
   destination = "/etc/secrets/db-creds"
   command = "export DB_USERNAME={{ .Data.data.username }}\nexport DB_PASSWORD={{ .Data.data.password }}"
 }
@@ -18,5 +18,6 @@ vault {
 }
 
 log_level = "debug"
+
 
 
