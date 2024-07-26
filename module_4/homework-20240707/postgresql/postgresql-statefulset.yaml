@@ -47,6 +47,9 @@ spec:
             - name: postgredb
               mountPath: /var/lib/postgresql/data
               readOnly: false
+          securityContext:
+            runAsUser: 999  # UID postgres
+            runAsGroup: 999  # GID postgres
   volumeClaimTemplates:
     - metadata:
         name: postgredb
