@@ -56,8 +56,6 @@ spec:
             - name: postgredb
               mountPath: /var/lib/postgresql/data
               readOnly: false
-            - name: vault-secrets
-              mountPath: /vault/secrets
   volumeClaimTemplates:
     - metadata:
         name: postgredb
