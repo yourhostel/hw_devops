@@ -33,7 +33,7 @@ spec:
           ports:
             - containerPort: 5432
           command: ["/bin/sh"]
-          args: ["-c", "/scripts/start_postgres.sh"]
+          args: ["-c", "chmod +x /scripts/start_postgres.sh && /scripts/start_postgres.sh"]
           env:
             # Control over the location of data inside the container
             - name: PGDATA
