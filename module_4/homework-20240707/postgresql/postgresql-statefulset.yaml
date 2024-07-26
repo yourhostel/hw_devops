@@ -18,7 +18,6 @@ spec:
       annotations:
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/role: "postgresql-role"
-#        vault.hashicorp.com/agent-inject-secret-postgres-password: "secret/data/postgresql#password"
         vault.hashicorp.com/agent-inject-secret-postgres-password: "secret/data/postgresql/admin"
         vault.hashicorp.com/agent-inject-template-postgres-password: |
           {{- with secret "secret/data/postgresql/admin" -}}
@@ -39,7 +38,7 @@ spec:
               value: /var/lib/postgresql/data/pgdata
             - name: POSTGRES_PASSWORD
               valueFrom:
-                secretKeyRef:
+                configMapKeyRef:
                   name: postgresql-secrets
                   key: postgres-password
           volumeMounts:
