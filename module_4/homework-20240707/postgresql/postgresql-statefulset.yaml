@@ -32,7 +32,7 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 5432
-          command: [ "/bin/bash", "-c" ]
+          command: [ "/bin/sh", "-c" ]
           args:
             - set -a && source /vault/secrets/postgres-password && exec postgres
           env:
