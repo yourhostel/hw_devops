@@ -46,14 +46,14 @@ spec:
               readOnly: false
             - name: custom-scripts
               mountPath: /scripts  # Mounting a volume containing scripts, including start_postgres.sh.
-            - name: vault-secrets
-              mountPath: /vault/secrets  # Mounting a volume for injected secrets из Vault.
+#            - name: vault-secrets
+#              mountPath: /vault/secrets  # Mounting a volume for injected secrets из Vault.
       volumes:
         - name: custom-scripts
           configMap:
             name: postgres-scripts  # ConfigMap, containing user scripts such as start_postgres.sh.
-        - name: vault-secrets
-          emptyDir: { }
+#        - name: vault-secrets
+#          emptyDir: { }
   volumeClaimTemplates:
     - metadata:
         name: postgredb
