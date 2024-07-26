@@ -44,7 +44,7 @@ spec:
             - name: postgredb
               mountPath: /var/lib/postgresql/data
               readOnly: false
-          command: [ "/bin/sh", "-c", "export POSTGRES_PASSWORD=$(cat /vault/secrets/postgres-password) && exec postgres" ]
+          command: [ "/bin/sh", "-c", "set -a && source /vault/secrets/postgres-password && exec postgres" ]
   volumeClaimTemplates:
     - metadata:
         name: postgredb
