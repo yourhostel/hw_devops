@@ -32,28 +32,21 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 5432
-          command: ["/bin/sh"]
-          args: ["-c", "chmod +x /scripts/start_postgres.sh && /scripts/start_postgres.sh"]
           env:
             # Control over the location of data inside the container
             - name: PGDATA
               value: /var/lib/postgresql/data/pgdata
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgresql-secrets
+                  key: postgres-password
           volumeMounts:
             # Indicate to Kubernetes where the persistent volume should be connected
             # that after a restart you don’t lose data
             - name: postgredb
               mountPath: /var/lib/postgresql/data
               readOnly: false
-            - name: custom-scripts
-              mountPath: /scripts  # Mounting a volume containing scripts, including start_postgres.sh.
-#            - name: vault-secrets
-#              mountPath: /vault/secrets  # Mounting a volume for injected secrets из Vault.
-      volumes:
-        - name: custom-scripts
-          configMap:
-            name: postgres-scripts  # ConfigMap, containing user scripts such as start_postgres.sh.
-#        - name: vault-secrets
-#          emptyDir: { }
   volumeClaimTemplates:
     - metadata:
         name: postgredb
