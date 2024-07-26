@@ -1,4 +1,4 @@
-# homework-20240707/postgresql/postgresql-state-full-set.yaml
+# homework-20240707/postgresql/postgresql-statefulset.yaml
 
 apiVersion: apps/v1
 kind: StatefulSet
@@ -32,20 +32,8 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 5432
-          command:
-            - sh
-            - -c
-            - |
-              # Wait for the POSTGRES_PASSWORD file to appear
-              while [ ! -f /vault/secrets/POSTGRES_PASSWORD ]; do
-                echo "Waiting for POSTGRES_PASSWORD..."
-                sleep 1
-              done
-              echo "Found POSTGRES_PASSWORD, starting PostgreSQL..."
-              # Read the password from the file and export it
-              export POSTGRES_PASSWORD=$(cat /vault/secrets/POSTGRES_PASSWORD)
-              # Now start PostgreSQL
-              exec docker-entrypoint.sh postgres
+          command: ["/bin/sh"]
+          args: ["-c", "/scripts/start_postgres.sh"]
           env:
             # Control over the location of data inside the container
             - name: PGDATA
@@ -56,6 +44,16 @@ spec:
             - name: postgredb
               mountPath: /var/lib/postgresql/data
               readOnly: false
+            - name: custom-scripts
+              mountPath: /scripts  # Mounting a volume containing scripts, including start_postgres.sh.
+#            - name: vault-secrets
+#              mountPath: /vault/secrets  # Mounting a volume for injected secrets из Vault.
+  volumes:
+    - name: custom-scripts
+      configMap:
+        name: postgres-scripts  # ConfigMap, containing user scripts such as start_postgres.sh.
+#    - name: vault-secrets
+#      emptyDir: { }
   volumeClaimTemplates:
     - metadata:
         name: postgredb
