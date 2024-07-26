@@ -24,8 +24,8 @@ spec:
           POSTGRES_PASSWORD={{ .Data.data.password }}
           {{- end }}
     spec:
-      terminationGracePeriodSeconds: 10
       serviceAccountName: demo-user
+      terminationGracePeriodSeconds: 10
       containers:
         - name: postgres
           image: postgres:latest
@@ -58,15 +58,16 @@ spec:
               readOnly: false
             - name: vault-secrets
               mountPath: /vault/secrets
+      volumes:
+        - name: vault-secrets
+          emptyDir: {}
   volumeClaimTemplates:
-  - metadata:
-      name: postgredb
-    spec:
-      accessModes: ["ReadWriteOnce"]
-      resources:
-        requests:
-          storage: 3Gi
-volumes:
-  - name: vault-secrets
-    emptyDir: {}
+    - metadata:
+        name: postgredb
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 3Gi
+
 
