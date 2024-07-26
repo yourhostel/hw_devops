@@ -1,4 +1,4 @@
-# homework-20240707/postgresql/start_postgres.sh
+# homework-20240707/start_postgres.sh
 
 echo "Waiting for postgres_password..."
 while [ ! -f /vault/secrets/postgres_password ]; do
