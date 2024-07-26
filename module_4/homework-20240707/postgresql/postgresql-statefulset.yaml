@@ -1,4 +1,5 @@
 # homework-20240707/postgresql/postgresql-state-full-set.yaml
+
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -18,29 +19,54 @@ spec:
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/role: "postgresql-role"
         vault.hashicorp.com/agent-inject-secret-admin: "secret/data/postgresql/admin"
-        vault.hashicorp.com/agent-inject-template-POSTGRES_USER: |
-          {{- with secret "secret/data/postgresql/admin" -}}
-          POSTGRES_USER={{ .Data.data.username }}
-          {{- end }}
         vault.hashicorp.com/agent-inject-template-POSTGRES_PASSWORD: |
           {{- with secret "secret/data/postgresql/admin" -}}
           POSTGRES_PASSWORD={{ .Data.data.password }}
           {{- end }}
     spec:
-      serviceAccountName: postgresql-sa
+      terminationGracePeriodSeconds: 10
+      serviceAccountName: demo-user
       containers:
-      - name: postgresql
-        image: postgres:latest
-        ports:
-        - containerPort: 5432
-        env:
-        - name: POSTGRES_USER
-          valueFrom:
-            secretKeyRef:
-              name: postgresql-admin-secrets
-              key: POSTGRES_USER
-        - name: POSTGRES_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: postgresql-admin-secrets
-              key: POSTGRES_PASSWORD
+        - name: postgres
+          image: postgres:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5432
+          command:
+            - sh
+            - -c
+            - |
+              # Wait for the POSTGRES_PASSWORD file to appear
+              while [ ! -f /vault/secrets/POSTGRES_PASSWORD ]; do
+                echo "Waiting for POSTGRES_PASSWORD..."
+                sleep 1
+              done
+              echo "Found POSTGRES_PASSWORD, starting PostgreSQL..."
+              # Read the password from the file and export it
+              export POSTGRES_PASSWORD=$(cat /vault/secrets/POSTGRES_PASSWORD)
+              # Now start PostgreSQL
+              exec docker-entrypoint.sh postgres
+          env:
+            # Control over the location of data inside the container
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+          volumeMounts:
+            # Indicate to Kubernetes where the persistent volume should be connected
+            # that after a restart you don’t lose data
+            - name: postgredb
+              mountPath: /var/lib/postgresql/data
+              readOnly: false
+            - name: vault-secrets
+              mountPath: /vault/secrets
+  volumeClaimTemplates:
+  - metadata:
+      name: postgredb
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 3Gi
+volumes:
+  - name: vault-secrets
+    emptyDir: {}
+
