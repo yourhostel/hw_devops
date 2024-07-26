@@ -58,9 +58,6 @@ spec:
               readOnly: false
             - name: vault-secrets
               mountPath: /vault/secrets
-      volumes:
-        - name: vault-secrets
-          emptyDir: {}
   volumeClaimTemplates:
     - metadata:
         name: postgredb
