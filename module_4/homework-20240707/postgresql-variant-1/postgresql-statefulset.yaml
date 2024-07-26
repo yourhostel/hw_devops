@@ -1,4 +1,4 @@
-# homework-20240707/postgresql/postgresql-statefulset.yaml
+# homework-20240707/postgresql-variant-1/postgresql-statefulset.yaml
 
 apiVersion: apps/v1
 kind: StatefulSet
@@ -17,7 +17,7 @@ spec:
         app: postgresql
       annotations:
         vault.hashicorp.com/agent-inject: "true"
-        vault.hashicorp.com/role: "postgresql-role"
+        vault.hashicorp.com/role: "yourhostel-role"
         vault.hashicorp.com/agent-inject-secret-postgres-password: "secret/data/postgresql/admin"
         vault.hashicorp.com/agent-inject-template-postgres-password: |
           {{- with secret "secret/data/postgresql/admin" -}}
@@ -28,7 +28,7 @@ spec:
           {{ .Data.data.username }}
           {{- end }}
     spec:
-      serviceAccountName: demo-user
+      serviceAccountName: yourhostel-user
       terminationGracePeriodSeconds: 10
       containers:
         - name: postgres
@@ -40,7 +40,8 @@ spec:
           args:
             - |
               if [ ! -s "$PGDATA/PG_VERSION" ]; then
-                initdb -D "$PGDATA" --username=$(cat /vault/secrets/postgres-username) --pwfile=/vault/secrets/postgres-password
+                initdb -D "$PGDATA" --username=$(cat /vault/secrets/postgres-username) \
+                                    --pwfile=/vault/secrets/postgres-password
               fi &&
               exec postgres
           env:
@@ -58,8 +59,11 @@ spec:
               mountPath: /var/lib/postgresql/data
               readOnly: false
           securityContext:
-            runAsUser: 999  # UID postgres
-            runAsGroup: 999  # GID postgres
+            #Pod-level security context
+            #fsGroup: 999
+            # Security at the individual container level
+            runAsUser: 999  # UID user postgres
+            runAsGroup: 999  # GID user postgres
   volumeClaimTemplates:
     - metadata:
         name: postgredb
@@ -67,6 +71,6 @@ spec:
         accessModes: ["ReadWriteOnce"]
         resources:
           requests:
-            storage: 3Gi
+            storage: 1Gi
 
 

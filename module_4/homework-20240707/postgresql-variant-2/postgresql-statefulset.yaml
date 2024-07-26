@@ -1,0 +1,50 @@
+# homework-20240707/postgresql-variant-2/postgresql-statefulset.yaml
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres
+spec:
+  serviceName: psql-svc
+  replicas: 1
+  updateStrategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/role: "yourhostel-role"
+        vault.hashicorp.com/agent-inject-secret-pgpass: "secret/data/postgresql/admin"
+        vault.hashicorp.com/agent-inject-template-pgpass: |
+          {{- with secret "secret/data/postgresql/admin" -}}
+          localhost:5432:postgres:{{ .Data.data.username }}:{{ .Data.data.password }}
+          {{- end -}}
+    spec:
+      terminationGracePeriodSeconds: 10
+      serviceAccountName: yourhostel-user
+      containers:
+        - name: postgres
+          image: postgres:10.1
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5432
+          env:
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+          volumeMounts:
+            - name: postgredb
+              mountPath: /var/lib/postgresql/data
+              readOnly: false
+  volumeClaimTemplates:
+  - metadata:
+      name: postgredb
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
