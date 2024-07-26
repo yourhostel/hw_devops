@@ -22,6 +22,7 @@ spec:
         vault.hashicorp.com/agent-inject-template-postgres-password: |
           {{- with secret "secret/data/postgresql/admin" -}}
           POSTGRES_PASSWORD={{ .Data.data.password }}
+          POSTGRES_USER={{ .Data.data.username }}
           {{- end }}
     spec:
       serviceAccountName: demo-user
@@ -37,7 +38,7 @@ spec:
             - |
               set -a && . /vault/secrets/postgres-password &&
               if [ ! -s "$PGDATA/PG_VERSION" ]; then
-                initdb -D "$PGDATA";
+                initdb -D "$PGDATA" --username=$(cat /vault/secrets/postgres-username) --pwfile=/vault/secrets/postgres-password
               fi &&
               exec postgres
           env:
@@ -46,6 +47,8 @@ spec:
               value: /var/lib/postgresql/data/pgdata
             - name: POSTGRES_PASSWORD_FILE
               value: /vault/secrets/postgres-password
+            - name: POSTGRES_USER_FILE
+              value: /vault/secrets/postgres-username
           volumeMounts:
             # Indicate to Kubernetes where the persistent volume should be connected
             # that after a restart you don’t lose data
