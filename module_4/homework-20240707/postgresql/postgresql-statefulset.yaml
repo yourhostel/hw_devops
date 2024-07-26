@@ -34,7 +34,7 @@ spec:
             - containerPort: 5432
           command: [ "/bin/sh", "-c" ]
           args:
-            - set -a && source /vault/secrets/postgres-password && exec postgres
+            - set -a && . /vault/secrets/postgres-password && exec postgres
           env:
             # Control over the location of data inside the container
             - name: PGDATA
