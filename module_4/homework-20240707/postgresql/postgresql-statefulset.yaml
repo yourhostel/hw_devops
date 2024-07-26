@@ -32,6 +32,9 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 5432
+          command: [ "/bin/bash", "-c" ]
+          args:
+            - set -a && source /vault/secrets/postgres-password && exec postgres
           env:
             # Control over the location of data inside the container
             - name: PGDATA
@@ -44,7 +47,6 @@ spec:
             - name: postgredb
               mountPath: /var/lib/postgresql/data
               readOnly: false
-          command: [ "/bin/sh", "-c", "set -a && source /vault/secrets/postgres-password && exec postgres" ]
   volumeClaimTemplates:
     - metadata:
         name: postgredb
