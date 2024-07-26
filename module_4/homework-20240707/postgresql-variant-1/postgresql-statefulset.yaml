@@ -40,8 +40,7 @@ spec:
           args:
             - |
               if [ ! -s "$PGDATA/PG_VERSION" ]; then
-                initdb -D "$PGDATA" --username=$(cat /vault/secrets/postgres-username) \
-                                    --pwfile=/vault/secrets/postgres-password
+                initdb -D "$PGDATA" --username=$(cat /vault/secrets/postgres-username) --pwfile=/vault/secrets/postgres-password
               fi &&
               exec postgres
           env:
