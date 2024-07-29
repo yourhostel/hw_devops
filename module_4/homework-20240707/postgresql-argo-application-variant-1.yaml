@@ -1,16 +1,16 @@
-# homework-20240707/postgresql-argo-application.yaml
+# homework-20240707/postgresql-argo-application-variant-1.yaml
 
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: postgresql-app
+  name: postgresql-app-variant-1
   namespace: argocd
 spec:
   project: default
   source:
     repoURL: https://github.com/yourhostel/hw_devops.git
     path: module_4/homework-20240707/postgresql-variant-1
-    targetRevision: main  # или HEAD, если хочешь всегда использовать последние изменения
+    targetRevision: main  # or HEAD for the latest changes
   destination:
     server: https://kubernetes.default.svc
     namespace: default
