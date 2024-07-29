@@ -112,7 +112,7 @@ kubectl exec -it vault-0 -n vault -- vault kv get secret/postgresql/admin
 ![vault (10).jpg](screenshots%2Fvault%20%2810%29.jpg)
 
 # postgresql-variant-1
-* Create a secret and run [postgresql-statefulset.yaml](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-20240707/postgresql-variant-1/postgresql-statefulset.yaml). In this example, the database account is created based on the secrets of Vault automatically
+* Run [postgresql-variant-1/postgresql-statefulset.yaml](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-20240707/postgresql-variant-1/postgresql-statefulset.yaml). In this example, the database account is created based on the secrets of Vault automatically
 ```bash
 kubectl apply -f postgresql-variant-1/postgresql-statefulset.yaml
 kubectl get pods postgresql-0 -n default -o wide
@@ -145,7 +145,7 @@ kubectl exec -it postgresql-0 -c postgres -- psql -U yourhostel -d postgres
 ![vault (14).jpg](screenshots%2Fvault%20%2814%29.jpg)
 
 # postgresql-variant-2
-* Creates an account manually using the default user `postgres`. Specify the login and password that Vault stores. Verify that Vault substitutes the secret into the template string from the pgpass file and sets it to the PGPASSFILE environment variable.
+* Run [postgresql-variant-1/postgresql-statefulset.yaml](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-20240707/postgresql-variant-2/postgresql-statefulset.yaml). Creates an account manually using the default user `postgres`. Specify the login and password that Vault stores. Verify that Vault substitutes the secret into the template string from the pgpass file and sets it to the PGPASSFILE environment variable.
 ```bash
 kubectl apply -f postgresql-variant-2/postgresql-statefulset.yaml
 
