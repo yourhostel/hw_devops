@@ -36,6 +36,8 @@ spec:
           env:
             - name: PGDATA
               value: /var/lib/postgresql/data/pgdata
+            - name: PGPASSFILE
+              value: "/vault/secrets/pgpass"
           volumeMounts:
             - name: postgredb
               mountPath: /var/lib/postgresql/data
