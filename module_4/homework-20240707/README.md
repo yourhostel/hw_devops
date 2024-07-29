@@ -145,7 +145,7 @@ kubectl exec -it postgresql-0 -c postgres -- psql -U yourhostel -d postgres
 ![vault (14).jpg](screenshots%2Fvault%20%2814%29.jpg)
 
 # postgresql-variant-2
-* Run [postgresql-variant-1/postgresql-statefulset.yaml](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-20240707/postgresql-variant-2/postgresql-statefulset.yaml). Creates an account manually using the default user `postgres`. Specify the login and password that Vault stores. Verify that Vault substitutes the secret into the template string from the pgpass file and sets it to the PGPASSFILE environment variable.
+* Run [postgresql-variant-2/postgresql-statefulset.yaml](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-20240707/postgresql-variant-2/postgresql-statefulset.yaml). Creates an account manually using the default user `postgres`. Specify the login and password that Vault stores. Verify that Vault substitutes the secret into the template string from the pgpass file and sets it to the PGPASSFILE environment variable.
 ```bash
 kubectl apply -f postgresql-variant-2/postgresql-statefulset.yaml
 
