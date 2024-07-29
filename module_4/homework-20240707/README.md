@@ -174,7 +174,7 @@ kubectl exec -it postgres-0 -c postgres -- psql -U yourhostel -d postgres
 * The command creates a new application in Argo CD based on the configuration file [postgresql-argo-application.yaml](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-20240707/postgresql-argo-application.yaml)` for both variants
 ```bash
 sed 's/VAR/1/g' postgresql-argo-application.yaml | argocd app create -f -
-sed 's/VAR/1/g' postgresql-argo-application.yaml | argocd app create -f -
+sed 's/VAR/2/g' postgresql-argo-application.yaml | argocd app create -f -
 ```
 ![vault (17).jpg](screenshots%2Fvault%20%2817%29.jpg)
 
