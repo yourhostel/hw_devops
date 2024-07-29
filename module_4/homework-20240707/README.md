@@ -248,7 +248,7 @@ vault read database/creds/my-role
 ![vault (21).jpg](screenshots%2Fvault%20%2821%29.jpg)
 
 ```bash
-kubectl exec -it postgresql-0 -c postgres -- psql -U v-token-my-role-HsTpqGn9y7VxcXYHr4lL-1722036023 -d postgres -h postgresql.default.svc.cluster.local -W
+kubectl exec -it postgresql-0 -c postgres -- psql -U v-token-my-role-QYGba7MWD7QjgyKo6zGI-1722264817 -d postgres -h postgresql.default.svc.cluster.local -W
 ```
 ![vault (22).jpg](screenshots%2Fvault%20%2822%29.jpg)
 
