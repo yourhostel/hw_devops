@@ -3,13 +3,13 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: postgresql-app-variant-1
+  name: postgresql-app-variant-VAR
   namespace: argocd
 spec:
   project: default
   source:
     repoURL: https://github.com/yourhostel/hw_devops.git
-    path: module_4/homework-20240707/postgresql-variant-1
+    path: module_4/homework-20240707/postgresql-variant-VAR
     targetRevision: main  # or HEAD for the latest changes
   destination:
     server: https://kubernetes.default.svc
