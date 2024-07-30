@@ -16,6 +16,9 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    - name: List all files from the repo root
+      run: ls -la
+
     - name: List files in the Dockerfile directory
       run: ls -la module_4/homework-step-final/
 
@@ -35,5 +38,6 @@ jobs:
         file: Dockerfile
         push: true
         tags: yourhostel/devops-final:latest
+
 
 
