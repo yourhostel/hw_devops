@@ -1,4 +1,4 @@
-# homework-step-final/app.py
+# app.py
 
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
