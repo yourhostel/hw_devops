@@ -28,7 +28,7 @@ jobs:
     - name: Build and push
       uses: docker/build-push-action@v3
       with:
-        context: ./module_4/homework-step-final
+        context: module_4/homework-step-final
         file: Dockerfile
         push: true
         tags: yourhostel/devops-final:latest
