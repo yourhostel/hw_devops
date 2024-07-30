@@ -10,7 +10,7 @@ on:
       - 'module_4/homework-step-final/**' # comment out for debugging
 
 # only for debugging
-      - '**'
+#      - '**'
 #  list_files:
 #    runs-on: ubuntu-latest
 #    steps:

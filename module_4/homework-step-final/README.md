@@ -20,3 +20,9 @@ on:
       - 'module_4/homework-step-final/**'
 ```
 3. Added [app.py](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-step-final/app.py) and [Dockerfile](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-step-final/Dockerfile) to the project.
+4. Added repository secrets.
+![final-1 (1).jpg](screenshots%2Ftask-1%2Ffinal-1%20%281%29.jpg)
+5. Checking the workflows.
+![final-1 (2).jpg](screenshots%2Ftask-1%2Ffinal-1%20%282%29.jpg)
+![final-1 (3).jpg](screenshots%2Ftask-1%2Ffinal-1%20%283%29.jpg)
+![final-1 (4).jpg](screenshots%2Ftask-1%2Ffinal-1%20%284%29.jpg)
