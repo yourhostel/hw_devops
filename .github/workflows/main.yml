@@ -58,4 +58,4 @@ jobs:
           else
             echo "Application failed to respond with 200 OK"
             exit 1
-          fiRemoved needs: list_files from build task
+          fi
