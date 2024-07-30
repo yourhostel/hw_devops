@@ -7,7 +7,8 @@ on:
     branches:
       - main
     paths:
-      - 'module_4/homework-step-final/**'
+      - '**' # only for debugging
+#      - 'module_4/homework-step-final/**'
 
 jobs:
   list_files:
