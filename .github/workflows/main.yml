@@ -23,7 +23,6 @@ on:
 #      run: ls -la module_4/homework-step-final/
 jobs:
   build:
-    needs: list_files
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -52,14 +51,11 @@ jobs:
           docker run -d -p 8080:8080 --name myapp yourhostel/devops-final:latest
       - name: Check application response
         run: |
-          sleep 10  # Даем время для запуска сервера
+          sleep 10  # Give time for the server to start
           response=$(curl -o /dev/null -s -w "%{http_code}\n" http://localhost:8080)
           if [ "$response" -eq 200 ]; then
             echo "Application responded with 200 OK"
           else
             echo "Application failed to respond with 200 OK"
             exit 1
-          fi
-
-
-
+          fiRemoved needs: list_files from build task
