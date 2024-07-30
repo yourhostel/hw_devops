@@ -7,20 +7,21 @@ on:
     branches:
       - main
     paths:
-      - '**' # only for debugging
-#      - 'module_4/homework-step-final/**'
+      - 'module_4/homework-step-final/**' # comment out for debugging
 
-jobs:
-  list_files:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-
-    - name: List all files from the repo root
-      run: ls -la
-
-    - name: List files in the Dockerfile directory
-      run: ls -la module_4/homework-step-final/
+# only for debugging
+#     - '**'
+#jobs:
+#  list_files:
+#    runs-on: ubuntu-latest
+#    steps:
+#    - uses: actions/checkout@v3
+#
+#    - name: List all files from the repo root
+#      run: ls -la
+#
+#    - name: List files in the Dockerfile directory
+#      run: ls -la module_4/homework-step-final/
 
   build:
     needs: list_files
@@ -45,6 +46,23 @@ jobs:
         push: true
         tags: yourhostel/devops-final:latest
 
-
+  test_application:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Pull and run Docker image
+      run: |
+        docker pull yourhostel/devops-final:latest
+        docker run -d -p 8080:8080 --name myapp yourhostel/devops-final:latest
+    - name: Check application response
+      run: |
+        sleep 10
+        response=$(curl -o /dev/null -s -w "%{http_code}\n" http://localhost:8080)
+        if [ "$response" -eq 200 ]; then
+          echo "Application responded with 200 OK"
+        else
+          echo "Application failed to respond with 200 OK"
+          exit 1
+        fi
 
 
