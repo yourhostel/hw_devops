@@ -216,5 +216,29 @@ resource "aws_security_group_rule" "allow_http_https" {
   cidr_blocks       = ["0.0.0.0/0"]  # Be cautious with open access like this
 }
 
+output "eks_cluster_id" {
+  description = "ID of the EKS cluster"
+  value       = aws_eks_cluster.yourhostel.id
+}
+
+output "eks_node_group_id" {
+  description = "ID of the EKS node group"
+  value       = aws_eks_node_group.yourhostel.id
+}
+
+output "eks_cluster_endpoint" {
+  description = "Endpoint for the EKS cluster"
+  value       = aws_eks_cluster.yourhostel.endpoint
+}
+
+output "eks_cluster_security_group_id" {
+  description = "Security group ID for the EKS cluster"
+  value       = aws_security_group.eks_security_group.id
+}
+
+output "nginx_ingress_release_status" {
+  description = "Status of the NGINX Ingress Controller release"
+  value       = helm_release.nginx_ingress.status
+}
 
 
