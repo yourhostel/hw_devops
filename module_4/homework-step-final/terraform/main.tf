@@ -277,5 +277,15 @@ output "nginx_ingress_full_status" {
   value       = data.kubernetes_service.nginx_ingress_service.status
 }
 
+output "nginx_ingress_hostname" {
+  description = "Hostname of the NGINX Ingress Controller"
+  value       = data.kubernetes_service.nginx_ingress_service.status[0].load_balancer[0].ingress[0].hostname
+}
+
+output "nginx_ingress_ip" {
+  description = "IP address of the NGINX Ingress Controller"
+  value       = data.kubernetes_service.nginx_ingress_service.status[0].load_balancer[0].ingress[0].ip
+}
+
 
 
