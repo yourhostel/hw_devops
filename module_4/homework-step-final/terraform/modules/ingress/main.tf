@@ -69,7 +69,18 @@ output "nginx_ingress_hostname" {
   value       = try(data.kubernetes_service.nginx_ingress_service.status.0.load_balancer.0.ingress.0.hostname, "No external hostname found")
 }
 
-output "nginx_ingress_service_full" {
-  description = "Full data of the NGINX Ingress Service"
-  value       = data.kubernetes_service.nginx_ingress_service
+output "nginx_ingress_ports" {
+  description = "Ports exposed by the NGINX Ingress Controller"
+  value = {
+    http  = try(data.kubernetes_service.nginx_ingress_service.spec.0.port[0].port, "No HTTP port found")
+    https = try(data.kubernetes_service.nginx_ingress_service.spec.0.port[1].port, "No HTTPS port found")
+    node_port_http  = try(data.kubernetes_service.nginx_ingress_service.spec.0.port[0].node_port, "No HTTP node port found")
+    node_port_https = try(data.kubernetes_service.nginx_ingress_service.spec.0.port[1].node_port, "No HTTPS node port found")
+  }
 }
+
+# Output of nginx_ingress_service object for debugging
+#output "nginx_ingress_service_full" {
+#  description = "Full data of the NGINX Ingress Service"
+#  value       = data.kubernetes_service.nginx_ingress_service
+#}

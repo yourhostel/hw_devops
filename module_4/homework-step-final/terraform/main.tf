@@ -63,6 +63,11 @@ output "nginx_ingress_hostname" {
   value = module.ingress.nginx_ingress_hostname
 }
 
-output "nginx_ingress_service_full" {
-  value = module.ingress.nginx_ingress_service_full
+output "nginx_ingress_ports" {
+  value = module.ingress.nginx_ingress_ports
 }
+
+# Output of nginx_ingress_service object for debugging
+#output "nginx_ingress_service_full" {
+#  value = module.ingress.nginx_ingress_service_full
+#}
