@@ -34,6 +34,10 @@ on:
 ### Execution:
 ### Useful commands:
 ```bash
+terraform init
+terraform plan -out=tfplan
+terraform apply tfplan
+
 # LOCK_ID - this is the lock ID shown in the error message
 terraform force-unlock LOCK_ID 
 terraform state list

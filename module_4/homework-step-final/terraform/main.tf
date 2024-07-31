@@ -6,7 +6,7 @@ provider "aws" {
 }
 
 # EKS Cluster configuration
-resource "aws_eks_cluster" "yourhostel" {
+resource "aws_eks_cluster" "eks_cluster" {
   name     = var.name
   role_arn = aws_iam_role.eks_cluster_role.arn
 
@@ -22,16 +22,16 @@ resource "aws_eks_cluster" "yourhostel" {
 
   tags = merge(
     var.tags,
-    { Name = "${var.name}" }
+    { Name = var.name }
   )
 }
 
-data "aws_eks_cluster_auth" "yourhostel" {
-  name = aws_eks_cluster.yourhostel.name
+data "aws_eks_cluster_auth" "eks_auth" {
+  name = aws_eks_cluster.eks_cluster.name
 }
 
-resource "aws_eks_node_group" "yourhostel" {
-  cluster_name    = aws_eks_cluster.yourhostel.name
+resource "aws_eks_node_group" "eks_node_group" {
+  cluster_name    = aws_eks_cluster.eks_cluster.name
   node_group_name = "${var.prefix}_node_group"
   node_role_arn   = aws_iam_role.eks_node_role.arn
   subnet_ids      = var.subnets_ids
@@ -128,6 +128,21 @@ resource "aws_iam_role_policy_attachment" "ecr_read_only" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
 }
 
+# Kubernetes provider configuration
+data "aws_eks_cluster" "eks_cluster_data" {
+  name = aws_eks_cluster.eks_cluster.name
+}
+
+data "aws_eks_cluster_auth" "eks_cluster_auth" {
+  name = aws_eks_cluster.eks_cluster.name
+}
+
+provider "kubernetes" {
+  host                   = data.aws_eks_cluster.eks_cluster_data.endpoint
+  cluster_ca_certificate = base64decode(data.aws_eks_cluster.eks_cluster_data.certificate_authority.0.data)
+  token                  = data.aws_eks_cluster_auth.eks_cluster_auth.token
+}
+
 # Helm release for NGINX Ingress Controller
 resource "helm_release" "nginx_ingress" {
   name       = "${var.prefix}-nginx-ingress"
@@ -216,19 +231,20 @@ resource "aws_security_group_rule" "allow_http_https" {
   cidr_blocks       = ["0.0.0.0/0"]  # Be cautious with open access like this
 }
 
+# Outputs
 output "eks_cluster_id" {
   description = "ID of the EKS cluster"
-  value       = aws_eks_cluster.yourhostel.id
+  value       = aws_eks_cluster.eks_cluster.id
 }
 
 output "eks_node_group_id" {
   description = "ID of the EKS node group"
-  value       = aws_eks_node_group.yourhostel.id
+  value       = aws_eks_node_group.eks_node_group.id
 }
 
 output "eks_cluster_endpoint" {
   description = "Endpoint for the EKS cluster"
-  value       = aws_eks_cluster.yourhostel.endpoint
+  value       = aws_eks_cluster.eks_cluster.endpoint
 }
 
 output "eks_cluster_security_group_id" {
@@ -240,5 +256,7 @@ output "nginx_ingress_release_status" {
   description = "Status of the NGINX Ingress Controller release"
   value       = helm_release.nginx_ingress.status
 }
+
+
 
 
