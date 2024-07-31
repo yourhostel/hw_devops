@@ -143,6 +143,14 @@ provider "kubernetes" {
   token                  = data.aws_eks_cluster_auth.eks_cluster_auth.token
 }
 
+provider "helm" {
+  kubernetes {
+    host                   = data.aws_eks_cluster.eks_cluster_data.endpoint
+    cluster_ca_certificate = base64decode(data.aws_eks_cluster.eks_cluster_data.certificate_authority.0.data)
+    token                  = data.aws_eks_cluster_auth.eks_cluster_auth.token
+  }
+}
+
 # Helm release for NGINX Ingress Controller
 resource "helm_release" "nginx_ingress" {
   name       = "${var.prefix}-nginx-ingress"

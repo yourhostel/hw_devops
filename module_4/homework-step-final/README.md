@@ -27,7 +27,7 @@ on:
 ![final-1 (3).jpg](screenshots%2Ftask-1%2Ffinal-1%20%283%29.jpg)
 ![final-1 (4).jpg](screenshots%2Ftask-1%2Ffinal-1%20%284%29.jpg)
 
-## Write terraform code to create EKS cluster
+## Task 2 Write terraform code to create EKS cluster
 * use code from lection_scripts/lesson-20240620/EKS
 * one node group with one node
 * nginx ingress controller
@@ -37,6 +37,9 @@ on:
 terraform init
 terraform plan -out=tfplan
 terraform apply tfplan
+terraform destroy
+
+terraform init -upgrade
 
 # LOCK_ID - this is the lock ID shown in the error message
 terraform force-unlock LOCK_ID 
