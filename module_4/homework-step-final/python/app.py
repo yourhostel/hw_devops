@@ -1,4 +1,4 @@
-# app.py
+# python/app.py
 
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
