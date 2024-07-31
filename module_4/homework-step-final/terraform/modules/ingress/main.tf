@@ -1,5 +1,18 @@
 # terraform/modules/ingress/main.tf
 
+terraform {
+  required_providers {
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = "~> 2.0"
+    }
+    helm = {
+      source  = "hashicorp/helm"
+      version = "~> 2.0"
+    }
+  }
+}
+
 # Helm release for NGINX Ingress Controller
 resource "helm_release" "nginx_ingress" {
   name       = "${var.prefix}-nginx-ingress"
