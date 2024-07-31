@@ -37,6 +37,10 @@ on:
 terraform init
 terraform plan -out=tfplan
 terraform apply tfplan
+
+# terraform plan -out=cluster.plan -target=module.cluster
+# terraform apply "cluster.plan"
+
 aws eks update-kubeconfig --region eu-north-1 --name yourhostel
 kubectl get pods -n kube-system -l app.kubernetes.io/name=ingress-nginx
 kubectl get ingress --all-namespaces
@@ -50,4 +54,9 @@ terraform init -upgrade
 terraform force-unlock LOCK_ID 
 terraform state list
 ps aux | grep terraform
+
+# Cleaning up states and plans
+rm -f terraform.tfstate
+rm -f terraform.tfstate.backup
+rm -f *.plan
 ```

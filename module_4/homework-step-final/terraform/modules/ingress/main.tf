@@ -1,4 +1,4 @@
-# terraform/ingress.tf
+# terraform/modules/ingress/main.tf
 
 # Helm release for NGINX Ingress Controller
 resource "helm_release" "nginx_ingress" {
@@ -45,11 +45,11 @@ output "nginx_ingress_release_status" {
 
 # Kubernetes provider configuration
 data "aws_eks_cluster" "eks_cluster_data" {
-  name = aws_eks_cluster.eks_cluster.name
+  name = var.name
 }
 
 data "aws_eks_cluster_auth" "eks_cluster_auth" {
-  name = aws_eks_cluster.eks_cluster.name
+  name = var.name
 }
 
 provider "kubernetes" {

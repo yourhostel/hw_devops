@@ -1,4 +1,4 @@
-# terraform/cluster.tf
+# terraform/modules/cluster/main.tf
 
 # AWS Provider configuration
 provider "aws" {
@@ -197,6 +197,18 @@ output "eks_cluster_endpoint" {
 output "eks_cluster_security_group_id" {
   description = "Security group ID for the EKS cluster"
   value       = aws_security_group.eks_security_group.id
+}
+
+output "endpoint" {
+  value = aws_eks_cluster.eks_cluster.endpoint
+}
+
+output "cluster_ca_certificate" {
+  value = aws_eks_cluster.eks_cluster.certificate_authority[0].data
+}
+
+output "cluster_token" {
+  value = data.aws_eks_cluster_auth.eks_auth.token
 }
 
 
