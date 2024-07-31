@@ -51,19 +51,10 @@ resource "helm_release" "nginx_ingress" {
   }
 }
 
-resource "null_resource" "wait_for_lb" {
-  depends_on = [helm_release.nginx_ingress]
-
-  provisioner "local-exec" {
-    command = "sleep 30"
-  }
-}
-
 data "kubernetes_service" "nginx_ingress_service" {
-  depends_on = [null_resource.wait_for_lb]
 
   metadata {
-    name      = "${var.prefix}-nginx-ingress-controller"
+    name      = "${var.prefix}-ingress-nginx-controller"
     namespace = "kube-system"
   }
 }
