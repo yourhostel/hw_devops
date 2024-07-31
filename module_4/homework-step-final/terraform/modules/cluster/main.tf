@@ -80,6 +80,27 @@ resource "aws_iam_role" "eks_cluster_role" {
   tags = var.tags
 }
 
+# Required to interact with AWS Route 53 Resolver DNS Firewall
+resource "aws_iam_role_policy" "eks_route53_resolver_policy" {
+  name = "${var.prefix}-eks-route53-resolver-policy"
+  role = aws_iam_role.eks_cluster_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "route53resolver:ListFirewallRuleGroupAssociations",
+          "route53resolver:ListFirewallRuleGroups",
+          "route53resolver:ListFirewallRules"
+        ],
+        Resource = "*"
+      }
+    ]
+  })
+}
+
 # Attach the EKS Cluster Policy to the role
 resource "aws_iam_role_policy_attachment" "eks_cluster_policy" {
   role       = aws_iam_role.eks_cluster_role.name
