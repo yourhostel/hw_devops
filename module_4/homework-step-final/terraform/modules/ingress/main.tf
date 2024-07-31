@@ -51,10 +51,15 @@ resource "helm_release" "nginx_ingress" {
   }
 }
 
+resource "time_sleep" "wait_10_seconds" {
+  depends_on = [helm_release.nginx_ingress]
+  duration   = "10s"
+}
+
 data "kubernetes_service" "nginx_ingress_service" {
   metadata {
     name      = "${var.prefix}-nginx-ingress-controller"
-    namespace = "kube-system"  # Или ваш namespace
+    namespace = "kube-system"
   }
 
   depends_on = [

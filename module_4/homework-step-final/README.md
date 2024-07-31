@@ -47,6 +47,7 @@ kubectl get svc -n kube-system
 terraform destroy
 
 terraform init -upgrade
+terraform refresh
 
 # LOCK_ID - this is the lock ID shown in the error message
 terraform force-unlock LOCK_ID 
