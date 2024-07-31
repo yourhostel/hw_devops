@@ -279,7 +279,7 @@ output "nginx_ingress_full_status" {
 
 output "nginx_ingress_external_ip" {
   description = "External IP or DNS name of the NGINX Ingress Controller"
-  value       = data.kubernetes_service.nginx_ingress_service.status.load_balancer[0]
+  value       = data.kubernetes_service.nginx_ingress_service.status.load_balancer[0].hostname
 }
 
 
