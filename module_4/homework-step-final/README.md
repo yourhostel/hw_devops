@@ -32,14 +32,44 @@ on:
 * one node group with one node
 * nginx ingress controller
 ### Execution:
-
-### Useful commands:
+1. Create a [Terraform Configuration](https://github.com/yourhostel/hw_devops/tree/main/module_4/homework-step-final/terraform)
+2. Create a `terraform.tfvars`
+```markdown
+region      = "eu-north-1"
+name        = "yourhostel"
+prefix      = "yourhostel"
+vpc_id      = "<vpc-id>"
+subnets_ids = ["<subnet-id-1>", "<subnet-id-2>", "<subnet-id-3>"]
+tags        = {
+  Environment = "test"
+  TfControl   = "true"
+}
+```
+```markdown
+/terraform$ tree
+.
+├── main.tf
+├── modules
+│   ├── cluster
+│   │   ├── main.tf
+│   │   └── variables.tf
+│   └── ingress
+│       ├── main.tf
+│       └── variables.tf
+├── terraform.tfvars
+└── variables.tf
+```
 ```bash
 terraform init
 terraform plan -out=tfplan
 terraform apply tfplan
-
 aws eks update-kubeconfig --region eu-north-1 --name yourhostel
+```
+![final-2 (1).jpg](screenshots%2Ftask-2%2Ffinal-2%20%281%29.jpg)
+![final-2 (2).jpg](screenshots%2Ftask-2%2Ffinal-2%20%282%29.jpg)
+![final-2 (3).jpg](screenshots%2Ftask-2%2Ffinal-2%20%283%29.jpg)
+### Useful commands:
+```bash
 kubectl get pods -n kube-system -l app.kubernetes.io/name=ingress-nginx
 kubectl get ingress --all-namespaces
 kubectl get svc -n kube-system
@@ -61,3 +91,8 @@ rm -f terraform.tfstate
 rm -f terraform.tfstate.backup
 rm -f tfplan
 ```
+## Task 3 Write terraform code which will install Cert manager, Sealed Secrets, ArgoCD to EKS using helm chart
+* add certificate cluster issuer to EKS using kubernetes provider and kubernetes_manifest resource
+* if you have own DNS domain, then argocd should use your dns name when expose over ingress
+* generate SSL certificiate for the used DNS name and optionally use HTTPS
+* each helm release should use own namespace
