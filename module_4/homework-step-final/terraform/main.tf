@@ -5,24 +5,59 @@ provider "aws" {
   region = var.region
 }
 
-# EKS Cluster configuration using the AWS EKS Module
-module "eks" {
-  source          = "terraform-aws-modules/eks/aws"
-  cluster_name    = var.name
-  cluster_version = "1.21"
-  subnets         = var.subnets_ids
-  vpc_id          = var.vpc_id
+# EKS Cluster configuration
+resource "aws_eks_cluster" "yourhostel" {
+  name     = var.name
+  role_arn = aws_iam_role.eks_cluster_role.arn
 
-  node_groups = {
-    "${var.prefix}_node_group" = {
-      desired_capacity = 1
-      max_capacity     = 1
-      min_capacity     = 1
-      instance_type    = "t3.large"
-    }
+  vpc_config {
+    security_group_ids = [aws_security_group.eks_security_group.id]
+    subnet_ids         = var.subnets_ids
   }
 
-  tags = var.tags
+  depends_on = [
+    aws_iam_role_policy_attachment.eks_cluster_policy,
+    aws_iam_role_policy_attachment.eks_vpc_resource_controller,
+  ]
+
+  tags = merge(
+    var.tags,
+    { Name = "${var.name}" }
+  )
+}
+
+data "aws_eks_cluster_auth" "yourhostel" {
+  name = aws_eks_cluster.yourhostel.name
+}
+
+resource "aws_eks_node_group" "yourhostel" {
+  cluster_name    = aws_eks_cluster.yourhostel.name
+  node_group_name = "${var.prefix}_node_group"
+  node_role_arn   = aws_iam_role.eks_node_role.arn
+  subnet_ids      = var.subnets_ids
+
+  scaling_config {
+    desired_size = 1
+    max_size     = 1
+    min_size     = 1
+  }
+
+  instance_types = ["t3.large"]
+
+  labels = {
+    "node-type" = "tests"
+  }
+
+  depends_on = [
+    aws_iam_role_policy_attachment.eks_worker_node_policy,
+    aws_iam_role_policy_attachment.eks_cni_policy,
+    aws_iam_role_policy_attachment.ecr_read_only,
+  ]
+
+  tags = merge(
+    var.tags,
+    { Name = "${var.name}-node-group" }
+  )
 }
 
 # IAM Role for the EKS cluster
@@ -161,15 +196,14 @@ resource "aws_security_group_rule" "allow_ssh" {
   cidr_blocks       = ["91.225.123.2/32"]  # Update to your current external IP
 }
 
-
 # Allow inbound traffic to the worker nodes from the EKS control plane
 resource "aws_security_group_rule" "eks_ingress_kubernetes_api" {
-  type              = "ingress"
-  from_port         = 443
-  to_port           = 443
-  protocol          = "tcp"
-  security_group_id = aws_security_group.eks_security_group.id
-  source_security_group_id = module.eks.cluster_security_group_id  # Using the EKS module's security group
+  type                   = "ingress"
+  from_port              = 443
+  to_port                = 443
+  protocol               = "tcp"
+  security_group_id      = aws_security_group.eks_security_group.id
+  source_security_group_id = aws_security_group.eks_security_group.id  # Replace with the correct control plane SG
 }
 
 # Setting up access to API server via HTTP/S for testing
@@ -181,4 +215,6 @@ resource "aws_security_group_rule" "allow_http_https" {
   security_group_id = aws_security_group.eks_security_group.id
   cidr_blocks       = ["0.0.0.0/0"]  # Be cautious with open access like this
 }
+
+
 
