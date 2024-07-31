@@ -59,12 +59,8 @@ output "nginx_ingress_release_status" {
   value = module.ingress.nginx_ingress_release_status
 }
 
-output "nginx_ingress_hostname" {
-  value = module.ingress.nginx_ingress_hostname
-}
-
 output "nginx_ingress_ports" {
-  value = module.ingress.nginx_ingress_ports
+  value = module.ingress.ingress_nginx_controller
 }
 
 # Output of nginx_ingress_service object for debugging
