@@ -34,6 +34,7 @@ module "ingress" {
     kubernetes = kubernetes
     helm       = helm
   }
+
   name   = var.name
   prefix = var.prefix
 }

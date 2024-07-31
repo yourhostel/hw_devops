@@ -58,12 +58,16 @@ output "nginx_ingress_release_status" {
 
 data "kubernetes_service" "nginx_ingress_service" {
   metadata {
-    name      = "${var.prefix}-nginx-ingress-ingress-nginx-controller"
-    namespace = "kube-system"
+    name      = "${var.prefix}-nginx-ingress-controller"
+    namespace = "kube-system"  # Или ваш namespace
   }
+
+  depends_on = [
+    helm_release.nginx_ingress
+  ]
 }
 
 output "nginx_ingress_hostname" {
-  description = "Hostname of the NGINX Ingress Controller"
-  value       = data.kubernetes_service.nginx_ingress_service.status[0].load_balancer[0].ingress[0].hostname
+  description = "External hostname for the NGINX Ingress Controller"
+  value       = try(data.kubernetes_service.nginx_ingress_service.status.0.load_balancer.0.ingress.0.hostname, "No external hostname found")
 }
