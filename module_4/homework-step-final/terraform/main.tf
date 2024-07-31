@@ -62,3 +62,7 @@ output "nginx_ingress_release_status" {
 output "nginx_ingress_hostname" {
   value = module.ingress.nginx_ingress_hostname
 }
+
+output "nginx_ingress_service_full" {
+  value = module.ingress.nginx_ingress_service_full
+}
