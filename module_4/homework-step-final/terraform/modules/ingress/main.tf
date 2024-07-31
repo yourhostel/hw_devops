@@ -52,8 +52,11 @@ resource "helm_release" "nginx_ingress" {
 }
 
 resource "time_sleep" "wait_10_seconds" {
-  depends_on = [helm_release.nginx_ingress]
-  duration   = "10s"
+  create_duration   = "10s"
+
+  depends_on = [
+    helm_release.nginx_ingress
+  ]
 }
 
 data "kubernetes_service" "nginx_ingress_service" {
@@ -63,7 +66,7 @@ data "kubernetes_service" "nginx_ingress_service" {
   }
 
   depends_on = [
-    helm_release.nginx_ingress
+    time_sleep.wait_10_seconds
   ]
 }
 
