@@ -64,18 +64,16 @@ output "nginx_ingress_release_status" {
   value       = helm_release.nginx_ingress.status
 }
 
-output "nginx_ingress_hostname" {
-  description = "External hostname for the NGINX Ingress Controller"
-  value       = try(data.kubernetes_service.nginx_ingress_service.status.0.load_balancer.0.ingress.0.hostname, "No external hostname found")
-}
-
-output "nginx_ingress_ports" {
-  description = "Ports exposed by the NGINX Ingress Controller"
+output "ingress_nginx_controller" {
+  description = "Details of the NGINX Ingress Controller service"
   value = {
-    http  = try(data.kubernetes_service.nginx_ingress_service.spec.0.port[0].port, "No HTTP port found")
-    https = try(data.kubernetes_service.nginx_ingress_service.spec.0.port[1].port, "No HTTPS port found")
-    node_port_http  = try(data.kubernetes_service.nginx_ingress_service.spec.0.port[0].node_port, "No HTTP node port found")
-    node_port_https = try(data.kubernetes_service.nginx_ingress_service.spec.0.port[1].node_port, "No HTTPS node port found")
+    type           = try(data.kubernetes_service.nginx_ingress_service.spec.0.type, "No type found")
+    cluster_ip     = try(data.kubernetes_service.nginx_ingress_service.spec.0.cluster_ip, "No cluster IP found")
+    external_ip    = try(data.kubernetes_service.nginx_ingress_service.status.0.load_balancer.0.ingress[0].hostname, "No external IP found")
+    http           = try(data.kubernetes_service.nginx_ingress_service.spec.0.port[0].port, "No HTTP port found")
+    https          = try(data.kubernetes_service.nginx_ingress_service.spec.0.port[1].port, "No HTTPS port found")
+    node_port_http = try(data.kubernetes_service.nginx_ingress_service.spec.0.port[0].node_port, "No HTTP node port found")
+    node_port_https= try(data.kubernetes_service.nginx_ingress_service.spec.0.port[1].node_port, "No HTTPS node port found")
   }
 }
 
