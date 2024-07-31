@@ -74,6 +74,10 @@ data "kubernetes_service" "nginx_ingress_service" {
 output "nginx_ingress_release_status" {
   description = "Status of the NGINX Ingress Controller release"
   value       = helm_release.nginx_ingress.status
+
+    depends_on = [
+    time_sleep.wait_10_seconds
+  ]
 }
 
 output "nginx_ingress_hostname" {
