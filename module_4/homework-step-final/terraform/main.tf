@@ -265,6 +265,22 @@ output "nginx_ingress_release_status" {
   value       = helm_release.nginx_ingress.status
 }
 
+data "kubernetes_service" "nginx_ingress_service" {
+  metadata {
+    name      = "${var.prefix}-nginx-ingress-ingress-nginx-controller"
+    namespace = "kube-system"
+  }
+}
+
+output "nginx_ingress_full_status" {
+  description = "Full status of the NGINX Ingress Controller"
+  value       = data.kubernetes_service.nginx_ingress_service.status
+}
+
+output "nginx_ingress_external_ip" {
+  description = "External IP or DNS name of the NGINX Ingress Controller"
+  value       = data.kubernetes_service.nginx_ingress_service.status.load_balancer
+}
 
 
 

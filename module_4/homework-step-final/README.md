@@ -37,6 +37,11 @@ on:
 terraform init
 terraform plan -out=tfplan
 terraform apply tfplan
+aws eks update-kubeconfig --region eu-north-1 --name yourhostel
+kubectl get pods -n kube-system -l app.kubernetes.io/name=ingress-nginx
+kubectl get ingress --all-namespaces
+kubectl get svc -n kube-system
+
 terraform destroy
 
 terraform init -upgrade
