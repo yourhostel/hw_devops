@@ -51,11 +51,6 @@ resource "helm_release" "nginx_ingress" {
   }
 }
 
-output "nginx_ingress_release_status" {
-  description = "Status of the NGINX Ingress Controller release"
-  value       = helm_release.nginx_ingress.status
-}
-
 data "kubernetes_service" "nginx_ingress_service" {
   metadata {
     name      = "${var.prefix}-nginx-ingress-controller"
@@ -65,6 +60,12 @@ data "kubernetes_service" "nginx_ingress_service" {
   depends_on = [
     helm_release.nginx_ingress
   ]
+}
+
+# Outputs
+output "nginx_ingress_release_status" {
+  description = "Status of the NGINX Ingress Controller release"
+  value       = helm_release.nginx_ingress.status
 }
 
 output "nginx_ingress_hostname" {

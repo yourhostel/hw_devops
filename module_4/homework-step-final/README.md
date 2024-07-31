@@ -32,14 +32,12 @@ on:
 * one node group with one node
 * nginx ingress controller
 ### Execution:
+
 ### Useful commands:
 ```bash
 terraform init
 terraform plan -out=tfplan
 terraform apply tfplan
-
-# terraform plan -out=cluster.plan -target=module.cluster
-# terraform apply "cluster.plan"
 
 aws eks update-kubeconfig --region eu-north-1 --name yourhostel
 kubectl get pods -n kube-system -l app.kubernetes.io/name=ingress-nginx
@@ -58,6 +56,5 @@ ps aux | grep terraform
 # Cleaning up states and plans
 rm -f terraform.tfstate
 rm -f terraform.tfstate.backup
-rm -f *.plan
 rm -f tfplan
 ```

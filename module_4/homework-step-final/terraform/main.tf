@@ -38,3 +38,27 @@ module "ingress" {
   name   = var.name
   prefix = var.prefix
 }
+
+output "eks_cluster_id" {
+  value = module.cluster.eks_cluster_id
+}
+
+output "eks_node_group_id" {
+  value = module.cluster.eks_node_group_id
+}
+
+output "eks_cluster_endpoint" {
+  value = module.cluster.eks_cluster_endpoint
+}
+
+output "eks_cluster_security_group_id" {
+  value = module.cluster.eks_cluster_security_group_id
+}
+
+output "nginx_ingress_release_status" {
+  value = module.ingress.nginx_ingress_release_status
+}
+
+output "nginx_ingress_hostname" {
+  value = module.ingress.nginx_ingress_hostname
+}
