@@ -52,9 +52,8 @@ resource "helm_release" "nginx_ingress" {
 }
 
 data "kubernetes_service" "nginx_ingress_service" {
-
   metadata {
-    name      = "${var.prefix}-ingress-nginx-controller"
+    name      = "${var.prefix}-nginx-ingress-ingress-nginx-controller"
     namespace = "kube-system"
   }
 }
