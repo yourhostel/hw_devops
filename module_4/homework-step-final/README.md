@@ -44,6 +44,7 @@ kubectl get pods -n kube-system -l app.kubernetes.io/name=ingress-nginx
 kubectl get ingress --all-namespaces
 kubectl get svc -n kube-system
 
+terraform plan -destroy
 terraform destroy
 
 terraform init -upgrade

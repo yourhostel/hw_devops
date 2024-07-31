@@ -51,14 +51,6 @@ resource "helm_release" "nginx_ingress" {
   }
 }
 
-resource "time_sleep" "wait_10_seconds" {
-  create_duration   = "10s"
-
-  depends_on = [
-    helm_release.nginx_ingress
-  ]
-}
-
 data "kubernetes_service" "nginx_ingress_service" {
   metadata {
     name      = "${var.prefix}-nginx-ingress-controller"
