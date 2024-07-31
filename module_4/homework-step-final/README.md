@@ -43,6 +43,7 @@ aws eks update-kubeconfig --region eu-north-1 --name yourhostel
 kubectl get pods -n kube-system -l app.kubernetes.io/name=ingress-nginx
 kubectl get ingress --all-namespaces
 kubectl get svc -n kube-system
+kubectl describe svc yourhostel-nginx-ingress-ingress-nginx-controller -n kube-system
 
 terraform plan -destroy
 terraform destroy

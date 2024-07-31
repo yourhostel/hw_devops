@@ -51,33 +51,35 @@ resource "helm_release" "nginx_ingress" {
   }
 }
 
+resource "null_resource" "wait_for_lb" {
+  depends_on = [helm_release.nginx_ingress]
+
+  provisioner "local-exec" {
+    command = "sleep 30"
+  }
+}
+
 data "kubernetes_service" "nginx_ingress_service" {
+  depends_on = [null_resource.wait_for_lb]
+
   metadata {
     name      = "${var.prefix}-nginx-ingress-controller"
     namespace = "kube-system"
   }
-
-  depends_on = [
-    helm_release.nginx_ingress
-  ]
 }
 
 # Outputs
-output "nginx_ingress_service_full" {
-  description = "Full data of the NGINX Ingress Service"
-  value       = data.kubernetes_service.nginx_ingress_service
-}
-
 output "nginx_ingress_release_status" {
   description = "Status of the NGINX Ingress Controller release"
   value       = helm_release.nginx_ingress.status
-
-    depends_on = [
-    helm_release.nginx_ingress
-  ]
 }
 
 output "nginx_ingress_hostname" {
   description = "External hostname for the NGINX Ingress Controller"
   value       = try(data.kubernetes_service.nginx_ingress_service.status.0.load_balancer.0.ingress.0.hostname, "No external hostname found")
+}
+
+output "nginx_ingress_service_full" {
+  description = "Full data of the NGINX Ingress Service"
+  value       = data.kubernetes_service.nginx_ingress_service
 }
