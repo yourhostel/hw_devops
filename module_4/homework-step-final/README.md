@@ -59,4 +59,5 @@ ps aux | grep terraform
 rm -f terraform.tfstate
 rm -f terraform.tfstate.backup
 rm -f *.plan
+rm -f tfplan
 ```
