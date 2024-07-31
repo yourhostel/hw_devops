@@ -17,7 +17,7 @@ on:
     branches:
       - main
     paths:
-      - 'module_4/homework-step-final/**'
+      - 'module_4/homework-step-final/python/**'
 ```
 3. Added [app.py](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-step-final/app.py) and [Dockerfile](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-step-final/Dockerfile) to the project.
 4. Added repository secrets.
