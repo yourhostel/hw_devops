@@ -66,7 +66,7 @@ data "kubernetes_service" "nginx_ingress_service" {
   }
 
   depends_on = [
-    time_sleep.wait_10_seconds
+    helm_release.nginx_ingress
   ]
 }
 
@@ -76,7 +76,7 @@ output "nginx_ingress_release_status" {
   value       = helm_release.nginx_ingress.status
 
     depends_on = [
-    time_sleep.wait_10_seconds
+    helm_release.nginx_ingress
   ]
 }
 
