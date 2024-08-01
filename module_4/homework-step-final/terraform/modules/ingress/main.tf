@@ -39,7 +39,7 @@ resource "helm_release" "nginx_ingress" {
   }
   set {
     name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-eip-allocations"
-    value = var.elastic_ip_allocation_id
+    value = join(",", var.elastic_ip_allocation_ids)
   }
   set {
     name  = "controller.service.targetPorts.http"

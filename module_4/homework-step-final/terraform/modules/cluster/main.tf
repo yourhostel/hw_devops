@@ -201,13 +201,14 @@ resource "aws_security_group_rule" "allow_http_https" {
 
 # creating an Elastic IP
 resource "aws_eip" "elastic_ip" {
-  domain = "vpc"
+  count = 3 # matches the number of subnets
+  vpc   = true
 }
 
 # Outputs
-output "elastic_ip_allocation_id" {
-  description = "Allocation ID of the Elastic IP for NLB"
-  value       = aws_eip.elastic_ip.id
+output "elastic_ip_allocation_ids" {
+  description = "Allocation IDs of the Elastic IPs for NLB"
+  value       = aws_eip.elastic_ip[*].id
 }
 
 output "eks_cluster_id" {
