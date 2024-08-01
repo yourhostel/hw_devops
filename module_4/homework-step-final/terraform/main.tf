@@ -28,9 +28,17 @@ module "cluster" {
   tags        = var.tags
 }
 
+resource "null_resource" "delay" {
+  depends_on = [module.cluster]
+
+  provisioner "local-exec" {
+    command = "sleep 15"
+  }
+}
+
 module "ingress" {
   source = "./modules/ingress"
-  depends_on = [module.cluster]
+  depends_on = [null_resource.delay]
 
   providers = {
     kubernetes = kubernetes
@@ -39,6 +47,7 @@ module "ingress" {
 
   name   = var.name
   prefix = var.prefix
+  elastic_ip_allocation_id = module.cluster.elastic_ip_allocation_id
 }
 
 output "eks_cluster_id" {
@@ -55,6 +64,11 @@ output "eks_cluster_endpoint" {
 
 output "eks_cluster_security_group_id" {
   value = module.cluster.eks_cluster_security_group_id
+}
+
+output "elastic_ip_allocation_id" {
+  description = "Allocation IDs of the Elastic IPs for NLB"
+  value       = module.cluster.elastic_ip_allocation_id
 }
 
 output "nginx_ingress_release_status" {
