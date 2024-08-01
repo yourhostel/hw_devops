@@ -30,6 +30,8 @@ module "cluster" {
 
 module "ingress" {
   source = "./modules/ingress"
+  depends_on = [module.cluster]
+
   providers = {
     kubernetes = kubernetes
     helm       = helm
@@ -59,7 +61,7 @@ output "nginx_ingress_release_status" {
   value = module.ingress.nginx_ingress_release_status
 }
 
-output "nginx_ingress_ports" {
+output "ingress_nginx_controller" {
   value = module.ingress.ingress_nginx_controller
 }
 
