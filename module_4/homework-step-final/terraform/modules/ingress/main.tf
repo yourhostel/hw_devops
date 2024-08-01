@@ -78,7 +78,7 @@ output "ingress_nginx_controller" {
 }
 
 # Output of nginx_ingress_service object for debugging
-#output "nginx_ingress_service_full" {
-#  description = "Full data of the NGINX Ingress Service"
-#  value       = data.kubernetes_service.nginx_ingress_service
-#}
+output "nginx_ingress_service_full" {
+  description = "Full data of the NGINX Ingress Service"
+  value       = data.kubernetes_service.nginx_ingress_service
+}
