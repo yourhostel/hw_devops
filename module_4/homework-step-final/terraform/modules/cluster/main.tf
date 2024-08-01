@@ -202,7 +202,7 @@ resource "aws_security_group_rule" "allow_http_https" {
 # creating an Elastic IP
 resource "aws_eip" "elastic_ip" {
   count = 3 # matches the number of subnets
-  vpc   = true
+  domain = "vpc"
 }
 
 # Outputs
