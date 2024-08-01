@@ -201,7 +201,7 @@ resource "aws_security_group_rule" "allow_http_https" {
 
 # creating an Elastic IP
 resource "aws_eip" "elastic_ip" {
-  vpc = true
+  domain = "vpc"
 }
 
 # Outputs
