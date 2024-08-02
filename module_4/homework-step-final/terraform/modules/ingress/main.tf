@@ -58,22 +58,22 @@ data "kubernetes_service" "nginx_ingress_service" {
   }
 }
 
-resource "null_resource" "get_lb_ips" {
-  provisioner "local-exec" {
-    command = "kubectl get svc ${var.prefix}-nginx-ingress-ingress-nginx-controller -n kube-system -o jsonpath='{.status.loadBalancer.ingress[*].ip}'"
-  }
-
-  depends_on = [helm_release.nginx_ingress]
+data "aws_lb" "ingress_lb" {
+  name = data.kubernetes_service.nginx_ingress_service.status.0.load_balancer.0.ingress[0].hostname
 }
 
-data "local_file" "lb_ips" {
-  filename = "/tmp/lb_ips.txt"
+data "aws_network_interfaces" "elb_interfaces" {
+  filter {
+    name   = "description"
+    values = ["ELB net/${data.aws_lb.ingress_lb.id}*"]
+  }
 }
 
 # Outputs
+
 output "load_balancer_ips" {
   description = "Public IPs associated with the Load Balancer"
-  value       = split(" ", data.local_file.lb_ips.content)
+  value       = [for ni in data.aws_network_interfaces.elb_interfaces.ids : aws_network_interface.ni.association.public_ip]
 }
 
 output "nginx_ingress_release_status" {
