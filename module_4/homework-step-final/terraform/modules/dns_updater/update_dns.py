@@ -4,25 +4,50 @@ import sys
 import json
 import requests
 
+import sys
+import json
+import requests
+
 # Loading input data from Terraform
 input_data = json.load(sys.stdin)
 
-# Parameters for the request
-url = input_data["query"]["url"]
+# Displaying the received data
+print("Received data:", input_data)
+
+# Extracting parameters for the request
+url = input_data["url"]
+auth_token = input_data["auth_token"]
+data_param = input_data["data"]
+subdomain_id = input_data["subdomain_id"]
+priority = input_data["priority"]
+
+# Displaying extracted parameters
+print("URL:", url)
+print("Auth Token:", auth_token)
+print("Data:", data_param)
+print("Subdomain ID:", subdomain_id)
+print("Priority:", priority)
+
+# Setting up headers and data for the POST request
 headers = {
-    "Authorization": "Bearer " + input_data["query"]["auth_token"],
+    "Authorization": "Bearer " + auth_token,
     "Content-Type": "application/x-www-form-urlencoded"
 }
 data = {
-    "data": input_data["query"]["data"],
-    "subdomain_id": input_data["query"]["subdomain_id"],
-    "priority": input_data["query"]["priority"]
+    "data": data_param,
+    "subdomain_id": subdomain_id,
+    "priority": priority
 }
 
-# Sending a POST request
+# Sending the POST request
 response = requests.post(url, headers=headers, data=data)
+
+# Output the response status and body
 output = {"status_code": response.status_code, "body": response.json()}
+print("Response Status Code:", response.status_code)
+print("Response Body:", response.json())
 
 # Output the result for Terraform
 print(json.dumps(output))
+
 
