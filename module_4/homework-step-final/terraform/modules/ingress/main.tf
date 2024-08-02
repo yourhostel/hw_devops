@@ -77,7 +77,7 @@ data "aws_network_interface" "elb_interface" {
 # Outputs
 output "load_balancer_ips" {
   description = "Public IPs associated with the Load Balancer"
-  value = data.aws_network_interface.elb_interface
+  value = data.aws_network_interfaces.elb_interfaces.ids
 #  value       = [for ni in data.aws_network_interfaces.elb_interfaces.ids : lookup(data.aws_network_interface.elb_interface[ni], "association", {})["public_ip"]]
 }
 
