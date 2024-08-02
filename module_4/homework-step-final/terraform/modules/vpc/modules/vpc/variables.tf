@@ -1,17 +1,16 @@
-variable "region" {
-  default = "eu-north-1"
-}
+# vpc/variables.tf
 
 variable "vpc_cidr_block" {
-  default = "10.0.0.0/16"
+  description = "CIDR block for the VPC"
+  type        = string
 }
 
 variable "public_subnets" {
-  default = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
+  description = "List of public subnet CIDR blocks"
+  type        = list(string)
 }
 
 variable "tags" {
-  default = {
-    Environment = "yourhostel"
-  }
+  description = "Tags to apply to resources"
+  type        = map(string)
 }
