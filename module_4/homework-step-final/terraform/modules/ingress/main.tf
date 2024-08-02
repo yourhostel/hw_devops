@@ -65,19 +65,15 @@ data "aws_network_interfaces" "elb_interfaces" {
   }
 }
 
-locals {
-  elb_interface_ids = data.aws_network_interfaces.elb_interfaces.ids
-}
-
 data "aws_network_interface" "elb_interface" {
-  for_each = toset(local.elb_interface_ids)
+  for_each = toset(data.aws_network_interfaces.elb_interfaces.ids)
   id       = each.key
 }
 
 # Outputs
 output "load_balancer_ips" {
   description = "Public IPs associated with the Load Balancer"
-  value = data.kubernetes_service.nginx_ingress_service.status.0.load_balancer.0.ingress[0].hostname
+  value = data.aws_network_interfaces.elb_interfaces.ids
 #  value       = [for ni in data.aws_network_interfaces.elb_interfaces.ids : lookup(data.aws_network_interface.elb_interface[ni], "association", {})["public_ip"]]
 }
 
