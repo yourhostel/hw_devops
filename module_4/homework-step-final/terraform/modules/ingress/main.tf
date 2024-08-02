@@ -70,30 +70,26 @@ resource "null_resource" "fetch_elb_ips" {
      --query 'NetworkInterfaces[*].Association.PublicIp' \
      --output json > /tmp/elb_ips.json
     EOT
-#         --output text > /tmp/elb_ips.txt
-#         --output json > /tmp/elb_ips.json
   }
     triggers = {
     always_run = timestamp()
   }
 }
 
-#data "local_file" "elb_ips" {
-##  filename   = "/tmp/elb_ips.json"
-#  filename   = "/tmp/elb_ips.txt"
-#  depends_on = [null_resource.fetch_elb_ips]
-#}
-#
-##locals {
-##  elb_ips = jsondecode(data.local_file.elb_ips.content)
-##}
-#
-## Outputs
-#output "load_balancer_ips" {
-#  description = "Public IPs associated with the Load Balancer"
-##  value       = local.elb_ips
-#  value       = split("\n", trimspace(data.local_file.elb_ips.content))
-#}
+data "local_file" "elb_ips" {
+  filename   = "/tmp/elb_ips.json"
+  depends_on = [null_resource.fetch_elb_ips]
+}
+
+locals {
+  elb_ips = jsondecode(data.local_file.elb_ips.content)
+}
+
+# Outputs
+output "load_balancer_ips" {
+  description = "Public IPs associated with the Load Balancer"
+  value       = local.elb_ips
+}
 
 output "nginx_ingress_release_status" {
   description = "Status of the NGINX Ingress Controller release"
