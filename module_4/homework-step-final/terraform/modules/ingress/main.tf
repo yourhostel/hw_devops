@@ -65,6 +65,11 @@ data "aws_network_interfaces" "elb_interfaces" {
   }
 }
 
+locals {
+  elb_interface_ids = data.aws_network_interfaces.elb_interfaces.ids
+}
+
+
 # Outputs
 output "load_balancer_ips" {
   description = "Public IPs associated with the Load Balancer"
