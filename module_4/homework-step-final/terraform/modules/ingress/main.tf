@@ -69,6 +69,10 @@ locals {
   elb_interface_ids = data.aws_network_interfaces.elb_interfaces.ids
 }
 
+data "aws_network_interface" "elb_interface" {
+  for_each = toset(local.elb_interface_ids)
+  id       = each.key
+}
 
 # Outputs
 output "load_balancer_ips" {
