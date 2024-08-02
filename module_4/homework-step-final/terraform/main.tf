@@ -47,7 +47,7 @@ module "ingress" {
 
   name   = var.name
   prefix = var.prefix
-#  elastic_ip_allocation_id = module.cluster.elastic_ip_allocation_ids
+  elastic_ip_allocation_id = module.cluster.elastic_ip_allocation_ids
 }
 
 output "eks_cluster_id" {
