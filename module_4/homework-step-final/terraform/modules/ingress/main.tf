@@ -58,14 +58,10 @@ data "kubernetes_service" "nginx_ingress_service" {
   }
 }
 
-data "aws_lb" "ingress_lb" {
-  name = data.kubernetes_service.nginx_ingress_service.status.0.load_balancer.0.ingress[0].hostname
-}
-
 data "aws_network_interfaces" "elb_interfaces" {
   filter {
     name   = "description"
-    values = ["ELB ${data.aws_lb.ingress_lb.name}*"]
+    values = ["ELB ${data.kubernetes_service.nginx_ingress_service.status.0.load_balancer.0.ingress[0].hostname}*"]
   }
 }
 
