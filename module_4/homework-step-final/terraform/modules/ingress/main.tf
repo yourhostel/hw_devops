@@ -52,6 +52,10 @@ resource "helm_release" "nginx_ingress" {
 }
 
 data "kubernetes_service" "nginx_ingress_service" {
+    depends_on = [
+    helm_release.nginx_ingress
+  ]
+
   metadata {
     name      = "${var.prefix}-nginx-ingress-ingress-nginx-controller"
     namespace = "kube-system"
@@ -62,7 +66,15 @@ locals {
   lb_hostname = data.kubernetes_service.nginx_ingress_service.status.0.load_balancer.0.ingress[0].hostname
 }
 
+locals {
+  service_spec = data.kubernetes_service.nginx_ingress_service.spec[0]
+}
+
 resource "null_resource" "fetch_elb_ips" {
+  triggers = {
+    always_run = timestamp()
+  }
+
   provisioner "local-exec" {
     command = <<EOT
      aws ec2 describe-network-interfaces \
@@ -71,9 +83,6 @@ resource "null_resource" "fetch_elb_ips" {
      --output json > /tmp/elb_ips.json
     EOT
   }
-    triggers = {
-    always_run = timestamp()
-  }
 }
 
 data "local_file" "elb_ips" {
@@ -81,14 +90,10 @@ data "local_file" "elb_ips" {
   depends_on = [null_resource.fetch_elb_ips]
 }
 
-locals {
-  elb_ips = jsondecode(data.local_file.elb_ips.content)
-}
-
 # Outputs
 output "load_balancer_ips" {
   description = "Public IPs associated with the Load Balancer"
-  value       = local.elb_ips
+  value       = jsondecode(data.local_file.elb_ips.content)
 }
 
 output "nginx_ingress_release_status" {
@@ -99,13 +104,13 @@ output "nginx_ingress_release_status" {
 output "ingress_nginx_controller" {
   description = "Details of the NGINX Ingress Controller service"
   value = {
-    type           = try(data.kubernetes_service.nginx_ingress_service.spec.0.type, "No type found")
-    cluster_ip     = try(data.kubernetes_service.nginx_ingress_service.spec.0.cluster_ip, "No cluster IP found")
+    type           = try(local.service_spec.type, "No type found")
+    cluster_ip     = try(local.service_spec.cluster_ip, "No cluster IP found")
     external_ip    = try(local.lb_hostname, "No external IP found")
-    http           = try(data.kubernetes_service.nginx_ingress_service.spec.0.port[0].port, "No HTTP port found")
-    https          = try(data.kubernetes_service.nginx_ingress_service.spec.0.port[1].port, "No HTTPS port found")
-    node_port_http = try(data.kubernetes_service.nginx_ingress_service.spec.0.port[0].node_port, "No HTTP node port found")
-    node_port_https= try(data.kubernetes_service.nginx_ingress_service.spec.0.port[1].node_port, "No HTTPS node port found")
+    http           = try(local.service_spec.port[0].port, "No HTTP port found")
+    https          = try(local.service_spec.port[1].port, "No HTTPS port found")
+    node_port_http = try(local.service_spec.port[0].node_port, "No HTTP node port found")
+    node_port_https= try(local.service_spec.port[1].node_port, "No HTTPS node port found")
   }
 }
 
