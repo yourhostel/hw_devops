@@ -62,23 +62,18 @@ data "aws_lb" "ingress_lb" {
   name = data.kubernetes_service.nginx_ingress_service.status.0.load_balancer.0.ingress[0].hostname
 }
 
-data "aws_network_interfaces" "elb_interfaces" {
+data "aws_network_interface" "elb_interface" {
+  count = length(data.aws_network_interfaces.elb_interfaces.ids)
   filter {
-    name   = "description"
-    values = ["ELB net/${data.aws_lb.ingress_lb.id}*"]
+    name   = "network-interface-id"
+    values = [element(data.aws_network_interfaces.elb_interfaces.ids, count.index)]
   }
 }
 
-data "aws_network_interface" "elb_interface" {
-  count = length(data.aws_network_interfaces.elb_interfaces.ids)
-  network_interface_id = element(data.aws_network_interfaces.elb_interfaces.ids, count.index)
-}
-
 # Outputs
-
 output "load_balancer_ips" {
   description = "Public IPs associated with the Load Balancer"
-  value       = [for ni in data.aws_network_interfaces.elb_interfaces.ids : aws_network_interface.ni.association.public_ip]
+  value       = [for ni in data.aws_network_interface.elb_interface : ni.association[0].public_ip]
 }
 
 output "nginx_ingress_release_status" {
