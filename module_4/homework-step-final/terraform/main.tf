@@ -5,14 +5,14 @@ provider "aws" {
 }
 
 provider "kubernetes" {
-  host                   = module.cluster.endpoint
+  host                   = module.cluster.eks_cluster_endpoint
   cluster_ca_certificate = base64decode(module.cluster.cluster_ca_certificate)
   token                  = module.cluster.cluster_token
 }
 
 provider "helm" {
   kubernetes {
-    host                   = module.cluster.endpoint
+    host                   = module.cluster.eks_cluster_endpoint
     cluster_ca_certificate = base64decode(module.cluster.cluster_ca_certificate)
     token                  = module.cluster.cluster_token
   }
@@ -47,7 +47,6 @@ module "ingress" {
 
   name   = var.name
   prefix = var.prefix
-  elastic_ip_allocation_ids = module.cluster.elastic_ip_allocation_ids
 }
 
 output "eks_cluster_id" {
@@ -65,12 +64,7 @@ output "eks_cluster_endpoint" {
 output "eks_cluster_security_group_id" {
   value = module.cluster.eks_cluster_security_group_id
 }
-#-----------------------------------------------------------------------------------------------------------------------
-output "elastic_ip_allocation_ids" {
-  description = "Allocation IDs of the Elastic IPs for NLB"
-  value       = module.cluster.elastic_ip_allocation_ids
-}
-#-----------------------------------------------------------------------------------------------------------------------
+
 output "nginx_ingress_release_status" {
   value = module.ingress.nginx_ingress_release_status
 }
@@ -80,6 +74,6 @@ output "ingress_nginx_controller" {
 }
 
 # Output of nginx_ingress_service object for debugging
-output "nginx_ingress_service_full" {
-  value = module.ingress.nginx_ingress_service_full
-}
+#output "nginx_ingress_service_full" {
+#  value = module.ingress.nginx_ingress_service_full
+#}

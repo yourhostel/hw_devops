@@ -199,18 +199,7 @@ resource "aws_security_group_rule" "allow_http_https" {
   cidr_blocks       = ["0.0.0.0/0"]  # Be cautious with open access like this
 }
 
-# creating an Elastic IP
-resource "aws_eip" "elastic_ip" {
-  count  = 3
-  domain = "vpc"
-}
-
 # Outputs
-output "elastic_ip_allocation_ids" {
-  description = "Allocation IDs of the Elastic IPs for NLB"
-  value       = aws_eip.elastic_ip[*].id
-}
-
 output "eks_cluster_id" {
   description = "ID of the EKS cluster"
   value       = aws_eks_cluster.eks_cluster.id
@@ -229,10 +218,6 @@ output "eks_cluster_endpoint" {
 output "eks_cluster_security_group_id" {
   description = "Security group ID for the EKS cluster"
   value       = aws_security_group.eks_security_group.id
-}
-
-output "endpoint" {
-  value = aws_eks_cluster.eks_cluster.endpoint
 }
 
 output "cluster_ca_certificate" {
