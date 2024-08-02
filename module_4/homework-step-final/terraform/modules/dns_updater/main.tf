@@ -1,6 +1,13 @@
 # terraform/modules/dns_updater/main.tf
 
-provider "http" {}
+terraform {
+  required_providers {
+    http = {
+      source  = "hashicorp/http"
+      version = "3.4.3"
+    }
+  }
+}
 
 data "external" "update_dns_record" {
   program = ["python", "${path.module}/update_dns.py"]
