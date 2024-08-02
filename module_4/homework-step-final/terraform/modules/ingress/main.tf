@@ -68,9 +68,7 @@ resource "null_resource" "fetch_elb_ips" {
      aws ec2 describe-network-interfaces \
      --filters "Name=description,Values='ELB net/$(echo ${local.lb_hostname} | cut -d'-' -f1)*'" \
      --query 'NetworkInterfaces[*].Association.PublicIp' \
-     ----output json > /tmp/elb_ips.json
-     echo "Content of /tmp/elb_ips.json:"
-     cat /tmp/elb_ips.json
+     --output json > /tmp/elb_ips.json
     EOT
   }
 }
