@@ -65,12 +65,16 @@ output "eks_cluster_endpoint" {
 output "eks_cluster_security_group_id" {
   value = module.cluster.eks_cluster_security_group_id
 }
-
+#-----------------------------------------------------------------------------------------------------------------------
 output "elastic_ip_allocation_ids" {
   description = "Allocation IDs of the Elastic IPs for NLB"
   value       = module.cluster.elastic_ip_allocation_ids
 }
 
+output "elastic_ip_allocation_ids_debug" {
+  value = join(",", module.cluster.elastic_ip_allocation_ids)
+}
+#-----------------------------------------------------------------------------------------------------------------------
 output "nginx_ingress_release_status" {
   value = module.ingress.nginx_ingress_release_status
 }
