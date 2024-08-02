@@ -13,6 +13,7 @@ data "external" "update_dns_record" {
   program = ["python", "${path.module}/update_dns.py"]
 
   query = {
+    timestamp     = timestamp()
     url          = var.url_update_dns
     auth_token   = var.auth_token
     data         = var.dns_record_ip
@@ -20,9 +21,6 @@ data "external" "update_dns_record" {
     priority     = "0"
   }
 
-  triggers = {
-    timestamp = timestamp()
-  }
 }
 
 output "response_update_dns" {
