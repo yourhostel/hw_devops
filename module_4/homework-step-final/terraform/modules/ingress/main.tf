@@ -66,15 +66,15 @@ resource "null_resource" "get_lb_ips" {
   depends_on = [helm_release.nginx_ingress]
 }
 
-data "local_file" "lb_ips" {
-  filename = "/tmp/lb_ips.txt"
-}
-
-# Outputs
-output "load_balancer_ips" {
-  description = "Public IPs associated with the Load Balancer"
-  value       = split(" ", data.local_file.lb_ips.content)
-}
+#data "local_file" "lb_ips" {
+#  filename = "/tmp/lb_ips.txt"
+#}
+#
+## Outputs
+#output "load_balancer_ips" {
+#  description = "Public IPs associated with the Load Balancer"
+#  value       = split(" ", data.local_file.lb_ips.content)
+#}
 
 output "nginx_ingress_release_status" {
   description = "Status of the NGINX Ingress Controller release"

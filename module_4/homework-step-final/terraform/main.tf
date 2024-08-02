@@ -46,9 +46,9 @@ module "ingress" {
   prefix = var.prefix
 }
 
-output "load_balancer_ips" {
-  value = module.ingress.load_balancer_ips
-}
+#output "load_balancer_ips" {
+#  value = module.ingress.load_balancer_ips
+#}
 
 output "vpc" {
   value = {
