@@ -10,16 +10,6 @@ variable "prefix" {
   type        = string
 }
 
-variable "vpc_id" {
-  description = "VPC ID where the cluster will be deployed"
-  type        = string
-}
-
-variable "subnets_ids" {
-  description = "Subnet IDs for the EKS cluster"
-  type        = list(string)
-}
-
 variable "tags" {
   description = "Tags to apply to all resources created"
   type        = map(string)
