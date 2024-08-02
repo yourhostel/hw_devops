@@ -6,7 +6,8 @@ import requests
 
 # Loading input data from Terraform
 input_data = json.load(sys.stdin)
-
+print("Complete input data:")
+print("Complete input data:", input_data)
 # Since data is nested under 'query', we need to extract it correctly
 query_data = input_data["query"]
 
