@@ -42,3 +42,18 @@ variable "zone_name" {
   default     = ""
   type        = string
 }
+
+variable "auth_token" {
+  description = "Token hosting provider where we update A record"
+  type = string
+}
+
+variable "dns_record_id" {
+  description = "Unique domain id from hosting provider"
+  type = number
+}
+
+variable "url_update_dns" {
+  description = "Endpoint update dns record"
+  type = string
+}

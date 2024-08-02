@@ -46,6 +46,20 @@ module "ingress" {
   prefix = var.prefix
 }
 
+module "dns_updater" {
+  source = "./modules/dns_updater"
+  depends_on = [module.ingress]
+
+  auth_token     = var.auth_token
+  dns_record_id  = var.dns_record_id
+  url_update_dns = var.url_update_dns
+  dns_record_ip  = module.ingress.load_balancer_ips[0]
+}
+
+output "response_update_dns" {
+  value = module.dns_updater.response_update_dns
+}
+
 output "load_balancer_ips" {
   value = module.ingress.load_balancer_ips
 }
