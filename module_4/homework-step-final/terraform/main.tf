@@ -46,12 +46,8 @@ module "ingress" {
   prefix = var.prefix
 }
 
-data "aws_lb" "ingress_lb" {
-  load_balancer_arn = module.ingress.load_balancer_arn
-}
-
-output "public_ips" {
-  value = data.aws_lb.ingress_lb.load_balancer_addresses[*].ip_address
+output "load_balancer_ips" {
+  value = module.ingress.load_balancer_ips
 }
 
 output "vpc" {
