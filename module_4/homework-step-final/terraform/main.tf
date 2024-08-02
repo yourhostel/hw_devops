@@ -18,27 +18,25 @@ provider "helm" {
   }
 }
 
+module "vpc" {
+  source = "./modules/vpc"
+}
+
 module "cluster" {
   source      = "./modules/cluster"
+  depends_on = [module.vpc]
+
   region      = var.region
   name        = var.name
   prefix      = var.prefix
-  vpc_id      = var.vpc_id
-  subnets_ids = var.subnets_ids
+  vpc_id      = module.vpc.vpc_id
+  subnets_ids = module.vpc.public_subnet_ids
   tags        = var.tags
-}
-
-resource "null_resource" "delay" {
-  depends_on = [module.cluster]
-
-  provisioner "local-exec" {
-    command = "sleep 15"
-  }
 }
 
 module "ingress" {
   source = "./modules/ingress"
-  depends_on = [null_resource.delay]
+  depends_on = [module.cluster]
 
   providers = {
     kubernetes = kubernetes
@@ -47,6 +45,13 @@ module "ingress" {
 
   name   = var.name
   prefix = var.prefix
+}
+
+output "vpc" {
+  value = {
+  vpc_id      = module.vpc.vpc_id
+  subnets_ids = module.vpc.public_subnet_ids
+  }
 }
 
 output "eks_cluster_id" {
