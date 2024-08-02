@@ -68,7 +68,7 @@ resource "null_resource" "fetch_elb_ips" {
      aws ec2 describe-network-interfaces \
      --filters "Name=description,Values='ELB net/$(echo ${local.lb_hostname} | cut -d'-' -f1)*'" \
      --query 'NetworkInterfaces[*].Association.PublicIp' \
-     --output text | tr '\t' '\n' > /tmp/elb_ips.txt
+     --output text > /tmp/elb_ips.txt
     EOT
   }
 }
@@ -81,7 +81,7 @@ data "local_file" "elb_ips" {
 # Outputs
 output "load_balancer_ips" {
   description = "Public IPs associated with the Load Balancer"
-  value       = split("\n", data.local_file.elb_ips.content)
+  value       = split("\n", trimspace(data.local_file.elb_ips.content))
 }
 
 output "nginx_ingress_release_status" {
