@@ -3,7 +3,7 @@
 import sys
 import json
 import requests
-
+#
 print("Complete input data:")
 # Loading input data from Terraform
 # input_data = json.load(sys.stdin)
