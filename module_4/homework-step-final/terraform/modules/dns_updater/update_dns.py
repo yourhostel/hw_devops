@@ -4,22 +4,21 @@ import sys
 import json
 import requests
 
-import sys
-import json
-import requests
-
 # Loading input data from Terraform
 input_data = json.load(sys.stdin)
 
+# Since data is nested under 'query', we need to extract it correctly
+query_data = input_data["query"]
+
 # Displaying the received data
-print("Received data:", input_data)
+print("Received data:", query_data)
 
 # Extracting parameters for the request
-url = input_data["url"]
-auth_token = input_data["auth_token"]
-data_param = input_data["data"]
-subdomain_id = input_data["subdomain_id"]
-priority = input_data["priority"]
+url = query_data["url"]
+auth_token = query_data["auth_token"]
+data_param = query_data["data"]
+subdomain_id = query_data["subdomain_id"]
+priority = query_data["priority"]
 
 # Displaying extracted parameters
 print("URL:", url)
@@ -41,13 +40,14 @@ data = {
 
 # Sending the POST request
 response = requests.post(url, headers=headers, data=data)
-
-# Output the response status and body
 output = {"status_code": response.status_code, "body": response.json()}
+
+# Displaying the response
 print("Response Status Code:", response.status_code)
 print("Response Body:", response.json())
 
 # Output the result for Terraform
 print(json.dumps(output))
+
 
 
