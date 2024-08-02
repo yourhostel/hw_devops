@@ -47,7 +47,7 @@ module "ingress" {
 
   name   = var.name
   prefix = var.prefix
-  elastic_ip_allocation_ids = module.cluster.elastic_ip_allocation_ids
+  elastic_ip_allocation_id = module.cluster.elastic_ip_allocation_id
 }
 
 output "eks_cluster_id" {
@@ -68,11 +68,7 @@ output "eks_cluster_security_group_id" {
 #-----------------------------------------------------------------------------------------------------------------------
 output "elastic_ip_allocation_ids" {
   description = "Allocation IDs of the Elastic IPs for NLB"
-  value       = module.cluster.elastic_ip_allocation_ids
-}
-
-output "elastic_ip_allocation_ids_debug" {
-  value = join(",", module.cluster.elastic_ip_allocation_ids)
+  value       = module.cluster.elastic_ip_allocation_id
 }
 #-----------------------------------------------------------------------------------------------------------------------
 output "nginx_ingress_release_status" {

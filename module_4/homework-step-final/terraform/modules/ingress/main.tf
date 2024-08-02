@@ -14,10 +14,6 @@ terraform {
 }
 
 # Helm release for NGINX Ingress Controller
-locals {
-  joined_ips = join(",", var.elastic_ip_allocation_ids)
-}
-
 resource "helm_release" "nginx_ingress" {
   name       = "${var.prefix}-nginx-ingress"
   namespace  = "kube-system"
@@ -43,7 +39,7 @@ resource "helm_release" "nginx_ingress" {
   }
   set {
     name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-eip-allocations"
-    value = chomp(local.joined_ips)
+    value = var.elastic_ip_allocation_id
   }
 
   set {

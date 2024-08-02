@@ -10,7 +10,7 @@ variable "prefix" {
   type        = string
 }
 
-variable "elastic_ip_allocation_ids" {
-  description = "Allocation IDs of the Elastic IPs for NLB"
-  type        = list(string)
+variable "elastic_ip_allocation_id" {
+  description = "Allocation ID of the Elastic IP for NLB"
+  type        = string
 }
