@@ -61,7 +61,12 @@ data "kubernetes_service" "nginx_ingress_service" {
 data "aws_network_interfaces" "elb_interfaces" {
   filter {
     name   = "description"
-    values = ["ELB ${data.kubernetes_service.nginx_ingress_service.status.0.load_balancer.0.ingress[0].hostname}*"]
+    values = ["ELB net/${data.kubernetes_service.nginx_ingress_service.status.0.load_balancer.0.ingress[0].hostname}*"]
+  }
+
+  filter {
+    name   = "description"
+    values = ["ELB net/${data.kubernetes_service.nginx_ingress_service.status.0.load_balancer.0.ingress[0].ip}*"]
   }
 }
 
