@@ -35,6 +35,7 @@ module "cluster" {
 
 module "ingress" {
   source = "./modules/ingress"
+  depends_on = [module.cluster]
 
   providers = {
     kubernetes = kubernetes
