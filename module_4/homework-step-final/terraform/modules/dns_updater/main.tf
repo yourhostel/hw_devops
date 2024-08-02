@@ -13,7 +13,7 @@ data "external" "update_dns_record" {
   program = ["python", "${path.module}/update_dns.py"]
 
   query = {
-    timestamp     = timestamp()
+    timestamp    = timestamp()
     url          = var.url_update_dns
     auth_token   = var.auth_token
     data         = var.dns_record_ip
