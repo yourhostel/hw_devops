@@ -69,6 +69,11 @@ data "aws_network_interfaces" "elb_interfaces" {
   }
 }
 
+data "aws_network_interface" "elb_interface" {
+  count = length(data.aws_network_interfaces.elb_interfaces.ids)
+  network_interface_id = element(data.aws_network_interfaces.elb_interfaces.ids, count.index)
+}
+
 # Outputs
 
 output "load_balancer_ips" {
