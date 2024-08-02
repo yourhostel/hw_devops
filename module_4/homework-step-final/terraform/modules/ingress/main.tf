@@ -58,28 +58,23 @@ data "kubernetes_service" "nginx_ingress_service" {
   }
 }
 
-data "aws_network_interfaces" "elb_interfaces" {
-  filter {
-    name   = "description"
-    values = ["ELB net/${data.kubernetes_service.nginx_ingress_service.status.0.load_balancer.0.ingress[0].hostname}*"]
-  }
-
-  filter {
-    name   = "description"
-    values = ["ELB net/${data.kubernetes_service.nginx_ingress_service.status.0.load_balancer.0.ingress[0].ip}*"]
+resource "null_resource" "fetch_elb_ips" {
+  provisioner "local-exec" {
+    command = <<EOT
+      aws ec2 describe-network-interfaces --filters "Name=description,Values='ELB net/$(echo ${data.kubernetes_service.nginx_ingress_service.status.0.load_balancer.0.ingress[0].hostname} | cut -d'-' -f1)*'" --query 'NetworkInterfaces[*].Association.PublicIp' --output text > /tmp/elb_ips.txt
+    EOT
   }
 }
 
-data "aws_network_interface" "elb_interface" {
-  for_each = toset(data.aws_network_interfaces.elb_interfaces.ids)
-  id       = each.key
+data "local_file" "elb_ips" {
+  filename = "/tmp/elb_ips.txt"
+  depends_on = [null_resource.fetch_elb_ips]
 }
 
 # Outputs
 output "load_balancer_ips" {
   description = "Public IPs associated with the Load Balancer"
-  value = data.aws_network_interfaces.elb_interfaces.ids
-#  value       = [for ni in data.aws_network_interfaces.elb_interfaces.ids : lookup(data.aws_network_interface.elb_interface[ni], "association", {})["public_ip"]]
+  value       = split("\n", data.local_file.elb_ips.content)
 }
 
 output "nginx_ingress_release_status" {
