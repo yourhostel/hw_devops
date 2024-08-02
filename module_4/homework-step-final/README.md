@@ -96,3 +96,59 @@ rm -f terraform.tfstate \
 * if you have own DNS domain, then argocd should use your dns name when expose over ingress
 * generate SSL certificiate for the used DNS name and optionally use HTTPS
 * each helm release should use own namespace
+1. Added module my own [VPC](https://github.com/yourhostel/hw_devops/tree/main/module_4/homework-step-final/terraform/modules/vpc). Forwarding to module.cluster and output to console subnets_ids and vpc_id values.
+```markdown
+vpc
+├── main.tf
+├── modules
+│   └── vpc
+│       ├── main.tf
+│       └── variables.tf
+└── variables.tf
+```
+2. Added load_balancer_ips output extraction in  null_resource.fetch_elb_ipsm to [module.ingress](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-step-final/terraform/modules/ingress/main.tf)
+```terraform
+resource "null_resource" "fetch_elb_ips" {
+  triggers = {
+    always_run = timestamp()
+  }
+
+  provisioner "local-exec" {
+    command = <<EOT
+     aws ec2 describe-network-interfaces \
+     --filters "Name=description,Values='ELB net/$(echo ${local.lb_hostname} | cut -d'-' -f1)*'" \
+     --query 'NetworkInterfaces[*].Association.PublicIp' \
+     --output json > /tmp/elb_ips.json
+    EOT
+  }
+}
+```
+* the command `$(echo ${local.lb_hostname} | cut -d'-' -f1)` cuts from `a8b4bc81a22f3423ea48f2326e0a1d48-3b8c3a4c5611714e.elb.eu-north-1.amazonaws.com` only the first part that corresponds to the ELB identifier `a8b4bc81a22f3423ea48f2326e0a1d48`
+* `cut -d'-' -f1` splits the string at the - character and selects the first field `-f1`
+* Option `--query 'NetworkInterfaces[*].Association.PublicIp'` 
+* `NetworkInterfaces[*]`: This syntax uses JMESPath, a query language for JSON.
+* `NetworkInterfaces` is an array containing all network interfaces that match the given filters. The asterisk [*] indicates that the query is for all elements of the array, i.e. all network interfaces that are returned by the command.
+* `.Association` refers to a property that contains information about the associations of this interface. This may include data such as associations to public IP addresses or other resources.
+* `.PublicIp`: This option selects only public IP addresses from the association information of each network interface. If the network interface is associated with a public IP, that IP will be returned; if there is no association, the result will be null or a missing value.
+
+* Essentially, this command is executed
+```bash
+aws ec2 describe-network-interfaces \
+--filters "Name=description,Values='ELB net/a8b4bc81a22f3423ea48f2326e0a1d48*'" \
+--query 'NetworkInterfaces[*].{NetworkInterfaceId:NetworkInterfaceId, Description:Description, Association:Association}'
+```
+![final-3 (1).jpg](screenshots%2Ftask-3%2Ffinal-3%20%281%29.jpg)
+
+3. Start from scratch fully automatic cluster deployment
+```bash
+rm -f terraform.tfstate \
+&& rm -f terraform.tfstate.backup \
+&& rm -f tfplan
+terraform init
+terraform plan -out=tfplan
+terraform apply tfplan
+aws eks update-kubeconfig --region eu-north-1 --name yourhostel # if necessary, update the config
+```
+![final-3 (2).jpg](screenshots%2Ftask-3%2Ffinal-3%20%282%29.jpg)
+![final-3 (3).jpg](screenshots%2Ftask-3%2Ffinal-3%20%283%29.jpg)
+![final-3 (4).jpg](screenshots%2Ftask-3%2Ffinal-3%20%284%29.jpg)
