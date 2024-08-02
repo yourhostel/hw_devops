@@ -10,7 +10,7 @@ terraform {
 }
 
 data "external" "update_dns_record" {
-  program = ["python", "${path.module}/update_dns.py"]
+  program = ["python3", "${path.module}/update_dns.py"]
 
   query = {
     timestamp    = timestamp()
