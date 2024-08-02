@@ -19,6 +19,10 @@ data "external" "update_dns_record" {
     subdomain_id = tostring(var.dns_record_id)
     priority     = "0"
   }
+
+  triggers = {
+    timestamp = timestamp()
+  }
 }
 
 output "response_update_dns" {
