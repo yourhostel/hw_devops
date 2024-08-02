@@ -24,7 +24,6 @@ module "vpc" {
 
 module "cluster" {
   source      = "./modules/cluster"
-  depends_on = [module.vpc]
 
   region      = var.region
   name        = var.name
@@ -36,7 +35,6 @@ module "cluster" {
 
 module "ingress" {
   source = "./modules/ingress"
-  depends_on = [module.cluster]
 
   providers = {
     kubernetes = kubernetes
