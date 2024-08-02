@@ -58,10 +58,17 @@ data "kubernetes_service" "nginx_ingress_service" {
   }
 }
 
+locals {
+  lb_hostname = data.kubernetes_service.nginx_ingress_service.status.0.load_balancer.0.ingress[0].hostname
+}
+
 resource "null_resource" "fetch_elb_ips" {
   provisioner "local-exec" {
     command = <<EOT
-      aws ec2 describe-network-interfaces --filters "Name=description,Values='ELB net/$(echo ${data.kubernetes_service.nginx_ingress_service.status.0.load_balancer.0.ingress[0].hostname} | cut -d'-' -f1)*'" --query 'NetworkInterfaces[*].Association.PublicIp' --output text > /tmp/elb_ips.txt
+     aws ec2 describe-network-interfaces \
+     --filters "Name=description,Values='ELB net/$(echo ${local.lb_hostname} | cut -d'-' -f1)*'" \
+     --query 'NetworkInterfaces[*].Association.PublicIp' \
+     --output text | tr '\t' '\n' > /tmp/elb_ips.txt
     EOT
   }
 }
@@ -87,7 +94,7 @@ output "ingress_nginx_controller" {
   value = {
     type           = try(data.kubernetes_service.nginx_ingress_service.spec.0.type, "No type found")
     cluster_ip     = try(data.kubernetes_service.nginx_ingress_service.spec.0.cluster_ip, "No cluster IP found")
-    external_ip    = try(data.kubernetes_service.nginx_ingress_service.status.0.load_balancer.0.ingress[0].hostname, "No external IP found")
+    external_ip    = try(local.lb_hostname, "No external IP found")
     http           = try(data.kubernetes_service.nginx_ingress_service.spec.0.port[0].port, "No HTTP port found")
     https          = try(data.kubernetes_service.nginx_ingress_service.spec.0.port[1].port, "No HTTPS port found")
     node_port_http = try(data.kubernetes_service.nginx_ingress_service.spec.0.port[0].node_port, "No HTTP node port found")
