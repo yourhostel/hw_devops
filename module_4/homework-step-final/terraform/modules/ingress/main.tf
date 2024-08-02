@@ -73,6 +73,9 @@ resource "null_resource" "fetch_elb_ips" {
 #         --output text > /tmp/elb_ips.txt
 #         --output json > /tmp/elb_ips.json
   }
+    triggers = {
+    always_run = timestamp()
+  }
 }
 
 #data "local_file" "elb_ips" {
