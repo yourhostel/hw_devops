@@ -62,12 +62,17 @@ data "aws_lb" "ingress_lb" {
   name = data.kubernetes_service.nginx_ingress_service.status.0.load_balancer.0.ingress[0].hostname
 }
 
+data "aws_network_interfaces" "elb_interfaces" {
+  filter {
+    name   = "description"
+    values = ["ELB ${data.aws_lb.ingress_lb.name}*"]
+  }
+}
+
 data "aws_network_interface" "elb_interface" {
   count = length(data.aws_network_interfaces.elb_interfaces.ids)
-  filter {
-    name   = "network-interface-id"
-    values = [element(data.aws_network_interfaces.elb_interfaces.ids, count.index)]
-  }
+
+  id = element(data.aws_network_interfaces.elb_interfaces.ids, count.index)
 }
 
 # Outputs
