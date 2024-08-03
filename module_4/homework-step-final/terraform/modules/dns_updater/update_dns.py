@@ -29,14 +29,21 @@ data = {
 # Sending the POST request
 response = requests.post(url, headers=headers, data=data)
 
-# Extracting messages, if available
-messages = response.json().get("messages", {})
 
-# Output the result for Terraform
-output = {
-    "response": response.json(),
-    "messages": messages
-}
-print(json.dumps(output, ensure_ascii=False))
+# Function to convert boolean values to strings
+def convert_bool_to_string(obj):
+    if isinstance(obj, dict):
+        return {k: convert_bool_to_string(v) for k, v in obj.items()}
+    elif isinstance(obj, list):
+        return [convert_bool_to_string(elem) for elem in obj]
+    elif isinstance(obj, bool):
+        return str(obj).lower()
+    return obj
+
+
+# Converting booleans and printing the result
+json_data = convert_bool_to_string(response.json())
+
+print(json.dumps(json_data, ensure_ascii=False))
 
 
