@@ -5,7 +5,7 @@ import json
 import requests
 
 input_data = json.load(sys.stdin)
-print(json.dumps(input_data))
+# print(json.dumps(input_data))
 # # Extracting parameters for the request
 # url = input_data["url"]
 # auth_token = input_data["auth_token"]
