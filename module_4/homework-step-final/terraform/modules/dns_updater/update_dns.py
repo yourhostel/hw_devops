@@ -33,14 +33,14 @@ response = requests.post(url, headers=headers, data=data)
 def convert_to_string_and_copy(source, target):
     if isinstance(source, dict):
         for k, v in source.items():
-            target[str(k)] = {}
-            convert_to_string_and_copy(v, target[str(k)])
+            target[str(k)] = convert_to_string_and_copy(v, {})
     elif isinstance(source, list):
+        list_as_dict = {}
         for i, item in enumerate(source):
-            target[str(i)] = {}
-            convert_to_string_and_copy(item, target[str(i)])
+            list_as_dict[str(i)] = convert_to_string_and_copy(item, {})
+        return list_as_dict
     else:
-        target = str(source)
+        return str(source)
     return target
 
 
@@ -48,6 +48,7 @@ data = requests.post(url, headers=headers, data=data).json()
 
 json_data = {}
 json_data = convert_to_string_and_copy(data, json_data)
+
 
 print(json.dumps(json_data, ensure_ascii=False))
 
