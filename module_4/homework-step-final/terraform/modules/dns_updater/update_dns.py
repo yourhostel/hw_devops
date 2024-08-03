@@ -41,6 +41,6 @@ def convert_bool_to_string(obj):
 
 
 json_data = convert_bool_to_string(response.json())
-print(json.dumps({"result": "Готово"}))
+print(json.dumps({"result": "true", "response": {"callback": "13.48.109.31"}, "messages": {"success": ["Готово"]}}))
 
 
