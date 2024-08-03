@@ -53,7 +53,7 @@ module "dns_updater" {
   auth_token     = var.auth_token
   dns_record_id  = var.dns_record_id
   url_update_dns = var.url_update_dns
-  dns_record_ip  = module.ingress.load_balancer_ips[0]
+  dns_record_ips = module.ingress.load_balancer_ips
 }
 
 output "response_update_dns" {

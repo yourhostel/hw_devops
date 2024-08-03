@@ -12,6 +12,6 @@ variable "url_update_dns" {
   type = string
 }
 
-variable "dns_record_ip" {
-  type = string
+variable "dns_record_ips" {
+  type = list(string)
 }
