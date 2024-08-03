@@ -61,16 +61,16 @@ response = {
 }
 
 
-def convert_to_string(obj):
+def convert_to_string_and_json(obj):
     if isinstance(obj, dict):
-        return {str(k): convert_to_string(v) for k, v in obj.items()}
+        return {str(k): convert_to_string_and_json(v) for k, v in obj.items()}
     elif isinstance(obj, list):
-        return [convert_to_string(item) for item in obj]
+        return [convert_to_string_and_json(item) for item in obj]
     else:
-        return str(obj)
+        return json.dumps(obj, ensure_ascii=False)
 
 
-stringified_response = convert_to_string(response)
+stringified_response = convert_to_string_and_json(response)
 
 
 print(json.dumps(stringified_response, ensure_ascii=False))
