@@ -54,7 +54,11 @@ data = {
 # print(json.dumps(json_data, ensure_ascii=False))
 
 
-response = requests.post(url, headers=headers, data=data).json()
+response = {
+  "result": "true",
+  "response": {"callback": "13.48.109.31"},
+  "messages": {"success": ["Готово"]}
+}
 
 
 def convert_to_string(obj):
