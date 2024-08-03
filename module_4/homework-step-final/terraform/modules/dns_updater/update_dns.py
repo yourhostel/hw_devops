@@ -49,7 +49,7 @@ input_data = json.load(sys.stdin)
 # Extracting parameters for the request
 url = input_data["url"]
 auth_token = input_data["auth_token"]
-dns_record_ips = input_data["dns_record_ips"]
+dns_record_ips = input_data["dns_record_ips"].split(",")
 subdomain_id = input_data["subdomain_id"]
 priority = input_data["priority"]
 
