@@ -37,6 +37,6 @@ output = {
     "response": response.json(),
     "messages": messages
 }
-print(json.dumps(output))
+print(json.dumps(output, ensure_ascii=False))
 
 
