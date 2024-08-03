@@ -4,10 +4,10 @@ import sys
 import json
 import requests
 
-print("Complete input data:")
-# # Loading input data from Terraform
-# input_data = json.load(sys.stdin)
 
+# # Loading input data from Terraform
+input_data = json.load(sys.stdin)
+print(json.dumps({"data": input_data}))
 # print("Complete input data:", input_data)
 # Since data is nested under 'query', we need to extract it correctly
 # query_data = input_data["query"]
