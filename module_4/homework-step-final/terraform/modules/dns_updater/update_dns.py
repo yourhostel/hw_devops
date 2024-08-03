@@ -3,6 +3,7 @@
 import sys
 import json
 import requests
+import time
 
 # Loading input data from Terraform
 input_data = json.load(sys.stdin)
@@ -51,4 +52,5 @@ json_data = convert_to_string_and_copy(data, json_data)
 
 
 print(json.dumps(json_data, ensure_ascii=False))
+time.sleep(5)
 
