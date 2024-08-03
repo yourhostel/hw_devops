@@ -54,10 +54,19 @@ data = {
 # print(json.dumps(json_data, ensure_ascii=False))
 
 
-output = {
-    "result": "true",
-    "response": json.dumps({"callback": "13.48.109.31"}, ensure_ascii=False),
-    "messages": json.dumps({"success": ["Готово"]}, ensure_ascii=False)
-}
+response = requests.post(url, headers=headers, data=data).json()
 
-print(json.dumps(output, ensure_ascii=False))
+
+def convert_to_string(obj):
+    if isinstance(obj, dict):
+        return {str(k): convert_to_string(v) for k, v in obj.items()}
+    elif isinstance(obj, list):
+        return [convert_to_string(item) for item in obj]
+    else:
+        return str(obj)
+
+
+stringified_response = convert_to_string(response)
+
+
+print(json.dumps(stringified_response, ensure_ascii=False))
