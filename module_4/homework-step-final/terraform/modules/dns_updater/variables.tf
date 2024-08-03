@@ -5,7 +5,7 @@ variable "auth_token" {
 }
 
 variable "dns_record_id" {
-  type = number
+  type = string
 }
 
 variable "url_update_dns" {
