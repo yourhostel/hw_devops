@@ -4,7 +4,7 @@ import sys
 import json
 import requests
 
-# print("Complete input data:")
+print("Complete input data:")
 # # Loading input data from Terraform
 # input_data = json.load(sys.stdin)
 
@@ -50,6 +50,6 @@ import requests
 #
 # # Output the result for Terraform
 # print(json.dumps(output))
-print(json.dumps({"key": "value"}))
+# print(json.dumps({"key": "value"}))
 
 
