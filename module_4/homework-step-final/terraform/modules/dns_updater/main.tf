@@ -20,12 +20,6 @@ data "external" "update_dns_record" {
     subdomain_id = var.dns_record_id
     priority     = "0"
   }
-#  query =  {
-#     "status": "ok",
-#     "message": "DNS record updated",
-#     "ip": "1.2.3.4"
-#  }
-
 }
 
 output "response_update_dns" {
