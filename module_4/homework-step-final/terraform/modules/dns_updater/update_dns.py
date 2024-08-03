@@ -27,11 +27,12 @@ data = {
     "priority": priority
 }
 
-response = {
-  "result": True,
-  "response": {"callback": "13.48.109.31"},
-  "messages": {"success": ["Готово"]}
-}
+response = requests.post(url, headers=headers, data=data).json()
+#response = {
+#  "result": True,
+#  "response": {"callback": "13.48.109.31"},
+#  "messages": {"success": ["Готово"]}
+#}
 
 
 #def stringify(obj):
