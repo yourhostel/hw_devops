@@ -28,6 +28,6 @@ data "external" "update_dns_record" {
 
 }
 
-#output "response_update_dns" {
-#  value = data.external.update_dns_record.result
-#}
+output "response_update_dns" {
+  value = data.external.update_dns_record.result
+}
