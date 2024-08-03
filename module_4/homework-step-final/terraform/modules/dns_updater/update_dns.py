@@ -36,9 +36,9 @@ print("Response Body:", response.json())
 
 # Sending the POST request
 response = requests.post(url, headers=headers, data=data)
-output = {"status_code": str(response.status_code), "body": response.json()}
+# response_data = {"result": True, "response": response.json()}
 
 # Output the result for Terraform
-print(json.dumps(output))
+print(response.json())
 
 
