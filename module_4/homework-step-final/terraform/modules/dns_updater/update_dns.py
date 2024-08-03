@@ -41,6 +41,6 @@ def convert_bool_to_string(obj):
 
 
 json_data = convert_bool_to_string(response.json())
-print(json.dumps(json_data, ensure_ascii=False))
+print(json.dumps({"result": "true"}))
 
 
