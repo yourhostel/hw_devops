@@ -30,8 +30,17 @@ data = {
 response = requests.post(url, headers=headers, data=data)
 
 
-json_data = response.json()
-json_str = json.dumps(json_data, ensure_ascii=False)
-print(json_str)
+def convert_bool_to_string(obj):
+    if isinstance(obj, dict):
+        return {k: convert_bool_to_string(v) for k, v in obj.items()}
+    elif isinstance(obj, list):
+        return [convert_bool_to_string(elem) for elem in obj]
+    elif isinstance(obj, bool):
+        return str(obj).lower()
+    return obj
+
+
+json_data = convert_bool_to_string(response)
+print(json.dumps(json_data, ensure_ascii=False))
 
 
