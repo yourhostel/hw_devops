@@ -28,7 +28,9 @@ data = {
 }
 
 # Sending the POST request
-response = requests.post(url, headers=headers, data=data)
+data = requests.post(url, headers=headers, data=data).json()
+
+time.sleep(5)
 
 
 def convert_to_string_and_copy(source, target):
@@ -45,12 +47,10 @@ def convert_to_string_and_copy(source, target):
     return target
 
 
-data = requests.post(url, headers=headers, data=data).json()
-
 json_data = {}
 json_data = convert_to_string_and_copy(data, json_data)
 
 
 print(json.dumps(json_data, ensure_ascii=False))
-time.sleep(5)
+
 
