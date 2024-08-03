@@ -34,8 +34,8 @@ messages = response.json().get("messages", {})
 
 # Output the result for Terraform
 output = {
-    "response": "",
-    "messages": "messages"
+    "response": response.json(),
+    "messages": messages
 }
 print(json.dumps(output))
 
