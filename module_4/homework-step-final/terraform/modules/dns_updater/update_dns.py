@@ -56,8 +56,8 @@ data = {
 
 output = {
     "result": "true",
-    "response": {"callback": "13.48.109.31"},
-    "messages": {"success": "Готово"}
+    "response": "13.48.109.31",
+    "messages": "Готово"
 }
 
 print(json.dumps(output, ensure_ascii=False))
