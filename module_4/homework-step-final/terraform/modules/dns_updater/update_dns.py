@@ -30,17 +30,15 @@ data = {
 response = requests.post(url, headers=headers, data=data)
 
 
-def convert_bool_to_string(obj):
+def convert_and_serialize(obj):
     if isinstance(obj, dict):
-        return {k: convert_bool_to_string(v) for k, v in obj.items()}
+        return {k: convert_and_serialize(v) for k, v in obj.items()}
     elif isinstance(obj, list):
-        return [convert_bool_to_string(elem) for elem in obj]
-    elif isinstance(obj, bool):
-        return str(obj).lower()
-    return obj
+        return [convert_and_serialize(elem) for elem in obj]
+    return json.dumps(obj, ensure_ascii=False) if not isinstance(obj, str) else obj
 
 
-json_data = convert_bool_to_string(response.json())
-print(json.dumps({"result": "true", "response": json.dumps({"callback": "13.48.109.31"}), "messages": json.dumps({"success": ["Готово"]})}))
+json_data = convert_and_serialize(response.json())
+print(json.dumps(json_data, ensure_ascii=False))
 
 
