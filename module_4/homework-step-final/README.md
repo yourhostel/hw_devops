@@ -153,6 +153,7 @@ aws eks update-kubeconfig --region eu-north-1 --name yourhostel # if necessary, 
 ![final-3 (3).jpg](screenshots%2Ftask-3%2Ffinal-3%20%283%29.jpg)
 ![final-3 (4).jpg](screenshots%2Ftask-3%2Ffinal-3%20%284%29.jpg)
 4. Created module [dns_updater](https://github.com/yourhostel/hw_devops/tree/main/module_4/homework-step-final/terraform/modules/dns_updater) for updating DNS records.
+
 5. Added a script [update_dns.py](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-step-final/terraform/modules/dns_updater/update_dns.py) for automatic update of DNS records of type A of subdomain final.tyshchenko.online via API interface of hosting provider ukraine.com.ua.
 ![final-3 (5).jpg](screenshots%2Ftask-3%2Ffinal-3%20%285%29.jpg)
 * Checking
