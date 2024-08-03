@@ -30,15 +30,11 @@ data = {
 response = requests.post(url, headers=headers, data=data)
 output = {"status_code": response.status_code, "body": response.json()}
 
-# Displaying the response
-print("Response Status Code:", response.status_code)
-print("Response Body:", response.json())
-
 # Sending the POST request
 response = requests.post(url, headers=headers, data=data)
-# response_data = {"result": True, "response": response.json()}
+response_data = {"result": True, "response": response.json()}
 
 # Output the result for Terraform
-print(response.json())
+print(response_data)
 
 
