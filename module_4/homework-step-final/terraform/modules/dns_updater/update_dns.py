@@ -40,7 +40,7 @@ def convert_bool_to_string(obj):
     return obj
 
 
-json_data = convert_bool_to_string(response)
+json_data = convert_bool_to_string(response.json())
 print(json.dumps(json_data, ensure_ascii=False))
 
 
