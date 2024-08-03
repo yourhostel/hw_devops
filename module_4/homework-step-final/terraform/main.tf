@@ -56,9 +56,9 @@ module "dns_updater" {
   dns_record_ip  = module.ingress.load_balancer_ips[0]
 }
 
-#output "response_update_dns" {
-#  value = module.dns_updater.response_update_dns
-#}
+output "response_update_dns" {
+  value = module.dns_updater.response_update_dns
+}
 
 output "load_balancer_ips" {
   value = module.ingress.load_balancer_ips
