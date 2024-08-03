@@ -28,13 +28,16 @@ data = {
 
 # Sending the POST request
 response = requests.post(url, headers=headers, data=data)
-output = {"status_code": response.status_code, "body": response.json()}
 
-# Sending the POST request
-response = requests.post(url, headers=headers, data=data)
-# response_data = {"result": True, "response": response.json()}
+# Extracting messages, if available
+messages = response.json().get("messages", {})
 
 # Output the result for Terraform
-print(response.json())
+output = {
+    "result": True,
+    "response": response.json(),
+    "messages": messages
+}
+print(json.dumps(output))
 
 
