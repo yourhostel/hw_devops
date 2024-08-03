@@ -27,50 +27,57 @@ data = {
     "priority": priority
 }
 
-# Sending the POST request
-# data = requests.post(url, headers=headers, data=data).json()
-
-# time.sleep(5)
-#
-#
-# def convert_to_string_and_copy(source, target):
-#     if isinstance(source, dict):
-#         for k, v in source.items():
-#             target[str(k)] = convert_to_string_and_copy(v, {})
-#     elif isinstance(source, list):
-#         list_as_dict = {}
-#         for i, item in enumerate(source):
-#             list_as_dict[str(i)] = convert_to_string_and_copy(item, {})
-#         return list_as_dict
-#     else:
-#         return str(source)
-#     return target
-#
-#
-# json_data = {}
-# json_data = convert_to_string_and_copy(data, json_data)
-
-
-# print(json.dumps(json_data, ensure_ascii=False))
-
-
 response = {
-  "result": "true",
+  "result": True,
   "response": {"callback": "13.48.109.31"},
   "messages": {"success": ["Готово"]}
 }
 
 
-def convert_to_string_and_json(obj):
+#def stringify(obj):
+#    if isinstance(obj, dict):
+#        return json.dumps({k: stringify(v) for k, v in obj.items()}, ensure_ascii=False)
+#    elif isinstance(obj, list):
+#        return json.dumps([stringify(v) for v in obj], ensure_ascii=False)
+#    elif isinstance(obj, bool):
+#        return str(obj).lower()
+#    else:
+#        return str(obj)
+
+#json_string = stringify(response)
+#print(json_string)
+
+#def flatten_and_stringify(data, result=None):
+#    if result is None:
+#        result = {}
+#    if isinstance(data, dict):
+#        for k, v in data.items():
+#            if isinstance(v, (dict, list)):
+#                flatten_and_stringify(v, result)
+#            else:
+#                result[str(k)] = str(v)
+#    elif isinstance(data, list):
+#        for item in data:
+#            flatten_and_stringify(item, result)
+#    return result
+#
+#flattened_response = flatten_and_stringify(response)
+#print(json.dumps(flattened_response, ensure_ascii=False))
+
+def flatten_to_string(obj, parent_key='', sep='_'):
+    items = {}
     if isinstance(obj, dict):
-        return {str(k): convert_to_string_and_json(v) for k, v in obj.items()}
+        for k, v in obj.items():
+            new_key = f"{parent_key}{sep}{k}" if parent_key else str(k)
+            items.update(flatten_to_string(v, new_key, sep=sep))
     elif isinstance(obj, list):
-        return [convert_to_string_and_json(item) for item in obj]
+        for i, item in enumerate(obj):
+            new_key = f"{parent_key}{sep}{i}" if parent_key else str(i)
+            items.update(flatten_to_string(item, new_key, sep=sep))
     else:
-        return json.dumps(obj, ensure_ascii=False)
+        items[parent_key] = str(obj)
+    return items
 
 
-stringified_response = convert_to_string_and_json(response)
-
-
-print(json.dumps(stringified_response, ensure_ascii=False))
+flattened_response = flatten_to_string(response)
+print(json.dumps(flattened_response, ensure_ascii=False))
