@@ -35,6 +35,8 @@ def convert_and_serialize(obj):
         return {k: convert_and_serialize(v) for k, v in obj.items()}
     elif isinstance(obj, list):
         return [convert_and_serialize(elem) for elem in obj]
+    elif isinstance(obj, bool):
+        return json.dumps(obj).lower()  # True/False to "true"/"false"
     return json.dumps(obj, ensure_ascii=False) if not isinstance(obj, str) else obj
 
 
