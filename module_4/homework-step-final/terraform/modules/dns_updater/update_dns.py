@@ -30,17 +30,24 @@ data = {
 response = requests.post(url, headers=headers, data=data)
 
 
-def convert_and_serialize(obj):
-    if isinstance(obj, dict):
-        return {k: convert_and_serialize(v) for k, v in obj.items()}
-    elif isinstance(obj, list):
-        return [convert_and_serialize(elem) for elem in obj]
-    elif isinstance(obj, bool):
-        return json.dumps(obj).lower()  # True/False to "true"/"false"
-    return json.dumps(obj, ensure_ascii=False) if not isinstance(obj, str) else obj
+def convert_to_string_and_copy(source, target):
+    if isinstance(source, dict):
+        for k, v in source.items():
+            target[str(k)] = {}
+            convert_to_string_and_copy(v, target[str(k)])
+    elif isinstance(source, list):
+        for i, item in enumerate(source):
+            target[str(i)] = {}
+            convert_to_string_and_copy(item, target[str(i)])
+    else:
+        target = str(source)
+    return target
 
 
-json_data = convert_and_serialize(response.json())
-# print(json.dumps(json_data, ensure_ascii=False))
-print(json.dumps({"result": "true", "response": {"callback": "13.48.109.31"}, "messages": {"success": ["Готово"]}}, ensure_ascii=False))
+data = requests.post(url, headers=headers, data=data).json()
+
+json_data = {}
+json_data = convert_to_string_and_copy(data, json_data)
+
+print(json.dumps(json_data, ensure_ascii=False))
 
