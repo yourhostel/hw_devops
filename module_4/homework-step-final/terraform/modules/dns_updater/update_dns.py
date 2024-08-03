@@ -3,11 +3,8 @@
 import sys
 import json
 import requests
-import time
 
-# Loading input data from Terraform
 input_data = json.load(sys.stdin)
-# print(json.dumps(input_data))
 
 # Extracting parameters for the request
 url = input_data["url"]
@@ -28,43 +25,9 @@ data = {
 }
 
 response = requests.post(url, headers=headers, data=data).json()
-#response = {
-#  "result": True,
-#  "response": {"callback": "13.48.109.31"},
-#  "messages": {"success": ["Готово"]}
-#}
 
 
-#def stringify(obj):
-#    if isinstance(obj, dict):
-#        return json.dumps({k: stringify(v) for k, v in obj.items()}, ensure_ascii=False)
-#    elif isinstance(obj, list):
-#        return json.dumps([stringify(v) for v in obj], ensure_ascii=False)
-#    elif isinstance(obj, bool):
-#        return str(obj).lower()
-#    else:
-#        return str(obj)
-
-#json_string = stringify(response)
-#print(json_string)
-
-#def flatten_and_stringify(data, result=None):
-#    if result is None:
-#        result = {}
-#    if isinstance(data, dict):
-#        for k, v in data.items():
-#            if isinstance(v, (dict, list)):
-#                flatten_and_stringify(v, result)
-#            else:
-#                result[str(k)] = str(v)
-#    elif isinstance(data, list):
-#        for item in data:
-#            flatten_and_stringify(item, result)
-#    return result
-#
-#flattened_response = flatten_and_stringify(response)
-#print(json.dumps(flattened_response, ensure_ascii=False))
-
+# Recursive processing of the response object from the hosting provider
 def flatten_to_string(obj, parent_key='', sep='_'):
     items = {}
     if isinstance(obj, dict):
