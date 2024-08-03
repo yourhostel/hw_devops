@@ -40,7 +40,7 @@ variable "auth_token" {
 
 variable "dns_record_id" {
   description = "Unique domain id from hosting provider"
-  type = number
+  type = string
 }
 
 variable "url_update_dns" {
