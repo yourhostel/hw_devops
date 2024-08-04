@@ -33,9 +33,18 @@ module "cluster" {
   tags        = var.tags
 }
 
+module "cert_manager" {
+  depends_on = [
+    module.cluster
+  ]
+  source = "./modules/cert_manager"
+}
+
 module "ingress" {
   source = "./modules/ingress"
-  depends_on = [module.cluster]
+  depends_on = [
+    module.cert_manager
+  ]
 
   providers = {
     kubernetes = kubernetes
