@@ -13,6 +13,20 @@ terraform {
   }
 }
 
+provider "kubernetes" {
+  host                   = var.kube_host
+  cluster_ca_certificate = var.cluster_ca_certificate
+  token                  = var.kube_token
+}
+
+provider "helm" {
+  kubernetes {
+    host                   = var.kube_host
+    cluster_ca_certificate = var.cluster_ca_certificate
+    token                  = var.kube_token
+  }
+}
+
 # Installing Cert Manager
 resource "helm_release" "cert_manager" {
   name       = "cert-manager"
