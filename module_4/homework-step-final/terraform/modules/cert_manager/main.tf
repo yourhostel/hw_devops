@@ -29,14 +29,14 @@ resource "helm_release" "cert_manager" {
 
 # Creating ClusterIssuer
 resource "kubernetes_manifest" "cluster_issuer" {
-  manifest = file("clusterissuer.yaml")
+  manifest = yamldecode(file("${path.module}/clusterissuer.yaml"))
 }
+
 
 # Requesting a certificate for the domain final.tyshchenko.online
 resource "kubernetes_manifest" "certificate" {
-  manifest = file("certificate.yaml")
+  manifest = yamldecode(file("${path.module}/certificate.yaml"))
 }
-
 ## Creating ClusterIssuer
 #resource "kubernetes_manifest" "cluster_issuer" {
 #  manifest = {
