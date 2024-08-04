@@ -38,9 +38,9 @@ variable "auth_token" {
   type = string
 }
 
-variable "dns_record_id" {
+variable "dns_record_ids" {
   description = "Unique domain id from hosting provider"
-  type = string
+  type = list(string)
 }
 
 variable "url_update_dns" {

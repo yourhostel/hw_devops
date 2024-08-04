@@ -17,7 +17,7 @@ data "external" "update_dns_record" {
     url          = var.url_update_dns
     auth_token   = var.auth_token
     data         = join(",", var.dns_record_ips)
-    subdomain_id = var.dns_record_id
+    subdomain_ids = join(",", var.dns_record_ids)
     priority     = "0"
   }
 }

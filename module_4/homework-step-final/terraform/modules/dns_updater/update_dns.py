@@ -10,7 +10,7 @@ input_data = json.load(sys.stdin)
 url = input_data["url"]
 auth_token = input_data["auth_token"]
 dns_record_ips = input_data["data"].split(",")
-subdomain_id = input_data["subdomain_id"]
+subdomain_ids = input_data["subdomain_ids"].split(",")
 priority = input_data["priority"]
 
 # Setting up headers
@@ -22,8 +22,9 @@ headers = {
 # Creating an empty JSON object to store the responses
 responses = {}
 
-# Processing each IP
-for ip in dns_record_ips:
+# Processing each IP and its corresponding subdomain ID
+# Using zip to pair each IP with its subdomain ID
+for ip, subdomain_id in zip(dns_record_ips, subdomain_ids):
     data = {
         "data": ip,
         "subdomain_id": subdomain_id,

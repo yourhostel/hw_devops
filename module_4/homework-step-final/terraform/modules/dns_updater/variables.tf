@@ -4,8 +4,8 @@ variable "auth_token" {
   type = string
 }
 
-variable "dns_record_id" {
-  type = string
+variable "dns_record_ids" {
+  type = list(string)
 }
 
 variable "url_update_dns" {
