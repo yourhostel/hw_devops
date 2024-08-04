@@ -186,3 +186,4 @@ aws eks update-kubeconfig --region eu-north-1 --name yourhostel # if necessary, 
         responses['error'] = "Failed to update DNS after multiple attempts"
 ```
 ![final-3 (8).jpg](screenshots%2Ftask-3%2Ffinal-3%20%288%29.jpg)
+![final-3 (9).jpg](screenshots%2Ftask-3%2Ffinal-3%20%289%29.jpg)
