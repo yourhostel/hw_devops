@@ -42,7 +42,7 @@ if subdomain_alias and subdomain_alias_id:
         if response.status_code == 200:
             successful = True
         else:
-            time.sleep(15)  # Wait before retrying
+            time.sleep(30)  # Wait before retrying
         attempt += 1
 
     if successful:

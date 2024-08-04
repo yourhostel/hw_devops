@@ -160,3 +160,29 @@ aws eks update-kubeconfig --region eu-north-1 --name yourhostel # if necessary, 
 * Checking
 ![final-3 (6).jpg](screenshots%2Ftask-3%2Ffinal-3%20%286%29.jpg)
 ![final-3 (7).jpg](screenshots%2Ftask-3%2Ffinal-3%20%287%29.jpg)
+6. The script [update_dns.py](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-step-final/terraform/modules/dns_updater/update_dns.py) has been updated with the logic for installing an ALIAS record in the final.tyshchenko.online domain. If it is missing, then A-type records are installed (effective only if there is one subnet and it is not possible to install CNAME, ALIAS or ANAME).
+* A check for balancer readiness has also been added.
+```py
+    max_attempts = 10
+    attempt = 0
+    successful = False
+
+    while attempt < max_attempts and not successful:
+        data = {
+            "data": subdomain_alias,
+            "subdomain_id": subdomain_alias_id,
+            "priority": priority
+        }
+        response = requests.post(url, headers=headers, data=data)
+        if response.status_code == 200:
+            successful = True
+        else:
+            time.sleep(30)  # Wait before retrying
+        attempt += 1
+
+    if successful:
+        responses[subdomain_alias] = response.json()
+    else:
+        responses['error'] = "Failed to update DNS after multiple attempts"
+```
+![final-3 (8).jpg](screenshots%2Ftask-3%2Ffinal-3%20%288%29.jpg)
