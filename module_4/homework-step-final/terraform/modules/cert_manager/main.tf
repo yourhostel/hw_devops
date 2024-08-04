@@ -52,10 +52,10 @@ resource "kubernetes_custom_resource" "cluster_issuer" {
   }
 
   spec = {
-    acme {
+    acme = {
       server = "https://acme-v02.api.letsencrypt.org/directory"
       email  = "youremail@example.com"
-      private_key_secret_ref {
+      private_key_secret_ref = {
         name = "letsencrypt-prod"
       }
       solvers = [{
@@ -69,6 +69,7 @@ resource "kubernetes_custom_resource" "cluster_issuer" {
   }
   depends_on = [helm_release.cert_manager]
 }
+
 
 
 
