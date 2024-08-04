@@ -27,28 +27,44 @@ resource "helm_release" "cert_manager" {
   }
 }
 
-resource "kubernetes_manifest" "cluster_issuer" {
-  manifest = {
-    apiVersion = "cert-manager.io/v1"
-    kind       = "ClusterIssuer"
-    metadata   = {
-      name = "letsencrypt-prod"
-    }
-    spec = {
-      acme = {
-        server = "https://acme-v02.api.letsencrypt.org/directory"
-        email  = "youremail@example.com"
-        privateKeySecretRef = {
-          name = "letsencrypt-prod"
-        }
-        solvers = [{
-          http01 = {
-            ingress = {
-              class = "nginx"
-            }
-          }
-        }]
+# Using specialized Kubernetes provider resources
+resource "kubernetes_cluster_role_binding" "cert_manager" {
+  metadata {
+    name = "cert-manager"
+  }
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "ClusterRole"
+    name      = "cert-manager"
+  }
+  subject {
+    kind      = "ServiceAccount"
+    name      = "cert-manager"
+    namespace = "cert-manager"
+  }
+}
+
+resource "kubernetes_custom_resource" "cluster_issuer" {
+  api_version = "cert-manager.io/v1"
+  kind        = "ClusterIssuer"
+  metadata {
+    name = "letsencrypt-prod"
+  }
+
+  spec = {
+    acme {
+      server = "https://acme-v02.api.letsencrypt.org/directory"
+      email  = "youremail@example.com"
+      private_key_secret_ref {
+        name = "letsencrypt-prod"
       }
+      solvers = [{
+        http01 = {
+          ingress = {
+            class = "nginx"
+          }
+        }
+      }]
     }
   }
   depends_on = [helm_release.cert_manager]
