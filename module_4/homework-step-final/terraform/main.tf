@@ -35,10 +35,10 @@ module "cluster" {
 
 module "cert_manager" {
   source = "./modules/cert_manager"
-  depends_on = [
-    module.cluster
-  ]
-#
+#  depends_on = [
+#    module.cluster
+#  ]
+##
 #  providers = {
 #    kubernetes = kubernetes
 #    helm       = helm
