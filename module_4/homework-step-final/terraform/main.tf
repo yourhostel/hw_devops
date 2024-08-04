@@ -35,18 +35,14 @@ module "cluster" {
 
 module "cert_manager" {
   source = "./modules/cert_manager"
-#  depends_on = [
-#    module.cluster
-#  ]
-##
-#  providers = {
-#    kubernetes = kubernetes
-#    helm       = helm
-#  }
+  depends_on = [
+    module.cluster
+  ]
 
-  kube_host              = module.cluster.eks_cluster_endpoint
-  cluster_ca_certificate = base64encode(module.cluster.cluster_ca_certificate)
-  kube_token             = module.cluster.cluster_token
+  providers = {
+    kubernetes = kubernetes
+    helm       = helm
+  }
 }
 
 module "ingress" {
