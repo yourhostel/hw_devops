@@ -1,5 +1,13 @@
 # terraform/modules/cert_manager/main.tf
 
+terraform {
+  required_providers {
+    kubernetes = {
+      source = "hashicorp/kubernetes"
+    }
+  }
+}
+
 # Installing Cert Manager
 resource "helm_release" "cert_manager" {
   name       = "cert-manager"
