@@ -91,6 +91,11 @@ data "local_file" "elb_ips" {
 }
 
 # Outputs
+output "lb_hostname" {
+  description = "External IP is used as an alias to set up a DNS record"
+  value = local.lb_hostname
+}
+
 output "load_balancer_ips" {
   description = "Public IPs associated with the Load Balancer"
   value       = jsondecode(data.local_file.elb_ips.content)

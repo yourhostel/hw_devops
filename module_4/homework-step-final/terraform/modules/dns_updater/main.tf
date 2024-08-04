@@ -16,6 +16,8 @@ data "external" "update_dns_record" {
     timestamp    = timestamp()
     url          = var.url_update_dns
     auth_token   = var.auth_token
+    subdomain_alias = var.subdomain_alias
+    subdomain_alias_id = var.subdomain_alias_id
     data         = join(",", var.dns_record_ips)
     subdomain_ids = join(",", var.dns_record_ids)
     priority     = "0"

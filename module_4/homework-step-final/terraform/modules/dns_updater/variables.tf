@@ -4,6 +4,14 @@ variable "auth_token" {
   type = string
 }
 
+variable "subdomain_alias" {
+  type = string
+}
+
+variable "subdomain_alias_id" {
+  type = string
+}
+
 variable "dns_record_ids" {
   type = list(string)
 }

@@ -88,9 +88,9 @@ ps aux | grep terraform
 
 # Cleaning up states and plans
 rm -f terraform.tfstate \
-> && rm -f terraform.tfstate.backup \
-> && rm -f tfplan\
-> && rm -f terraform.log
+&& rm -f terraform.tfstate.backup \
+&& rm -f tfplan\
+&& rm -f terraform.log
 ```
 ## Task 3 Write terraform code which will install Cert manager, Sealed Secrets, ArgoCD to EKS using helm chart
 * add certificate cluster issuer to EKS using kubernetes provider and kubernetes_manifest resource

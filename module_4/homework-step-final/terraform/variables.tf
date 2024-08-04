@@ -38,6 +38,10 @@ variable "auth_token" {
   type = string
 }
 
+variable "subdomain_alias_id" {
+  type = string
+}
+
 variable "dns_record_ids" {
   description = "Unique domain id from hosting provider"
   type = list(string)

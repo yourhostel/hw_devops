@@ -46,13 +46,20 @@ module "ingress" {
   prefix = var.prefix
 }
 
+# Inside module, a script is used to install DNS records in a domain
+# that is served by the hosting provider ukraine.com.ua
 module "dns_updater" {
   source = "./modules/dns_updater"
   depends_on = [module.ingress]
 
   auth_token     = var.auth_token
-  dns_record_ids  = var.dns_record_ids
   url_update_dns = var.url_update_dns
+
+  # Used as a priority ALIAS record for the domain.
+  subdomain_alias_id = var.subdomain_alias_id
+  subdomain_alias = module.ingress.lb_hostname
+  # If the ALIAS record is missing, all dns_record_ids will be set as type A records.
+  dns_record_ids  = var.dns_record_ids
   dns_record_ips = module.ingress.load_balancer_ips
 }
 
