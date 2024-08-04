@@ -1,16 +1,22 @@
 # terraform/modules/cert_manager/variables.tf
 
-#variable "kube_host" {
-#  description = "Kubernetes cluster endpoint"
-#  type        = string
-#}
-#
-#variable "cluster_ca_certificate" {
-#  description = "CA certificate for the Kubernetes cluster"
-#  type        = string
-#}
-#
-#variable "kube_token" {
-#  description = "Token for accessing Kubernetes cluster"
-#  type        = string
-#}
+variable "namespace" {
+  default = "cert-manager"
+}
+
+variable "issuer_name" {
+  default = "letsencrypt-prod"
+}
+
+variable "ingress_class" {
+  default = "nginx"
+}
+
+variable "cert_manager_email" {
+  default = "yourhostel.ua@gmail.com"
+}
+
+variable "acme_server" {
+  default = "https://acme-v02.api.letsencrypt.org/directory"
+}
+
