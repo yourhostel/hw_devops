@@ -34,10 +34,15 @@ module "cluster" {
 }
 
 module "cert_manager" {
+  source = "./modules/cert_manager"
   depends_on = [
     module.cluster
   ]
-  source = "./modules/cert_manager"
+
+  providers = {
+    kubernetes = kubernetes
+    helm       = helm
+  }
 }
 
 module "ingress" {
