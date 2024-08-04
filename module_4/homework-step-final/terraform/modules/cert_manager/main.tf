@@ -13,19 +13,19 @@
 #  }
 #}
 
-provider "kubernetes" {
-  host                   = var.kube_host
-  cluster_ca_certificate = var.cluster_ca_certificate
-  token                  = var.kube_token
-}
-
-provider "helm" {
-  kubernetes {
-    host                   = var.kube_host
-    cluster_ca_certificate = var.cluster_ca_certificate
-    token                  = var.kube_token
-  }
-}
+#provider "kubernetes" {
+#  host                   = var.kube_host
+#  cluster_ca_certificate = var.cluster_ca_certificate
+#  token                  = var.kube_token
+#}
+#
+#provider "helm" {
+#  kubernetes {
+#    host                   = var.kube_host
+#    cluster_ca_certificate = var.cluster_ca_certificate
+#    token                  = var.kube_token
+#  }
+#}
 
 # Installing Cert Manager
 resource "helm_release" "cert_manager" {
@@ -52,7 +52,7 @@ resource "kubernetes_manifest" "cluster_issuer" {
     spec = {
       acme = {
         server          = "https://acme-v02.api.letsencrypt.org/directory"
-        email           = "	yourhostel.ua@gmail.com"
+        email           = "yourhostel.ua@gmail.com"
         privateKeySecretRef = {
           name = "letsencrypt-prod"
         }

@@ -39,10 +39,10 @@ module "cert_manager" {
     module.cluster
   ]
 #
-  providers = {
-    kubernetes = kubernetes
-    helm       = helm
-  }
+#  providers = {
+#    kubernetes = kubernetes
+#    helm       = helm
+#  }
 
   kube_host              = module.cluster.eks_cluster_endpoint
   cluster_ca_certificate = base64encode(module.cluster.cluster_ca_certificate)
