@@ -51,7 +51,7 @@ module "dns_updater" {
   depends_on = [module.ingress]
 
   auth_token     = var.auth_token
-  dns_record_id  = var.dns_record_ids
+  dns_record_ids  = var.dns_record_ids
   url_update_dns = var.url_update_dns
   dns_record_ips = module.ingress.load_balancer_ips
 }
