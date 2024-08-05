@@ -33,14 +33,14 @@ module "cluster" {
   tags        = var.tags
 }
 
-#module "cert_manager" {
-#  source = "./modules/cert_manager"
-#
-#  providers = {
-#    kubernetes = kubernetes
-#    helm       = helm
-#  }
-#}
+module "cert_manager" {
+  source = "./modules/cert_manager"
+
+  providers = {
+    kubernetes = kubernetes
+    helm       = helm
+  }
+}
 
 module "ingress" {
   source = "./modules/ingress"
