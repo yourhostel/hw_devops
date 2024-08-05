@@ -40,6 +40,7 @@ resource "kubernetes_manifest" "cluster_issuer" {
 }
 
 resource "kubernetes_ingress" "https_ingress" {
+  api_version = "networking.k8s.io/v1"
   depends_on = [
     kubernetes_manifest.cluster_issuer
   ]
@@ -58,6 +59,7 @@ resource "kubernetes_ingress" "https_ingress" {
       http {
         path {
           path = "/argo"
+          path_type = "Prefix"
           backend {
             service_name = "argo-service"
             service_port = 80
@@ -65,6 +67,7 @@ resource "kubernetes_ingress" "https_ingress" {
         }
         path {
           path = "/python-app"
+          path_type = "Prefix"
           backend {
             service_name = "python-app-service"
             service_port = 80
@@ -72,6 +75,7 @@ resource "kubernetes_ingress" "https_ingress" {
         }
         path {
           path = "/"
+          path_type = "Prefix"
           backend {
             service_name = "frontend-service"
             service_port = 80
@@ -86,3 +90,4 @@ resource "kubernetes_ingress" "https_ingress" {
     }
   }
 }
+
