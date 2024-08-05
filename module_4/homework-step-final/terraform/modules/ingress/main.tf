@@ -51,53 +51,53 @@ resource "helm_release" "nginx_ingress" {
   }
 }
 
-resource "kubernetes_ingress" "https_ingress" {
-  depends_on = [
-    helm_release.nginx_ingress
-  ]
-  metadata {
-    name      = "https-ingress"
-    namespace = "default"
-    annotations = {
-      "kubernetes.io/ingress.class" = "nginx"
-      "cert-manager.io/cluster-issuer" = "letsencrypt-prod"
-    }
-  }
-
-  spec {
-    rule {
-      host = "final.tyshchenko.online"
-      http {
-        path {
-          path = "/argo"
-          backend {
-            service_name = "argo-service"
-            service_port = 80
-          }
-        }
-        path {
-          path = "/python-app"
-          backend {
-            service_name = "python-app-service"
-            service_port = 80
-          }
-        }
-        path {
-          path = "/"
-          backend {
-            service_name = "frontend-service"
-            service_port = 80
-          }
-        }
-      }
-    }
-
-    tls {
-      hosts      = ["final.tyshchenko.online"]
-      secret_name = "final-tyshchenko-online-tls"
-    }
-  }
-}
+#resource "kubernetes_ingress" "https_ingress" {
+#  depends_on = [
+#    helm_release.nginx_ingress
+#  ]
+#  metadata {
+#    name      = "https-ingress"
+#    namespace = "default"
+#    annotations = {
+#      "kubernetes.io/ingress.class" = "nginx"
+#      "cert-manager.io/cluster-issuer" = "letsencrypt-prod"
+#    }
+#  }
+#
+#  spec {
+#    rule {
+#      host = "final.tyshchenko.online"
+#      http {
+#        path {
+#          path = "/argo"
+#          backend {
+#            service_name = "argo-service"
+#            service_port = 80
+#          }
+#        }
+#        path {
+#          path = "/python-app"
+#          backend {
+#            service_name = "python-app-service"
+#            service_port = 80
+#          }
+#        }
+#        path {
+#          path = "/"
+#          backend {
+#            service_name = "frontend-service"
+#            service_port = 80
+#          }
+#        }
+#      }
+#    }
+#
+#    tls {
+#      hosts      = ["final.tyshchenko.online"]
+#      secret_name = "final-tyshchenko-online-tls"
+#    }
+#  }
+#}
 
 data "kubernetes_service" "nginx_ingress_service" {
     depends_on = [
