@@ -13,8 +13,16 @@ terraform {
   }
 }
 
+resource "kubernetes_namespace" "cert_manager" {
+  metadata {
+    name = "cert-manager"
+  }
+}
+
 # Installing Cert Manager
 resource "helm_release" "cert_manager" {
+  depends_on = [kubernetes_namespace.cert_manager]
+
   name       = "cert-manager"
   namespace  = "cert-manager"
   repository = "https://charts.jetstack.io"
