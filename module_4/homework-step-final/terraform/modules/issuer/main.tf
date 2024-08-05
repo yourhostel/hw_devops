@@ -23,7 +23,7 @@ resource "kubernetes_manifest" "cluster_issuer" {
     spec = {
       acme = {
         server = "https://acme-v02.api.letsencrypt.org/directory"
-        email  = "youremail@example.com"
+        email  = "yourhostel.ua@gmail.com"
         privateKeySecretRef = {
           name = "letsencrypt-prod"
         }
