@@ -51,7 +51,7 @@ module "ingress" {
 module "cert_manager" {
   source = "./modules/cert_manager"
   depends_on = [
-    module.cluster
+    module.ingress
   ]
 
 #  providers = {
