@@ -4,19 +4,19 @@ provider "aws" {
   region = var.region
 }
 
-provider "kubernetes" {
-  host                   = module.cluster.eks_cluster_endpoint
-  cluster_ca_certificate = base64decode(module.cluster.cluster_ca_certificate)
-  token                  = module.cluster.cluster_token
-}
-
-provider "helm" {
-  kubernetes {
-    host                   = module.cluster.eks_cluster_endpoint
-    cluster_ca_certificate = base64decode(module.cluster.cluster_ca_certificate)
-    token                  = module.cluster.cluster_token
-  }
-}
+#provider "kubernetes" {
+#  host                   = module.cluster.eks_cluster_endpoint
+#  cluster_ca_certificate = base64decode(module.cluster.cluster_ca_certificate)
+#  token                  = module.cluster.cluster_token
+#}
+#
+#provider "helm" {
+#  kubernetes {
+#    host                   = module.cluster.eks_cluster_endpoint
+#    cluster_ca_certificate = base64decode(module.cluster.cluster_ca_certificate)
+#    token                  = module.cluster.cluster_token
+#  }
+#}
 
 module "vpc" {
   source = "./modules/vpc"
@@ -39,10 +39,10 @@ module "ingress" {
     module.cluster
   ]
 
-  providers = {
-    kubernetes = kubernetes
-    helm       = helm
-  }
+#  providers = {
+#    kubernetes = kubernetes
+#    helm       = helm
+#  }
 
   name   = var.name
   prefix = var.prefix
@@ -54,10 +54,10 @@ module "cert_manager" {
     module.cluster
   ]
 
-  providers = {
-    kubernetes = kubernetes
-    helm       = helm
-  }
+#  providers = {
+#    kubernetes = kubernetes
+#    helm       = helm
+#  }
 }
 
 # Inside module, a script is used to install DNS records in a domain
