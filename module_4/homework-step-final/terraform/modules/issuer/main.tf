@@ -86,8 +86,3 @@ resource "kubernetes_ingress" "https_ingress" {
     }
   }
 }
-
-
-
-
-
