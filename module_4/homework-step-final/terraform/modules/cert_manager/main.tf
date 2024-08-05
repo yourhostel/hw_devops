@@ -20,20 +20,12 @@ resource "helm_release" "cert_manager" {
   repository = "https://charts.jetstack.io"
   chart      = "cert-manager"
   version    = "v1.15.0"
-
-  set {
-    name  = "installCRDs"
-    value = "true"
-  }
 }
 
-resource "null_resource" "wait_for_crds" {
+resource "null_resource" "install_crds" {
   provisioner "local-exec" {
     command = <<EOT
-    while ! kubectl get crd clusterissuers.cert-manager.io > /dev/null 2>&1; do
-      echo "Waiting for CRD to be available...";
-      sleep 5;
-    done
+    kubectl apply --validate=false -f https://github.com/cert-manager/cert-manager/releases/download/v1.15.0/cert-manager.crds.yaml
     EOT
   }
 
@@ -42,8 +34,9 @@ resource "null_resource" "wait_for_crds" {
   }
 }
 
+
 resource "kubernetes_manifest" "cluster_issuer" {
-  depends_on = [helm_release.cert_manager, null_resource.wait_for_crds]
+  depends_on = [helm_release.cert_manager, null_resource.install_crds]
 
   manifest = {
     apiVersion = "cert-manager.io/v1"
