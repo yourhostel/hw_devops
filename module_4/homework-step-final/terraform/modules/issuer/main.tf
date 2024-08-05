@@ -39,55 +39,76 @@ resource "kubernetes_manifest" "cluster_issuer" {
   }
 }
 
-resource "kubernetes_ingress" "https_ingress" {
-  api_version = "networking.k8s.io/v1"
+resource "kubernetes_manifest" "https_ingress" {
   depends_on = [
     kubernetes_manifest.cluster_issuer
   ]
-  metadata {
-    name      = "https-ingress"
-    namespace = "default"
-    annotations = {
-      "kubernetes.io/ingress.class" = "nginx"
-      "cert-manager.io/cluster-issuer" = "letsencrypt-prod"
-    }
-  }
 
-  spec {
-    rule {
-      host = "final.tyshchenko.online"
-      http {
-        path {
-          path = "/argo"
-          path_type = "Prefix"
-          backend {
-            service_name = "argo-service"
-            service_port = 80
-          }
-        }
-        path {
-          path = "/python-app"
-          path_type = "Prefix"
-          backend {
-            service_name = "python-app-service"
-            service_port = 80
-          }
-        }
-        path {
-          path = "/"
-          path_type = "Prefix"
-          backend {
-            service_name = "frontend-service"
-            service_port = 80
-          }
-        }
+  manifest = {
+    apiVersion = "networking.k8s.io/v1"
+    kind       = "Ingress"
+    metadata = {
+      name      = "https-ingress"
+      namespace = "default"
+      annotations = {
+        "kubernetes.io/ingress.class" = "nginx"
+        "cert-manager.io/cluster-issuer" = "letsencrypt-prod"
       }
     }
-
-    tls {
-      hosts      = ["final.tyshchenko.online"]
-      secret_name = "final-tyshchenko-online-tls"
+    spec = {
+      rules = [
+        {
+          host = "final.tyshchenko.online"
+          http = {
+            paths = [
+              {
+                path = "/argo"
+                pathType = "Prefix"
+                backend = {
+                  service = {
+                    name = "argo-service"
+                    port = {
+                      number = 80
+                    }
+                  }
+                }
+              },
+              {
+                path = "/python-app"
+                pathType = "Prefix"
+                backend = {
+                  service = {
+                    name = "python-app-service"
+                    port = {
+                      number = 80
+                    }
+                  }
+                }
+              },
+              {
+                path = "/"
+                pathType = "Prefix"
+                backend = {
+                  service = {
+                    name = "frontend-service"
+                    port = {
+                      number = 80
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+      tls = [
+        {
+          hosts = ["final.tyshchenko.online"]
+          secretName = "final-tyshchenko-online-tls"
+        }
+      ]
     }
   }
 }
+
 
