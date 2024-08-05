@@ -33,28 +33,18 @@ module "cluster" {
   tags        = var.tags
 }
 
-provider "null" {
-  # Used to ensure consistency of execution
-}
-
-resource "null_resource" "wait_for_cluster" {
-  depends_on = [module.cluster]
-  # Dummy resource, used to control execution order
-}
-
-module "cert_manager" {
-  source = "./modules/cert_manager"
-  depends_on = [null_resource.wait_for_cluster]
-
-  providers = {
-    kubernetes = kubernetes
-    helm       = helm
-  }
-}
+#module "cert_manager" {
+#  source = "./modules/cert_manager"
+#
+#  providers = {
+#    kubernetes = kubernetes
+#    helm       = helm
+#  }
+#}
 
 module "ingress" {
   source = "./modules/ingress"
-  depends_on = [module.cert_manager]
+  depends_on = [module.cluster]
 
   providers = {
     kubernetes = kubernetes
