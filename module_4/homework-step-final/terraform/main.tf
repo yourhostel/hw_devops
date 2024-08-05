@@ -42,15 +42,15 @@ module "cert_manager" {
   }
 }
 
-#module "issuer" {
-#  source = "./modules/issuer"
-#  depends_on = [module.cert_manager]
-#
-#  providers = {
-#    kubernetes = kubernetes
-#    helm       = helm
-#  }
-#}
+module "issuer" {
+  source = "./modules/issuer"
+  depends_on = [module.cert_manager]
+
+  providers = {
+    kubernetes = kubernetes
+    helm       = helm
+  }
+}
 
 module "ingress" {
   source = "./modules/ingress"
