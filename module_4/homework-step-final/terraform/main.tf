@@ -34,7 +34,18 @@ module "cluster" {
 }
 
 module "cert_manager" {
-  source = "./modules/cert_manager"
+  source = "modules/issuer"
+  depends_on = [module.cluster]
+
+  providers = {
+    kubernetes = kubernetes
+    helm       = helm
+  }
+}
+
+module "issuer" {
+  source = "modules/issuer"
+  depends_on = [module.cert_manager]
 
   providers = {
     kubernetes = kubernetes
@@ -44,7 +55,7 @@ module "cert_manager" {
 
 module "ingress" {
   source = "./modules/ingress"
-  depends_on = [module.cluster]
+  depends_on = [module.issuer]
 
   providers = {
     kubernetes = kubernetes
