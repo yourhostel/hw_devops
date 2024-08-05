@@ -44,7 +44,7 @@ module "cert_manager" {
 }
 
 module "issuer" {
-  source = "modules/issuer"
+  source = "./modules/issuer"
   depends_on = [module.cert_manager]
 
   providers = {
