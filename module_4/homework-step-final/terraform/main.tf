@@ -4,19 +4,19 @@ provider "aws" {
   region = var.region
 }
 
-#provider "kubernetes" {
-#  host                   = module.cluster.eks_cluster_endpoint
-#  cluster_ca_certificate = base64decode(module.cluster.cluster_ca_certificate)
-#  token                  = module.cluster.cluster_token
-#}
-#
-#provider "helm" {
-#  kubernetes {
-#    host                   = module.cluster.eks_cluster_endpoint
-#    cluster_ca_certificate = base64decode(module.cluster.cluster_ca_certificate)
-#    token                  = module.cluster.cluster_token
-#  }
-#}
+provider "kubernetes" {
+  host                   = module.cluster.eks_cluster_endpoint
+  cluster_ca_certificate = base64decode(module.cluster.cluster_ca_certificate)
+  token                  = module.cluster.cluster_token
+}
+
+provider "helm" {
+  kubernetes {
+    host                   = module.cluster.eks_cluster_endpoint
+    cluster_ca_certificate = base64decode(module.cluster.cluster_ca_certificate)
+    token                  = module.cluster.cluster_token
+  }
+}
 
 module "vpc" {
   source = "./modules/vpc"
@@ -33,31 +33,36 @@ module "cluster" {
   tags        = var.tags
 }
 
-module "ingress" {
-  source = "./modules/ingress"
-  depends_on = [
-    module.cluster
-  ]
+provider "null" {
+  # Used to ensure consistency of execution
+}
 
-#  providers = {
-#    kubernetes = kubernetes
-#    helm       = helm
-#  }
-
-  name   = var.name
-  prefix = var.prefix
+resource "null_resource" "wait_for_cluster" {
+  depends_on = [module.cluster]
+  # Dummy resource, used to control execution order
 }
 
 module "cert_manager" {
   source = "./modules/cert_manager"
-  depends_on = [
-    module.ingress
-  ]
+  depends_on = [null_resource.wait_for_cluster]
 
-#  providers = {
-#    kubernetes = kubernetes
-#    helm       = helm
-#  }
+  providers = {
+    kubernetes = kubernetes
+    helm       = helm
+  }
+}
+
+module "ingress" {
+  source = "./modules/ingress"
+  depends_on = [module.cert_manager]
+
+  providers = {
+    kubernetes = kubernetes
+    helm       = helm
+  }
+
+  name   = var.name
+  prefix = var.prefix
 }
 
 # Inside module, a script is used to install DNS records in a domain

@@ -210,14 +210,14 @@ output "eks_node_group_id" {
   value       = aws_eks_node_group.eks_node_group.id
 }
 
-output "eks_cluster_endpoint" {
-  description = "Endpoint for the EKS cluster"
-  value       = aws_eks_cluster.eks_cluster.endpoint
-}
-
 output "eks_cluster_security_group_id" {
   description = "Security group ID for the EKS cluster"
   value       = aws_security_group.eks_security_group.id
+}
+
+output "eks_cluster_endpoint" {
+  description = "Endpoint for the EKS cluster"
+  value       = aws_eks_cluster.eks_cluster.endpoint
 }
 
 output "cluster_ca_certificate" {
