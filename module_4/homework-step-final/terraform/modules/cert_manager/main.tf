@@ -27,8 +27,23 @@ resource "helm_release" "cert_manager" {
   }
 }
 
+resource "null_resource" "wait_for_crds" {
+  provisioner "local-exec" {
+    command = <<EOT
+    while ! kubectl get crd clusterissuers.cert-manager.io > /dev/null 2>&1; do
+      echo "Waiting for CRD to be available...";
+      sleep 5;
+    done
+    EOT
+  }
+
+  triggers = {
+    always_run = timestamp()
+  }
+}
+
 resource "kubernetes_manifest" "cluster_issuer" {
-  depends_on = [helm_release.cert_manager]
+  depends_on = [helm_release.cert_manager, null_resource.wait_for_crds]
 
   manifest = {
     apiVersion = "cert-manager.io/v1"
