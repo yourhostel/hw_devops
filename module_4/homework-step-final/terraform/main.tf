@@ -34,7 +34,7 @@ module "cluster" {
 }
 
 module "cert_manager" {
-  source = "modules/issuer"
+  source = "./modules/cert_manager"
   depends_on = [module.cluster]
 
   providers = {
