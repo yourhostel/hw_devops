@@ -33,6 +33,21 @@ module "cluster" {
   tags        = var.tags
 }
 
+module "ingress" {
+  source = "./modules/ingress"
+  depends_on = [
+    module.cluster
+  ]
+
+  providers = {
+    kubernetes = kubernetes
+    helm       = helm
+  }
+
+  name   = var.name
+  prefix = var.prefix
+}
+
 module "cert_manager" {
   source = "./modules/cert_manager"
   depends_on = [
@@ -43,21 +58,6 @@ module "cert_manager" {
     kubernetes = kubernetes
     helm       = helm
   }
-}
-
-module "ingress" {
-  source = "./modules/ingress"
-  depends_on = [
-    module.cert_manager
-  ]
-
-  providers = {
-    kubernetes = kubernetes
-    helm       = helm
-  }
-
-  name   = var.name
-  prefix = var.prefix
 }
 
 # Inside module, a script is used to install DNS records in a domain
