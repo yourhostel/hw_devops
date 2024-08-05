@@ -19,7 +19,7 @@ resource "helm_release" "cert_manager" {
   namespace  = "cert-manager"
   repository = "https://charts.jetstack.io"
   chart      = "cert-manager"
-  version    = "v1.5.3"
+  version    = "v1.15.0"
 
   set {
     name  = "installCRDs"
@@ -27,63 +27,63 @@ resource "helm_release" "cert_manager" {
   }
 }
 
-resource "null_resource" "cluster_issuer" {
+resource "kubernetes_manifest" "cluster_issuer" {
   depends_on = [helm_release.cert_manager]
 
-  provisioner "local-exec" {
-    command = <<EOT
-kubectl apply -f - <<EOF
-apiVersion: cert-manager.io/v1
-kind: ClusterIssuer
-metadata:
-  name: letsencrypt-prod
-spec:
-  acme:
-    server: https://acme-v02.api.letsencrypt.org/directory
-    email: youremail@example.com
-    privateKeySecretRef:
-      name: letsencrypt-prod
-    solvers:
-    - http01:
-        ingress:
-          class: nginx
-EOF
-EOT
-  }
-
-  triggers = {
-    always_run = "${timestamp()}"
+  manifest = {
+    apiVersion = "cert-manager.io/v1"
+    kind       = "ClusterIssuer"
+    metadata   = {
+      name = "letsencrypt-prod"
+    }
+    spec = {
+      acme = {
+        server = "https://acme-v02.api.letsencrypt.org/directory"
+        email  = "youremail@example.com"
+        privateKeySecretRef = {
+          name = "letsencrypt-prod"
+        }
+        solvers = [{
+          http01 = {
+            ingress = {
+              class = "nginx"
+            }
+          }
+        }]
+      }
+    }
   }
 }
 
-
-#resource "kubernetes_manifest" "cluster_issuer" {
+#resource "null_resource" "cluster_issuer" {
 #  depends_on = [helm_release.cert_manager]
 #
-#  manifest = {
-#    apiVersion = "cert-manager.io/v1"
-#    kind       = "ClusterIssuer"
-#    metadata   = {
-#      name = "letsencrypt-prod"
-#    }
-#    spec = {
-#      acme = {
-#        server = "https://acme-v02.api.letsencrypt.org/directory"
-#        email  = "youremail@example.com"
-#        privateKeySecretRef = {
-#          name = "letsencrypt-prod"
-#        }
-#        solvers = [{
-#          http01 = {
-#            ingress = {
-#              class = "nginx"
-#            }
-#          }
-#        }]
-#      }
-#    }
+#  provisioner "local-exec" {
+#    command = <<EOT
+#kubectl apply -f - <<EOF
+#apiVersion: cert-manager.io/v1
+#kind: ClusterIssuer
+#metadata:
+#  name: letsencrypt-prod
+#spec:
+#  acme:
+#    server: https://acme-v02.api.letsencrypt.org/directory
+#    email: youremail@example.com
+#    privateKeySecretRef:
+#      name: letsencrypt-prod
+#    solvers:
+#    - http01:
+#        ingress:
+#          class: nginx
+#EOF
+#EOT
+#  }
+#
+#  triggers = {
+#    always_run = "${timestamp()}"
 #  }
 #}
+
 
 
 
