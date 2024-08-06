@@ -5,6 +5,14 @@ import time
 import sys
 import argparse
 
+LOG_FILE = "/tmp/apply_issuer.log"
+
+
+def write_to_log(message):
+    """Write a message to the log file."""
+    with open(LOG_FILE, "a") as f:
+        f.write(message + "\n")
+
 
 def run_command(command):
     """Run a command in the bash shell and return the result."""
@@ -18,7 +26,7 @@ def check_cluster_accessibility(cluster_name, region):
         f"aws eks describe-cluster --name {cluster_name} --region {region} --query cluster.status --output text"
     )
     if stderr:
-        print(f"Error checking cluster accessibility: {stderr}", file=sys.stderr)
+        write_to_log(f"Error checking cluster accessibility: {stderr}")
         return False
     return stdout.strip() == "ACTIVE"
 
@@ -29,7 +37,7 @@ def check_cert_manager_status(namespace="cert-manager"):
         f"kubectl get pods -n {namespace} -o jsonpath=\"{{.items[*].status.containerStatuses[*].ready}}\""
     )
     if stderr:
-        print(f"Error checking cert-manager status: {stderr}", file=sys.stderr)
+        write_to_log(f"Error checking cert-manager status: {stderr}")
         return False
 
     # Checking that all containers are ready
@@ -47,7 +55,7 @@ def apply_issuer_module(cluster_name, region, eks_cluster_endpoint, cluster_ca_c
     # Update kubeconfig configuration
     stdout, stderr = run_command(f"aws eks update-kubeconfig --region {region} --name {cluster_name}")
     if stderr:
-        print(f"Error updating kubeconfig: {stderr}", file=sys.stderr)
+        write_to_log(f"Error updating kubeconfig: {stderr}")
         return
 
     # Define provider arguments
@@ -59,22 +67,25 @@ def apply_issuer_module(cluster_name, region, eks_cluster_endpoint, cluster_ca_c
 
     # Check if the ClusterIssuer resource already exists
     if resource_exists("clusterissuer", "letsencrypt-prod", ""):
-        print("ClusterIssuer 'letsencrypt-prod' already exists. Skipping creation.")
+        write_to_log("ClusterIssuer 'letsencrypt-prod' already exists. Skipping creation.")
         return
 
     # Check if the https_ingress resource already exists
     if resource_exists("ingress", "https-ingress", "default"):
-        print("Ingress resource 'https-ingress' already exists. Skipping creation.")
+        write_to_log("Ingress resource 'https-ingress' already exists. Skipping creation.")
     else:
         # Apply the issuer module if the Ingress does not exist
         stdout, stderr = run_command(f"terraform apply {provider_args} -target=module.issuer -auto-approve")
         if stderr:
-            print(f"Error applying issuer module: {stderr}", file=sys.stderr)
+            write_to_log(f"Error applying issuer module: {stderr}")
         else:
-            print(stdout)
+            write_to_log(stdout)
 
 
 def main():
+    # Clear the log file at the start
+    open(LOG_FILE, "w").close()
+
     parser = argparse.ArgumentParser(description="Apply issuer module after cert-manager is ready.")
     parser.add_argument('--cluster_name', required=True, help="Name of the EKS cluster")
     parser.add_argument('--region', required=True, help="AWS region of the EKS cluster")
@@ -90,31 +101,37 @@ def main():
     # Check if the cluster is accessible
     for _ in range(max_retries):
         if check_cluster_accessibility(args.cluster_name, args.region):
-            print("Cluster is accessible. Updating kubeconfig...")
+            write_to_log("Cluster is accessible. Updating kubeconfig...")
             break
         else:
-            print("Cluster is not accessible yet. Retrying in 30 seconds...")
+            write_to_log("Cluster is not accessible yet. Retrying in 30 seconds...")
             time.sleep(sleep_duration)
     else:
-        print("Cluster was not accessible after maximum retries. Exiting...", file=sys.stderr)
+        write_to_log("Cluster was not accessible after maximum retries. Exiting...")
         sys.exit(1)
 
     # Check if cert-manager is ready
     for _ in range(max_retries):
         if check_cert_manager_status():
-            print("Cert-manager is ready. Checking and applying issuer module...")
+            write_to_log("Cert-manager is ready. Checking and applying issuer module...")
             apply_issuer_module(args.cluster_name, args.region, args.eks_cluster_endpoint,
                                 args.cluster_ca_certificate, args.cluster_token)
             break
         else:
-            print("Cert-manager is not ready yet. Retrying in 30 seconds...")
+            write_to_log("Cert-manager is not ready yet. Retrying in 30 seconds...")
             time.sleep(sleep_duration)
     else:
-        print("Cert-manager was not ready after maximum retries. Exiting...", file=sys.stderr)
+        write_to_log("Cert-manager was not ready after maximum retries. Exiting...")
+        sys.exit(1)
+
+    # Print the log at the end
+    with open(LOG_FILE, "r") as f:
+        print(f.read())
 
 
 if __name__ == "__main__":
     main()
+
 
 
 
