@@ -42,27 +42,27 @@ module "cert_manager" {
   }
 }
 
-resource "null_resource" "apply_issuer" {
-  depends_on = [module.cert_manager]
-
-  provisioner "local-exec" {
-    command = "python3 ${path.module}/apply_issuer.py --cluster_name ${var.name} --region ${var.region}"
-  }
-
-  triggers = {
-    always_run = timestamp()
-  }
-}
-
-#module "issuer" {
-#  source = "./modules/issuer"
+#resource "null_resource" "apply_issuer" {
 #  depends_on = [module.cert_manager]
 #
-#  providers = {
-#    kubernetes = kubernetes
-#    helm       = helm
+#  provisioner "local-exec" {
+#    command = "python3 ${path.module}/apply_issuer.py --cluster_name ${var.name} --region ${var.region}"
+#  }
+#
+#  triggers = {
+#    always_run = timestamp()
 #  }
 #}
+
+module "issuer" {
+  source = "./modules/issuer"
+  depends_on = [module.cert_manager]
+
+  providers = {
+    kubernetes = kubernetes
+    helm       = helm
+  }
+}
 
 module "ingress" {
   source = "./modules/ingress"
