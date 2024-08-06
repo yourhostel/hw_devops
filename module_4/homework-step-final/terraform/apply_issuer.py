@@ -72,7 +72,6 @@ def main():
     for _ in range(max_retries):
         if check_cluster_accessibility(args.cluster_name, args.region):
             print("Cluster is accessible. Updating kubeconfig...")
-            apply_issuer_module(args.cluster_name, args.region)
             break
         else:
             print("Cluster is not accessible yet. Retrying in 30 seconds...")
