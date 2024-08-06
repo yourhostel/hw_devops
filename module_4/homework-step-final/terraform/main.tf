@@ -42,32 +42,15 @@ module "cert_manager" {
   }
 }
 
-resource "null_resource" "apply_issuer" {
+module "issuer" {
+  source = "./modules/issuer"
   depends_on = [module.cert_manager]
 
-  provisioner "local-exec" {
-    command = <<EOT
-python3 ${path.module}/apply_issuer.py --cluster_name ${var.name} --region ${var.region} \
---eks_cluster_endpoint ${module.cluster.eks_cluster_endpoint} \
---cluster_ca_certificate ${module.cluster.cluster_ca_certificate} \
---cluster_token ${module.cluster.cluster_token} 2>&1 | tee /tmp/apply_issuer.log
-EOT
-  }
-
-  triggers = {
-    always_run = timestamp()
+  providers = {
+    kubernetes = kubernetes
+    helm       = helm
   }
 }
-
-#module "issuer" {
-#  source = "./modules/issuer"
-#  depends_on = [module.cert_manager]
-#
-#  providers = {
-#    kubernetes = kubernetes
-#    helm       = helm
-#  }
-#}
 
 module "ingress" {
   source = "./modules/ingress"
