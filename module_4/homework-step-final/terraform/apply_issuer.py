@@ -65,8 +65,8 @@ def main():
 
     args = parser.parse_args()
 
-    max_retries = 10
-    sleep_duration = 30  # in seconds
+    max_retries = 3
+    sleep_duration = 15  # in seconds
 
     # Check if the cluster is accessible
     for _ in range(max_retries):
