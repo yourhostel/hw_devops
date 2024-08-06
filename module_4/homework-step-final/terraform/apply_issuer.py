@@ -23,7 +23,7 @@ def check_cluster_accessibility(cluster_name, region):
 
 def check_cert_manager_status(namespace="cert-manager"):
     """Check for readiness of cert-manager."""
-    stdout, stderr = run_command(f"kubectl get pods -n {namespace} -o jsonpath='{.items[*].status.containerStatuses[*].ready}'")
+    stdout, stderr = run_command(f"kubectl get pods -n {namespace} -o jsonpath='{{{{.items[*].status.containerStatuses[*].ready}}}}'")
     if stderr:
         print(f"Error checking cert-manager status: {stderr}", file=sys.stderr)
         return False
