@@ -50,7 +50,7 @@ resource "null_resource" "apply_issuer" {
 python3 ${path.module}/apply_issuer.py --cluster_name ${var.name} --region ${var.region} \
 --eks_cluster_endpoint ${module.cluster.eks_cluster_endpoint} \
 --cluster_ca_certificate ${module.cluster.cluster_ca_certificate} \
---cluster_token ${module.cluster.cluster_token}
+--cluster_token ${module.cluster.cluster_token} 2>&1 | tee /tmp/apply_issuer.log
 EOT
   }
 
