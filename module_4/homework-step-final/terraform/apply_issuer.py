@@ -57,6 +57,11 @@ def apply_issuer_module(cluster_name, region, eks_cluster_endpoint, cluster_ca_c
         f"-var 'cluster_token={cluster_token}'"
     )
 
+    # Check if the ClusterIssuer resource already exists
+    if resource_exists("clusterissuer", "letsencrypt-prod", ""):
+        print("ClusterIssuer 'letsencrypt-prod' already exists. Skipping creation.")
+        return
+
     # Check if the https_ingress resource already exists
     if resource_exists("ingress", "https-ingress", "default"):
         print("Ingress resource 'https-ingress' already exists. Skipping creation.")
@@ -97,7 +102,7 @@ def main():
     # Check if cert-manager is ready
     for _ in range(max_retries):
         if check_cert_manager_status():
-            print("Cert-manager is ready. Applying issuer module...")
+            print("Cert-manager is ready. Checking and applying issuer module...")
             apply_issuer_module(args.cluster_name, args.region, args.eks_cluster_endpoint,
                                 args.cluster_ca_certificate, args.cluster_token)
             break
@@ -110,6 +115,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
