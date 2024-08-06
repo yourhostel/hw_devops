@@ -16,8 +16,13 @@ def write_to_log(message):
 
 def run_command(command):
     """Run a command in the bash shell and return the result."""
+    write_to_log(f"Running command: {command}")
     result = subprocess.run(['/bin/bash', '-c', command], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    return result.stdout.decode('utf-8'), result.stderr.decode('utf-8')
+    stdout = result.stdout.decode('utf-8')
+    stderr = result.stderr.decode('utf-8')
+    write_to_log(f"stdout: {stdout}")
+    write_to_log(f"stderr: {stderr}")
+    return stdout, stderr
 
 
 def check_cluster_accessibility(cluster_name, region):
@@ -47,7 +52,10 @@ def check_cert_manager_status(namespace="cert-manager"):
 def resource_exists(kind, name, namespace="default"):
     """Check if a Kubernetes resource exists."""
     stdout, stderr = run_command(f"kubectl get {kind} {name} -n {namespace}")
-    return not stderr.strip()  # Return True if no error message, indicating the resource exists
+    if stderr:
+        write_to_log(f"Error checking if resource {kind}/{name} exists: {stderr}")
+        return False
+    return True
 
 
 def apply_issuer_module(cluster_name, region, eks_cluster_endpoint, cluster_ca_certificate, cluster_token):
@@ -131,6 +139,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
