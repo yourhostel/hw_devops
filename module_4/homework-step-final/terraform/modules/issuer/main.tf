@@ -15,8 +15,7 @@ terraform {
 
 resource "kubernetes_manifest" "cluster_issuer" {
   manifest = {
-#    apiVersion = "cert-manager.io/v1"
-    apiVersion = "networking.k8s.io/v1"
+    apiVersion = "cert-manager.io/v1"
     kind       = "ClusterIssuer"
     metadata   = {
       name = "letsencrypt-prod"
