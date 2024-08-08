@@ -217,4 +217,7 @@ kubectl describe certificate <certificate_name> -n default # my certificate name
 kubectl logs -l app.kubernetes.io/instance=cert-manager -n cert-manager
 # certificate validity period
 echo | openssl s_client -connect final.tyshchenko.online:443 2>/dev/null | openssl x509 -noout -dates
+# To reissue, simply delete the current certificate.
+kubectl delete certificate final-tyshchenko-online-tls -n default
+kubectl delete secret final-tyshchenko-online-tls -n default
 ```

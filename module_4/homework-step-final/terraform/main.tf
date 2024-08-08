@@ -52,14 +52,14 @@ module "issuer" {
   }
 }
 
-#module "argo_cd" {
-#  source = "./modules/argo_cd"
-#
-#  providers = {
-#    kubernetes = kubernetes
-#    helm       = helm
-#  }
-#}
+module "argo_cd" {
+  source = "./modules/argo_cd"
+
+  providers = {
+    kubernetes = kubernetes
+    helm       = helm
+  }
+}
 
 module "ingress" {
   source = "./modules/ingress"
@@ -130,11 +130,11 @@ output "ingress_nginx_controller" {
   value = module.ingress.ingress_nginx_controller
 }
 
-#output "argo_cd_admin_password" {
-#  description = "Initial admin password for Argo CD"
-#  value     = module.argo_cd.argo_cd_initial_admin_password
-#  sensitive = true
-#}
+output "argo_cd_admin_password" {
+  description = "Initial admin password for Argo CD"
+  value     = module.argo_cd.argo_cd_initial_admin_password
+  sensitive = true
+}
 
 # Output of nginx_ingress_service object for debugging
 #output "nginx_ingress_service_full" {
