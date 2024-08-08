@@ -13,7 +13,15 @@ terraform {
   }
 }
 
+resource "kubernetes_namespace" "argocd" {
+  metadata {
+    name = "argocd"
+  }
+}
+
 resource "helm_release" "argo_cd" {
+  depends_on = [kubernetes_namespace.argocd]
+
   name       = "argo-cd"
   namespace  = "argocd"
   repository = "https://argoproj.github.io/argo-helm"
