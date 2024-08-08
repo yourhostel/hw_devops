@@ -28,31 +28,25 @@ resource "helm_release" "argo_cd" {
   chart      = "argo-cd"
   version    = "4.10.8"
 
-  set {
-    name  = "server.service.type"
-    value = "LoadBalancer"
-  }
-
-  set {
-    name  = "server.ingress.enabled"
-    value = "true"
-  }
-
-  set {
-    name  = "server.ingress.hosts[0]"
-    value = "final.tyshchenko.online/argo"
-  }
-
-  set {
-    name  = "server.ingress.annotations.nginx\\.ingress\\.kubernetes\\.io/rewrite-target"
-    value = "/$1"
-  }
-
-  set {
-    name  = "server.ingress.annotations.kubernetes\\.io/ingress.class"
-    value = "nginx"
-  }
+  values = [
+    <<EOF
+server:
+  service:
+    type: LoadBalancer
+ingress:
+  enabled: true
+  ingressClassName: nginx
+  hosts:
+    - host: final.tyshchenko.online
+      paths:
+        - path: /argo
+          pathType: ImplementationSpecific
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+EOF
+  ]
 }
+
 
 # Fetch the initial admin password for Argo CD
 data "kubernetes_secret" "argocd_initial_admin_secret" {
