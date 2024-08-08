@@ -48,6 +48,8 @@ resource "helm_release" "argo_cd" {
 
 # Fetch the initial admin password for Argo CD
 data "kubernetes_secret" "argocd_initial_admin_secret" {
+  depends_on = [helm_release.argo_cd]
+
   metadata {
     name      = "argocd-initial-admin-secret"
     namespace = "argocd"
