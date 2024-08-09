@@ -72,6 +72,7 @@ resource "kubernetes_manifest" "https_ingress" {
                       number = 443
                     }
                   }
+                  namespace = "argocd"
                 }
               },
               {
