@@ -50,7 +50,7 @@ resource "kubernetes_manifest" "https_ingress" {
     kind       = "Ingress"
     metadata = {
       name      = "https-ingress"
-      namespace = "default"
+      namespace = "argocd"
       annotations = {
         "kubernetes.io/ingress.class" = "nginx"
         "cert-manager.io/cluster-issuer" = "letsencrypt-prod"
