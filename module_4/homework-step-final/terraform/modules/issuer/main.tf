@@ -54,6 +54,7 @@ resource "kubernetes_manifest" "https_ingress" {
       annotations = {
         "kubernetes.io/ingress.class" = "nginx"
         "cert-manager.io/cluster-issuer" = "letsencrypt-prod"
+        "nginx.ingress.kubernetes.io/force-ssl-redirect" = "false"
       }
     }
     spec = {
