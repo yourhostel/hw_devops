@@ -51,6 +51,6 @@ data "kubernetes_secret" "argocd_initial_admin_secret" {
 }
 
 output "argo_cd_admin_password" {
-  value = base64decode(data.kubernetes_secret.argocd_initial_admin_secret.data.password)
+  value = data.kubernetes_secret.argocd_initial_admin_secret.data.password
   sensitive = true
 }

@@ -224,6 +224,8 @@ kubectl delete secret final-tyshchenko-online-tls -n default
 8. 
 ```bash
 terraform output -json | jq .argo_cd_admin_password.value
+kubectl get secret argocd-initial-admin-secret -n argocd -o json
+
 kubectl get svc -n argocd
 dig final.tyshchenko.online
 openssl s_client -connect final.tyshchenko.online:443 -servername final.tyshchenko.online
