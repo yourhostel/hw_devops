@@ -230,6 +230,7 @@ kubectl get svc -n argocd
 dig final.tyshchenko.online
 openssl s_client -connect final.tyshchenko.online:443 -servername final.tyshchenko.online
 
+kubectl run -it --rm --restart=Never curl --image=curlimages/curl --command -- curl -kLv https://argo-cd-argocd-server.argocd.svc.cluster.local
 
 kubectl rollout restart deployment yourhostel-nginx-ingress-ingress-nginx-controller -n kube-system
 kubectl get ingress https-ingress -n argocd -o yaml

@@ -27,7 +27,7 @@ resource "helm_release" "nginx_ingress" {
   }
   set {
     name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-backend-protocol"
-    value = "http"
+    value = "https"
   }
   set {
     name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-scheme"
@@ -48,14 +48,6 @@ resource "helm_release" "nginx_ingress" {
   set {
     name  = "controller.allowSnippetAnnotations"
     value = "true"
-  }
-    set {
-    name  = "controller.config.ssl-redirect"
-    value = "false"
-  }
-  set {
-    name  = "controller.config.force-ssl-redirect"
-    value = "false"
   }
 }
 
