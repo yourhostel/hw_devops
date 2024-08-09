@@ -233,4 +233,6 @@ kubectl rollout restart deployment yourhostel-nginx-ingress-ingress-nginx-contro
 kubectl get ingress https-ingress -n argocd -o yaml
 kubectl get configmap argocd-cm -n argocd -o yaml
 kubectl get ingress -A
+
+kubectl run --rm utils -it --image arunvelsriram/utils bash -n argocd
 ```
