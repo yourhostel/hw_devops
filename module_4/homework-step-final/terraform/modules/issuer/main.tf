@@ -54,8 +54,9 @@ resource "kubernetes_manifest" "https_ingress" {
       annotations = {
         "kubernetes.io/ingress.class" = "nginx"
         "cert-manager.io/cluster-issuer" = "letsencrypt-prod"
-        "nginx.ingress.kubernetes.io/rewrite-target" = "/"
-        "nginx.ingress.kubernetes.io/configuration-snippet" = "rewrite ^(/argo)(/.*)?$ $1 break;"
+        "nginx.ingress.kubernetes.io/ssl-redirect" = "true"
+        "nginx.ingress.kubernetes.io/force-ssl-redirect" = "true"
+        "nginx.ingress.kubernetes.io/use-regex" = "true"
       }
     }
     spec = {
