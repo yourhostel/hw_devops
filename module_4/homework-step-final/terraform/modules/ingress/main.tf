@@ -49,6 +49,14 @@ resource "helm_release" "nginx_ingress" {
     name  = "controller.allowSnippetAnnotations"
     value = "true"
   }
+    set {
+    name  = "controller.config.ssl-redirect"
+    value = "false"
+  }
+  set {
+    name  = "controller.config.force-ssl-redirect"
+    value = "false"
+  }
 }
 
 data "kubernetes_service" "nginx_ingress_service" {
