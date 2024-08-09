@@ -221,3 +221,7 @@ echo | openssl s_client -connect final.tyshchenko.online:443 2>/dev/null | opens
 kubectl delete certificate final-tyshchenko-online-tls -n default
 kubectl delete secret final-tyshchenko-online-tls -n default
 ```
+8. 
+```bash
+terraform output -json | jq .argo_cd_admin_password.value
+```
