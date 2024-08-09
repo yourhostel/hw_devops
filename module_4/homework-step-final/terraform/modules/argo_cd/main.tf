@@ -32,10 +32,24 @@ resource "helm_release" "argo_cd" {
   values = [
   <<EOF
   server:
+    extraArgs:
+      - --loglevel=debug
     service:
       type: ClusterIP
       portHttps: 443
   EOF
 ]
+}
+
+data "kubernetes_secret" "argocd_initial_admin_secret" {
+  metadata {
+    name = "argocd-initial-admin-secret"
+    namespace = "argocd"
+  }
+}
+
+output "argo_cd_admin_password" {
+  value = base64decode(data.kubernetes_secret.argocd_initial_admin_secret.data["password"])
+  sensitive = true
 }
 
