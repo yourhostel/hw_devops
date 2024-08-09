@@ -39,9 +39,16 @@ resource "kubernetes_manifest" "cluster_issuer" {
   }
 }
 
+resource "kubernetes_namespace" "argocd" {
+  metadata {
+    name = "argocd"
+  }
+}
+
 resource "kubernetes_manifest" "https_ingress" {
   depends_on = [
-    kubernetes_manifest.cluster_issuer
+    kubernetes_manifest.cluster_issuer,
+    kubernetes_namespace.argocd
   ]
 
   manifest = {

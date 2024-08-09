@@ -16,7 +16,6 @@ terraform {
 resource "helm_release" "argo_cd" {
   name       = "argo-cd"
   namespace  = "argocd"
-  create_namespace = true
 
   chart      = "argo-cd"
   repository = "https://argoproj.github.io/argo-helm"
