@@ -24,14 +24,22 @@ resource "helm_release" "argo_cd" {
 
   name       = "argo-cd"
   namespace  = "argocd"
-  repository = "https://argoproj.github.io/argo-helm"
+  create_namespace = true
+
   chart      = "argo-cd"
-  version    = "4.10.8"
+  repository = "https://argoproj.github.io/argo-helm"
+  version    = "5.34.2"
 
-  values = [file("${path.module}/argo-cd-values.yaml")]
+  values = [
+    <<EOF
+server:
+  service:
+    type: ClusterIP
+    portHttp: 80
+    portHttps: 443
+EOF
+  ]
 }
-
-
 
 # Fetch the initial admin password for Argo CD
 data "kubernetes_secret" "argocd_initial_admin_secret" {
@@ -45,5 +53,5 @@ data "kubernetes_secret" "argocd_initial_admin_secret" {
 
 output "argo_cd_initial_admin_password" {
   value = data.kubernetes_secret.argocd_initial_admin_secret.data["password"]
-  sensitive = true
+#  sensitive = true
 }

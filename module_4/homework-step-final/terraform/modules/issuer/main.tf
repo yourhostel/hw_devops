@@ -16,7 +16,6 @@ terraform {
 resource "kubernetes_manifest" "cluster_issuer" {
   manifest = {
     apiVersion = "cert-manager.io/v1"
-#    apiVersion = "networking.k8s.io/v1"
     kind       = "ClusterIssuer"
     metadata   = {
       name = "letsencrypt-prod"
@@ -71,7 +70,7 @@ resource "kubernetes_manifest" "https_ingress" {
                   service = {
                     name = "argo-cd-argocd-server"
                     port = {
-                      number = 443
+                      number = 80
                     }
                   }
                   namespace = "argocd"

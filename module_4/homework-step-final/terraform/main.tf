@@ -133,7 +133,7 @@ output "ingress_nginx_controller" {
 output "argo_cd_admin_password" {
   description = "Initial admin password for Argo CD"
   value     = module.argo_cd.argo_cd_initial_admin_password
-  sensitive = true
+#  sensitive = true
 }
 
 # Output of nginx_ingress_service object for debugging
