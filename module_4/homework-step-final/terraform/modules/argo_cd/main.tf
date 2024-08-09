@@ -30,13 +30,13 @@ resource "helm_release" "argo_cd" {
   repository = "https://argoproj.github.io/argo-helm"
   version    = "5.34.2"
 
-  values = [
-    <<EOF
+values = [
+  <<EOF
 server:
   service:
-    type: ClusterIP
+    type: NodePort
     portHttp: 80
 EOF
-  ]
+]
 }
 

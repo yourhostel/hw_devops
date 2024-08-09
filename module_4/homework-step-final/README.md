@@ -230,4 +230,7 @@ openssl s_client -connect final.tyshchenko.online:443 -servername final.tyshchen
 
 
 kubectl rollout restart deployment yourhostel-nginx-ingress-ingress-nginx-controller -n kube-system
+kubectl get ingress https-ingress -n argocd -o yaml
+kubectl get configmap argocd-cm -n argocd -o yaml
+kubectl get ingress -A
 ```
