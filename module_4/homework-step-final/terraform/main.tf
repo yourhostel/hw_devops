@@ -132,6 +132,7 @@ output "ingress_nginx_controller" {
 
 output "external_argo_cd_admin_password" {
   value = module.argo_cd.argo_cd_admin_password
+  sensitive = true
 }
 
 # Output of nginx_ingress_service object for debugging
