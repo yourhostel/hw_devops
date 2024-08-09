@@ -29,5 +29,13 @@ resource "helm_release" "argo_cd" {
   chart      = "argo-cd"
   repository = "https://argoproj.github.io/argo-helm"
   version    = "5.34.2"
+
+  values = [
+  <<EOF
+server:
+  extraArgs:
+    - --insecure
+EOF
+]
 }
 
