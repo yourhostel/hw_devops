@@ -53,8 +53,8 @@ resource "kubernetes_manifest" "https_ingress" {
       annotations = {
         "kubernetes.io/ingress.class" = "nginx"
         "cert-manager.io/cluster-issuer" = "letsencrypt-prod"
-        "nginx.ingress.kubernetes.io/ssl-redirect" = "false"
-        "nginx.ingress.kubernetes.io/force-ssl-redirect" = "false"
+        "nginx.ingress.kubernetes.io/ssl-redirect" = "true"
+        "nginx.ingress.kubernetes.io/force-ssl-redirect" = "true"
       }
     }
     spec = {
@@ -70,7 +70,7 @@ resource "kubernetes_manifest" "https_ingress" {
                   service = {
                     name = "argo-cd-argocd-server"
                     port = {
-                      number = 80
+                      number = 443
                     }
                   }
                 }
