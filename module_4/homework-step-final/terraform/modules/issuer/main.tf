@@ -67,9 +67,9 @@ resource "kubernetes_manifest" "https_ingress" {
                 pathType = "Prefix"
                 backend = {
                   service = {
-                    name = "argo-service"
+                    name = "argo-cd-argocd-server"
                     port = {
-                      number = 80
+                      number = 443
                     }
                   }
                 }

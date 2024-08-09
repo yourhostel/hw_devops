@@ -1,0 +1,7 @@
+# terraform/modules/argo_cd/argo-cd-values.yaml
+
+server:
+  service:
+    type: ClusterIP
+  ingress:
+    enabled: false

@@ -28,23 +28,7 @@ resource "helm_release" "argo_cd" {
   chart      = "argo-cd"
   version    = "4.10.8"
 
-  values = [
-    <<-EOF
-    server:
-      service:
-        type: ClusterIP
-    ingress:
-      enabled: true
-      ingressClassName: nginx
-      hosts:
-        - host: final.tyshchenko.online
-          paths:
-            - path: /argo
-              pathType: ImplementationSpecific
-      annotations:
-        nginx.ingress.kubernetes.io/rewrite-target: /$1
-    EOF
-  ]
+  values = [file("${path.module}/argo-cd-values.yaml")]
 }
 
 
