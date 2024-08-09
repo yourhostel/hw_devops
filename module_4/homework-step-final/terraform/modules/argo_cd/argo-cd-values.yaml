@@ -1,7 +1,13 @@
 # terraform/modules/argo_cd/argo-cd-values.yaml
 
 server:
-  service:
-    type: ClusterIP
   ingress:
-    enabled: false
+    enabled: true
+    hosts:
+      - final.tyshchenko.online
+    paths:
+      - /argo
+    tls:
+      - secretName: final-tyshchenko-online-tls
+        hosts:
+          - final.tyshchenko.online

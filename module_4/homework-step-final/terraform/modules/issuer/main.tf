@@ -59,52 +59,52 @@ resource "kubernetes_manifest" "https_ingress" {
       }
     }
     spec = {
-      rules = [
-        {
-          host = "final.tyshchenko.online"
-          http = {
-            paths = [
-              {
-                path = "/argo"
-                pathType = "Prefix"
-                backend = {
-                  service = {
-                    name = "argo-cd-argocd-server"
-                    port = {
-                      number = 443
-                    }
-                  }
-                  namespace = "argocd"
-                }
-              },
-              {
-                path = "/python-app"
-                pathType = "Prefix"
-                backend = {
-                  service = {
-                    name = "python-app-service"
-                    port = {
-                      number = 80
-                    }
-                  }
-                }
-              },
-              {
-                path = "/"
-                pathType = "Prefix"
-                backend = {
-                  service = {
-                    name = "frontend-service"
-                    port = {
-                      number = 80
-                    }
-                  }
-                }
-              }
-            ]
-          }
-        }
-      ]
+#      rules = [
+#        {
+#          host = "final.tyshchenko.online"
+#          http = {
+#            paths = [
+#              {
+#                path = "/argo"
+#                pathType = "Prefix"
+#                backend = {
+#                  service = {
+#                    name = "argo-cd-argocd-server"
+#                    port = {
+#                      number = 443
+#                    }
+#                  }
+#                  namespace = "argocd"
+#                }
+#              },
+#              {
+#                path = "/python-app"
+#                pathType = "Prefix"
+#                backend = {
+#                  service = {
+#                    name = "python-app-service"
+#                    port = {
+#                      number = 80
+#                    }
+#                  }
+#                }
+#              },
+#              {
+#                path = "/"
+#                pathType = "Prefix"
+#                backend = {
+#                  service = {
+#                    name = "frontend-service"
+#                    port = {
+#                      number = 80
+#                    }
+#                  }
+#                }
+#              }
+#            ]
+#          }
+#        }
+#      ]
       tls = [
         {
           hosts = ["final.tyshchenko.online"]
