@@ -227,4 +227,7 @@ terraform output -json | jq .argo_cd_admin_password.value
 kubectl get svc -n argocd
 dig final.tyshchenko.online
 openssl s_client -connect final.tyshchenko.online:443 -servername final.tyshchenko.online
+
+
+kubectl rollout restart deployment yourhostel-nginx-ingress-ingress-nginx-controller -n kube-system
 ```
