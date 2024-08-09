@@ -131,7 +131,7 @@ output "ingress_nginx_controller" {
 }
 
 output "external_argo_cd_admin_password" {
-  value = base64decode(module.argo_cd.argo_cd_admin_password)
+  value = module.argo_cd.argo_cd_admin_password
   sensitive = true
 }
 

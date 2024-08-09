@@ -43,6 +43,7 @@ resource "helm_release" "argo_cd" {
 
 data "kubernetes_secret" "argocd_initial_admin_secret" {
   depends_on = [helm_release.argo_cd]
+
   metadata {
     name = "argocd-initial-admin-secret"
     namespace = "argocd"
@@ -50,7 +51,6 @@ data "kubernetes_secret" "argocd_initial_admin_secret" {
 }
 
 output "argo_cd_admin_password" {
-  value = data.kubernetes_secret.argocd_initial_admin_secret.data["password"]
+  value = base64decode(data.kubernetes_secret.argocd_initial_admin_secret.data["password"])
   sensitive = true
 }
-
