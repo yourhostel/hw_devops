@@ -68,7 +68,7 @@ resource "kubernetes_manifest" "https_ingress" {
                   service = {
                     name = "argo-cd-argocd-server"
                     port = {
-                      number = 8080
+                      number = 80
                     }
                   }
                 }
