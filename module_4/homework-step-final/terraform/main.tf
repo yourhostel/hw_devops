@@ -130,7 +130,7 @@ output "ingress_nginx_controller" {
   value = module.ingress.ingress_nginx_controller
 }
 
-output "external_argo_cd_admin_password" {
+output "argo_cd_admin_password" {
   value = module.argo_cd.argo_cd_admin_password
   sensitive = true
 }
