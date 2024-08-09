@@ -54,9 +54,6 @@ resource "kubernetes_manifest" "https_ingress" {
       annotations = {
         "kubernetes.io/ingress.class" = "nginx"
         "cert-manager.io/cluster-issuer" = "letsencrypt-prod"
-        "nginx.ingress.kubernetes.io/ssl-redirect" = "true"
-        "nginx.ingress.kubernetes.io/force-ssl-redirect" = "true"
-        "nginx.ingress.kubernetes.io/use-regex" = "true"
       }
     }
     spec = {
@@ -77,30 +74,6 @@ resource "kubernetes_manifest" "https_ingress" {
                   }
                   namespace = "argocd"
                 }
-              },
-              {
-                path = "/python-app"
-                pathType = "Prefix"
-                backend = {
-                  service = {
-                    name = "python-app-service"
-                    port = {
-                      number = 80
-                    }
-                  }
-                }
-              },
-              {
-                path = "/"
-                pathType = "Prefix"
-                backend = {
-                  service = {
-                    name = "frontend-service"
-                    port = {
-                      number = 80
-                    }
-                  }
-                }
               }
             ]
           }
@@ -115,5 +88,79 @@ resource "kubernetes_manifest" "https_ingress" {
     }
   }
 }
+
+
+#resource "kubernetes_manifest" "https_ingress" {
+#  depends_on = [
+#    kubernetes_manifest.cluster_issuer
+#  ]
+#
+#  manifest = {
+#    apiVersion = "networking.k8s.io/v1"
+#    kind       = "Ingress"
+#    metadata = {
+#      name      = "https-ingress"
+#      namespace = "argocd"
+#      annotations = {
+#        "kubernetes.io/ingress.class" = "nginx"
+#        "cert-manager.io/cluster-issuer" = "letsencrypt-prod"
+#      }
+#    }
+#    spec = {
+#      rules = [
+#        {
+#          host = "final.tyshchenko.online"
+#          http = {
+#            paths = [
+#              {
+#                path = "/argo"
+#                pathType = "Prefix"
+#                backend = {
+#                  service = {
+#                    name = "argo-cd-argocd-server"
+#                    port = {
+#                      number = 443
+#                    }
+#                  }
+#                  namespace = "argocd"
+#                }
+#              },
+#              {
+#                path = "/python-app"
+#                pathType = "Prefix"
+#                backend = {
+#                  service = {
+#                    name = "python-app-service"
+#                    port = {
+#                      number = 80
+#                    }
+#                  }
+#                }
+#              },
+#              {
+#                path = "/"
+#                pathType = "Prefix"
+#                backend = {
+#                  service = {
+#                    name = "frontend-service"
+#                    port = {
+#                      number = 80
+#                    }
+#                  }
+#                }
+#              }
+#            ]
+#          }
+#        }
+#      ]
+#      tls = [
+#        {
+#          hosts = ["final.tyshchenko.online"]
+#          secretName = "final-tyshchenko-online-tls"
+#        }
+#      ]
+#    }
+#  }
+#}
 
 
