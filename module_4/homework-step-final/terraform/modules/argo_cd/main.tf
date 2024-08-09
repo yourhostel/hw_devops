@@ -13,15 +13,7 @@ terraform {
   }
 }
 
-resource "kubernetes_namespace" "argocd" {
-  metadata {
-    name = "argocd"
-  }
-}
-
 resource "helm_release" "argo_cd" {
-  depends_on = [kubernetes_namespace.argocd]
-
   name       = "argo-cd"
   namespace  = "argocd"
   create_namespace = true
@@ -29,16 +21,11 @@ resource "helm_release" "argo_cd" {
   chart      = "argo-cd"
   repository = "https://argoproj.github.io/argo-helm"
   version    = "5.34.2"
-  values = [
-  <<EOF
-  server:
-    extraArgs:
-      - --loglevel=debug
-    service:
-      type: ClusterIP
-      portHttps: 443
-  EOF
-]
+
+  set {
+    name  = "server.service.type"
+    value = "ClusterIP"
+  }
 }
 
 data "kubernetes_secret" "argocd_initial_admin_secret" {
