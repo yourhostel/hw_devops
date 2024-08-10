@@ -3,7 +3,7 @@
 resource "kubernetes_config_map" "nginx_html" {
   metadata {
     name      = "nginx-html"
-    namespace = "default"
+    namespace = "argocd"
   }
 
   data = {
@@ -21,7 +21,7 @@ EOF
 resource "kubernetes_deployment" "static_site" {
   metadata {
     name      = "static-site"
-    namespace = "default"
+    namespace = "argocd"
   }
 
   spec {
@@ -74,7 +74,7 @@ resource "kubernetes_deployment" "static_site" {
 resource "kubernetes_service" "static_site" {
   metadata {
     name      = "static-site-service"
-    namespace = "default"
+    namespace = "argocd"
   }
 
   spec {
