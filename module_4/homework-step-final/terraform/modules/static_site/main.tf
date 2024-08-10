@@ -20,7 +20,7 @@ EOF
 
 resource "kubernetes_deployment" "static_site" {
   metadata {
-    name      = "static_site"
+    name      = "static-site"
     namespace = "default"
   }
 
@@ -28,7 +28,7 @@ resource "kubernetes_deployment" "static_site" {
     replicas = 1
     selector {
       match_labels = {
-        app = "static_site"
+        app = "static-site"
       }
     }
 
