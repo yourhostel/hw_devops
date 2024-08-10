@@ -66,6 +66,19 @@ module "argo_cd" {
   }
 }
 
+module "argo_application" {
+  source = "./modules/argo_application"
+  argocd_ready = module.argo_cd.argocd_ready
+  depends_on = [
+    module.cert_manager
+  ]
+
+  providers = {
+    kubernetes = kubernetes
+    helm       = helm
+  }
+}
+
 module "ingress" {
   source = "./modules/ingress"
   depends_on = [module.cluster]

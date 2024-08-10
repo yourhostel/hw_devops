@@ -221,7 +221,41 @@ echo | openssl s_client -connect final.tyshchenko.online:443 2>/dev/null | opens
 kubectl delete certificate final-tyshchenko-online-tls -n default
 kubectl delete secret final-tyshchenko-online-tls -n default
 ```
-8. 
+8. Іnstall Argo CD.  Add and apply [module argo_cd](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-step-final/terraform/modules/argo_cd/main.tf)
+![final-3 (13).jpg](screenshots%2Ftask-3%2Ffinal-3%20%2813%29.jpg)
+- Inside the cluster we use HTTP
+```HCL
+  # Sets the service type of the Argo CD server to ClusterIP, making it accessible only within the cluster.
+  set {
+      name  = "server.service.type"
+      value = "ClusterIP"
+  }
+
+  # Disables TLS for the Argo CD server, allowing it to serve traffic over HTTP.
+  set {
+      name  = "server.extraArgs[0]"
+      value = "--insecure"
+  }
+
+  # Sets the root path for the Argo CD server, allowing it to be accessed at /argo.
+  set {
+      name  = "server.extraArgs[1]"
+      value = "--rootpath=/argo"
+  }
+
+  # Disables TLS for the Argo CD repository server, ensuring that it serves traffic over HTTP.
+  set {
+      name  = "repoServer.extraArgs[0]"
+      value = "--disable-tls"
+  }
+
+  # Disables TLS for the Argo CD Dex server, ensuring that it serves traffic over HTTP.
+  set {
+      name  = "dexServer.extraArgs[0]"
+      value = "--disable-tls"
+  }
+```
+### Useful commands:
 ```bash
 terraform output -json | jq .argo_cd_admin_password.value
 kubectl get secret argocd-initial-admin-secret -n argocd -o json
@@ -239,5 +273,4 @@ kubectl get ingress -A
 
 kubectl run --rm utils -it --image arunvelsriram/utils bash -n argocd
 curl -I http://argo-cd-argocd-server.argocd
-
 ```
