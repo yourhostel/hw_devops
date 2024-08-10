@@ -13,16 +13,12 @@ terraform {
   }
 }
 
-data "null_data_source" "argocd_ready_check" {
-  inputs = {
-    ready = var.argocd_ready ? "yes" : "no"
-  }
+locals {
+  argocd_ready = var.argocd_ready ? "yes" : "no"
 }
 
 resource "kubernetes_manifest" "cert_manager" {
-  depends_on = [
-    data.null_data_source.argocd_ready_check
-  ]
+  count = local.argocd_ready == "yes" ? 1 : 0
 
   manifest = {
     apiVersion = "argoproj.io/v1alpha1"
