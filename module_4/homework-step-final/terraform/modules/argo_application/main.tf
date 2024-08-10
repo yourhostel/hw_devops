@@ -14,9 +14,8 @@ terraform {
 }
 
 data "null_data_source" "argocd_ready_check" {
-  count = var.argocd_ready ? 1 : 0
   inputs = {
-    ready = "yes"
+    ready = var.argocd_ready ? "yes" : "no"
   }
 }
 
