@@ -21,10 +21,10 @@ resource "helm_release" "argo_cd" {
   repository = "https://argoproj.github.io/argo-helm"
   version    = "5.34.2"
 
-  set {
-    name  = "server.service.type"
-    value = "ClusterIP"
-  }
+#  set {
+#    name  = "server.service.type"
+#    value = "ClusterIP"
+#  }
 #  set {
 #    name  = "server.extraArgs"
 #    value = "{--insecure=true}"
@@ -36,8 +36,8 @@ resource "helm_release" "argo_cd" {
         type: ClusterIP
       extraArgs:
         insecure: true
-#        disable-auth: true
-#        disable-auth-for-local-ips: true
+        disable-auth: true
+        disable-auth-for-local-ips: true
     EOF
   ]
 }
