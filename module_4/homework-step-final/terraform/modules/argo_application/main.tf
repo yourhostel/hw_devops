@@ -52,3 +52,84 @@ resource "kubernetes_manifest" "cert_manager" {
   }
 }
 
+resource "kubernetes_manifest" "nginx_ingress" {
+  depends_on = [
+    null_resource.argocd_ready_check
+  ]
+
+  manifest = {
+    apiVersion = "argoproj.io/v1alpha1"
+    kind       = "Application"
+    metadata = {
+      name      = "nginx-ingress"
+      namespace = "argocd"
+    }
+    spec = {
+      project = "default"
+      source = {
+        repoURL        = "https://kubernetes.github.io/ingress-nginx"
+        chart          = "ingress-nginx"
+        targetRevision = "4.0.3"
+      }
+      destination = {
+        server    = "https://kubernetes.default.svc"
+        namespace = "kube-system"
+      }
+      syncPolicy = {
+        automated = {
+          prune     = true
+          selfHeal  = true
+        }
+      }
+    }
+  }
+}
+
+resource "kubernetes_manifest" "nginx_ingress" {
+  depends_on = [
+    null_resource.argocd_ready_check
+  ]
+
+  manifest = {
+    apiVersion = "argoproj.io/v1alpha1"
+    kind       = "Application"
+    metadata = {
+      name      = "nginx-ingress"
+      namespace = "argocd"
+    }
+    spec = {
+      project = "default"
+      source = {
+        repoURL        = "https://kubernetes.github.io/ingress-nginx"
+        chart          = "ingress-nginx"
+        targetRevision = "4.0.3"
+        helm = {
+          parameters = [
+            { name = "controller.replicaCount", value = "1" },
+            { name = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-backend-protocol", value = "https" },
+            { name = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-scheme", value = "internet-facing" },
+            { name = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-type", value = "nlb" },
+            { name = "controller.service.targetPorts.http", value = "http" },
+            { name = "controller.service.targetPorts.https", value = "https" },
+            { name = "controller.allowSnippetAnnotations", value = "true" },
+            { name = "controller.config.ssl-redirect", value = "false" },
+            { name = "controller.config.force-ssl-redirect", value = "false" },
+            { name = "controller.config.use-forwarded-headers", value = "true" }
+          ]
+        }
+      }
+      destination = {
+        server    = "https://kubernetes.default.svc"
+        namespace = "kube-system"
+      }
+      syncPolicy = {
+        automated = {
+          prune     = true
+          selfHeal  = true
+        }
+      }
+    }
+  }
+}
+
+

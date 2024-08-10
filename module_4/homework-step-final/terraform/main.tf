@@ -70,7 +70,8 @@ module "argo_application" {
   source = "./modules/argo_application"
   argocd_ready = module.argo_cd.argocd_ready
   depends_on = [
-    module.cert_manager
+    module.cert_manager,
+    module.ingress,
   ]
 
   providers = {
