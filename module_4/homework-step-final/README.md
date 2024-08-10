@@ -210,7 +210,7 @@ module "issuer" {
 ### Useful commands:
 ```bash
 kubectl get certificates -A
-kubectl describe ingress https-ingress -n default
+kubectl describe ingress https-ingress -n argocd
 curl -vI https://final.tyshchenko.online
 kubectl describe clusterissuer letsencrypt-prod -n cert-manager
 kubectl describe certificate <certificate_name> -n default # my certificate name final-tyshchenko-online-tls
