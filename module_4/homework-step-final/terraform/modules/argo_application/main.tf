@@ -70,39 +70,6 @@ resource "kubernetes_manifest" "nginx_ingress" {
         repoURL        = "https://kubernetes.github.io/ingress-nginx"
         chart          = "ingress-nginx"
         targetRevision = "4.0.3"
-      }
-      destination = {
-        server    = "https://kubernetes.default.svc"
-        namespace = "kube-system"
-      }
-      syncPolicy = {
-        automated = {
-          prune     = true
-          selfHeal  = true
-        }
-      }
-    }
-  }
-}
-
-resource "kubernetes_manifest" "nginx_ingress" {
-  depends_on = [
-    null_resource.argocd_ready_check
-  ]
-
-  manifest = {
-    apiVersion = "argoproj.io/v1alpha1"
-    kind       = "Application"
-    metadata = {
-      name      = "nginx-ingress"
-      namespace = "argocd"
-    }
-    spec = {
-      project = "default"
-      source = {
-        repoURL        = "https://kubernetes.github.io/ingress-nginx"
-        chart          = "ingress-nginx"
-        targetRevision = "4.0.3"
         helm = {
           parameters = [
             { name = "controller.replicaCount", value = "1" },
