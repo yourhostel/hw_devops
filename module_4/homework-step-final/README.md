@@ -238,4 +238,6 @@ kubectl get configmap argocd-cm -n argocd -o yaml
 kubectl get ingress -A
 
 kubectl run --rm utils -it --image arunvelsriram/utils bash -n argocd
+curl -I http://argo-cd-argocd-server.argocd
+
 ```

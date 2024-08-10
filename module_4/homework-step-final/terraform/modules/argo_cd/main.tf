@@ -25,6 +25,10 @@ resource "helm_release" "argo_cd" {
     name  = "server.service.type"
     value = "ClusterIP"
   }
+    set {
+    name  = "server.extraArgs.insecure"
+    value = "true"
+  }
 }
 
 data "kubernetes_secret" "argocd_initial_admin_secret" {
