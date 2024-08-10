@@ -25,14 +25,11 @@ resource "helm_release" "argo_cd" {
     name  = "server.service.type"
     value = "ClusterIP"
   }
-#  set {
-#    name  = "server.extraArgs"
-#    value = "{--insecure=true}"
-#  }
   set {
     name  = "server.extraArgs"
-    value = "{--insecure=true,--disable-auth=true,--disable-auth-for-local-ips=true}"
+    value = "{--insecure=true}"
   }
+
 }
 
 data "kubernetes_secret" "argocd_initial_admin_secret" {
