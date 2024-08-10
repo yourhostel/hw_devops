@@ -13,9 +13,16 @@ terraform {
   }
 }
 
+data "null_data_source" "argocd_ready_check" {
+  count = var.argocd_ready ? 1 : 0
+  inputs = {
+    ready = "yes"
+  }
+}
+
 resource "kubernetes_manifest" "cert_manager" {
   depends_on = [
-    null_resource.argocd_ready_check
+    data.null_data_source.argocd_ready_check
   ]
 
   manifest = {
@@ -44,9 +51,5 @@ resource "kubernetes_manifest" "cert_manager" {
       }
     }
   }
-}
-
-resource "null_resource" "argocd_ready_check" {
-  count = var.argocd_ready ? 1 : 0
 }
 
