@@ -36,8 +36,8 @@ resource "helm_release" "argo_cd" {
         type: ClusterIP
       extraArgs:
         insecure: true
-        disable-auth: true
-        disable-auth-for-local-ips: true
+#        disable-auth: true
+#        disable-auth-for-local-ips: true
     EOF
   ]
 }
