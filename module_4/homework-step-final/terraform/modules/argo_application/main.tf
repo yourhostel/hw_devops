@@ -1,5 +1,18 @@
 # terraform/modules/argo_application/main.tf
 
+terraform {
+  required_providers {
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = "~> 2.0"
+    }
+    helm = {
+      source  = "hashicorp/helm"
+      version = "~> 2.0"
+    }
+  }
+}
+
 resource "kubernetes_manifest" "cert_manager" {
   depends_on = [
     null_resource.argocd_ready_check
