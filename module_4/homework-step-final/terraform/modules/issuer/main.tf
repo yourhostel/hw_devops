@@ -99,7 +99,7 @@ resource "kubernetes_manifest" "https_ingress" {
                 pathType = "Prefix"
                 backend = {
                   service = {
-                    name = "frontend-service"
+                    name = "static-site-service"
                     port = {
                       number = 80
                     }
