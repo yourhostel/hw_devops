@@ -42,6 +42,10 @@ module "cert_manager" {
   }
 }
 
+module "static_site" {
+  source = "./modules/static_site"
+}
+
 #module "issuer" {
 #  source = "./modules/issuer"
 #  depends_on = [module.cert_manager]
