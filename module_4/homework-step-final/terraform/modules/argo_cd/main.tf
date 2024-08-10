@@ -57,6 +57,10 @@ resource "null_resource" "argocd_ready_check" {
     command = "kubectl get deploy argo-cd-argocd-server -n argocd -o jsonpath='{.status.availableReplicas}' | grep '1'"
   }
 
+  triggers = {
+    always_run = timestamp()
+  }
+
   depends_on = [helm_release.argo_cd]
 }
 

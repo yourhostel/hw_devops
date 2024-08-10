@@ -13,15 +13,15 @@ terraform {
   }
 }
 
-data "null_resource" "argocd_ready_check" {
-  inputs = {
-    ready = var.argocd_ready ? "yes" : "no"
+resource "null_resource" "argocd_ready_check" {
+  triggers = {
+    argocd_ready = var.argocd_ready ? "ready" : "not_ready"
   }
 }
 
 resource "kubernetes_manifest" "cert_manager" {
   depends_on = [
-    data.null_resource.argocd_ready_check
+    null_resource.argocd_ready_check
   ]
 
   manifest = {
