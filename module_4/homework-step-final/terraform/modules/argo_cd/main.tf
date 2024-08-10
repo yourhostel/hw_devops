@@ -21,25 +21,27 @@ resource "helm_release" "argo_cd" {
   repository = "https://argoproj.github.io/argo-helm"
   version    = "5.34.2"
 
-#  set {
-#    name  = "server.service.type"
-#    value = "ClusterIP"
-#  }
-#  set {
-#    name  = "server.extraArgs"
-#    value = "{--insecure=true}"
-#  }
-  values = [
-    <<EOF
-    server:
-      service:
-        type: ClusterIP
-      extraArgs:
-        insecure: true
-        disable-auth: true
-        disable-auth-for-local-ips: true
-    EOF
-  ]
+  set {
+    name  = "server.service.type"
+    value = "ClusterIP"
+  }
+  set {
+    name  = "server.extraArgs[0]"
+    value = "--insecure"
+  }
+  set {
+    name  = "server.extraArgs[1]"
+    value = "--rootpath=/argo"
+  }
+    set {
+    name  = "repoServer.extraArgs[0]"
+    value = "--disable-tls"
+  }
+
+  set {
+    name  = "dexServer.extraArgs[0]"
+    value = "--disable-tls"
+  }
 }
 
 data "kubernetes_secret" "argocd_initial_admin_secret" {
