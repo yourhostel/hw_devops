@@ -61,7 +61,7 @@ resource "kubernetes_manifest" "https_ingress" {
         "kubernetes.io/ingress.class" = "nginx"
         "cert-manager.io/cluster-issuer" = "letsencrypt-prod"
         "nginx.ingress.kubernetes.io/use-regex" = "true"
-        "nginx.ingress.kubernetes.io/backend-protocol" = "HTTPS"
+        "nginx.ingress.kubernetes.io/backend-protocol" = "HTTP" # inside the cluster
       }
     }
     spec = {
