@@ -311,17 +311,58 @@ helm repo update
 helm install sealed-secrets-controller sealed-secrets/sealed-secrets --namespace kube-system
 kubectl get pods -n kube-system | grep sealed-secrets
 ```
+![final-5 (1).jpg](screenshots%2Ftask-5%2Ffinal-5%20%281%29.jpg)
+
 2. Created sealed-secret.yaml
 ```bash
 kubectl create secret docker-registry dockerhub-secret \
---docker-server=https://index.docker.io/v1/ \
---docker-username=your-dockerhub-username \
---docker-password=your-dockerhub-password \
---docker-email=your-email@example.com \
---namespace=python-app \
--o yaml --dry-run=client | kubeseal --controller-name=sealed-secrets-controller \
---controller-namespace=kube-system --format=yaml > sealed-secret.yaml
+  --docker-server=https://index.docker.io/v1/ \
+  --docker-username=your-dockerhub-username \
+  --docker-password=your-dockerhub-password \
+  --docker-email=your-email@example.com \
+  --namespace=python-app \
+  -o yaml --dry-run=client | kubeseal \
+  --controller-name=sealed-secrets-controller \
+  --controller-namespace=kube-system \
+  --format=yaml > sealed-secret.yaml
 ```
 3. Added sealed-secret.yaml in repo `module_4/homework-step-final/sealed-secrets`
 4. Added Application to Argo CD [kubernetes_manifest.sealed_secret](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-step-final/terraform/modules/argo_application/main.tf)
+
+![final-5 (2).jpg](screenshots%2Ftask-5%2Ffinal-5%20%282%29.jpg)
+```bash
+kubectl get secrets -n python-app
+kubectl describe secret dockerhub-secret -n python-app
+# Getting the .dockerconfigjson value
+kubectl get secret dockerhub-secret -n python-app -o jsonpath="{.data.\.dockerconfigjson}" | base64 --decode && echo
+# example for auth 
+echo "dXNlcm5hbWU6cGFzc3dvcmQ=" | base64 --decode && echo
+```
+
+![final-5 (3).jpg](screenshots%2Ftask-5%2Ffinal-5%20%283%29.jpg)
+
+## Task 6 Write ArgoCD app which will deploy the Python app helm chart from item 4 to EKS
+- Added `imagePullSecrets` to Helm Chart [python-app](https://github.com/yourhostel/hw_devops/tree/main/module_4/homework-step-final/helm_charts/python-app)
+```yaml
+# values.yaml
+replicaCount: 1
+
+image:
+  repository: yourhostel/devops-final
+  pullPolicy: Always
+  tag: "latest"
+
+imagePullSecrets:
+  - name: dockerhub-secret
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+
+namespace: python-app
+```
+- The application was added earlier. kubernetes_manifest.python_app in [argo_application/main.tf](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-step-final/terraform/modules/argo_application/main.tf)
 

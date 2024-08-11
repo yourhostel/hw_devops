@@ -5,6 +5,9 @@ image:
   pullPolicy: Always
   tag: "latest"
 
+imagePullSecrets:
+  - name: dockerhub-secret
+
 service:
   type: ClusterIP
   port: 80
@@ -13,3 +16,4 @@ ingress:
   enabled: false
 
 namespace: python-app
+
