@@ -273,3 +273,9 @@ curl -I http://argo-cd-argocd-server.argocd
 ![final-4 (2).jpg](screenshots%2Ftask-4%2Ffinal-4%20%282%29.jpg)
 
 ![final-4 (3).jpg](screenshots%2Ftask-4%2Ffinal-4%20%283%29.jpg)
+```bash
+kubectl get pods -n python-app
+kubectl logs <pod> -n python-app
+kubectl get svc -n python-app
+kubectl describe ingress https-ingress -n argocd
+```

@@ -45,10 +45,32 @@ resource "kubernetes_namespace" "argocd" {
   }
 }
 
+resource "kubernetes_manifest" "python_app_proxy_service" {
+  depends_on = [kubernetes_namespace.argocd]
+
+  manifest = {
+    apiVersion = "v1"
+    kind       = "Service"
+    metadata = {
+      name      = "python-app-proxy"
+      namespace = "argocd"
+    }
+    spec = {
+      type         = "ExternalName"
+      externalName = "python-app-service.python-app.svc.cluster.local"
+      ports = [{
+        port       = 80
+        targetPort = 80
+      }]
+    }
+  }
+}
+
 resource "kubernetes_manifest" "https_ingress" {
   depends_on = [
     kubernetes_manifest.cluster_issuer,
-    kubernetes_namespace.argocd
+    kubernetes_namespace.argocd,
+    kubernetes_manifest.python_app_proxy_service
   ]
 
   manifest = {
@@ -87,8 +109,7 @@ resource "kubernetes_manifest" "https_ingress" {
                 pathType = "Prefix"
                 backend = {
                   service = {
-                    name = "python-app-service"
-                    namespace = "python-app"
+                    name = "python-app-proxy"
                     port = {
                       number = 80
                     }
