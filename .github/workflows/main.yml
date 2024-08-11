@@ -76,7 +76,7 @@ jobs:
         run: |
           echo "Before sed:"
           cat module_4/homework-step-final/helm_charts/python-app/values.yaml
-          sed -i "s/tag: .*/tag: ${{ steps.vars.outputs.short_sha }}/" module_4/homework-step-final/helm_charts/python-app/values.yaml
+          sed -i "s/^  tag:.*/  tag: ${{ steps.vars.outputs.short_sha }}/" module_4/homework-step-final/helm_charts/python-app/values.yaml
           echo "After sed:"
           cat module_4/homework-step-final/helm_charts/python-app/values.yaml
       - name: Commit and Push changes
@@ -93,3 +93,4 @@ jobs:
             git commit -m "Update Docker image tag to ${{ steps.vars.outputs.short_sha }}"
             git push origin main
           fi
+
