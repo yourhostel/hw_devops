@@ -296,3 +296,32 @@ kubectl get svc -n python-app
 kubectl describe ingress https-ingress -n argocd
 helm upgrade --install python-app ../helm_charts/python-app --namespace python-app --set image.tag=latest --recreate-pods
 ```
+## Task 5 Write ArgoCD app which will install the sealed secret with dockerhub connection details to namespace of your app
+1. Install sealed secrets
+```bash
+# Download kubeseal-0.27.1-linux-amd64.tar.gz
+wget https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.27.1/kubeseal-0.27.1-linux-amd64.tar.gz
+# Unpacking the archive
+tar -xzvf kubeseal-0.27.1-linux-amd64.tar.gz
+# Installation
+sudo mv kubeseal /usr/local/bin/
+kubeseal --version
+helm repo add sealed-secrets https://bitnami-labs.github.io/sealed-secrets
+helm repo update
+helm install sealed-secrets-controller sealed-secrets/sealed-secrets --namespace kube-system
+kubectl get pods -n kube-system | grep sealed-secrets
+```
+2. Created sealed-secret.yaml
+```bash
+kubectl create secret docker-registry dockerhub-secret \
+--docker-server=https://index.docker.io/v1/ \
+--docker-username=your-dockerhub-username \
+--docker-password=your-dockerhub-password \
+--docker-email=your-email@example.com \
+--namespace=python-app \
+-o yaml --dry-run=client | kubeseal --controller-name=sealed-secrets-controller \
+--controller-namespace=kube-system --format=yaml > sealed-secret.yaml
+```
+3. Added sealed-secret.yaml in repo `module_4/homework-step-final/sealed-secrets`
+4. Added Application to Argo CD [kubernetes_manifest.sealed_secret](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-step-final/terraform/modules/argo_application/main.tf)
+

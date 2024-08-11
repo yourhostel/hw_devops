@@ -175,3 +175,36 @@ resource "kubernetes_manifest" "python_app" {
     }
   }
 }
+
+resource "kubernetes_manifest" "sealed_secret" {
+  depends_on = [
+    null_resource.argocd_ready_check
+  ]
+
+  manifest = {
+    apiVersion = "argoproj.io/v1alpha1"
+    kind       = "Application"
+    metadata = {
+      name      = "sealed-secret"
+      namespace = "argocd"
+    }
+    spec = {
+      project = "default"
+      source = {
+        repoURL        = "https://github.com/yourhostel/hw_devops"
+        path           = "module_4/homework-step-final/sealed-secrets"
+        targetRevision = "main"
+      }
+      destination = {
+        server    = "https://kubernetes.default.svc"
+        namespace = "python-app"
+      }
+      syncPolicy = {
+        automated = {
+          prune    = true
+          selfHeal = true
+        }
+      }
+    }
+  }
+}
