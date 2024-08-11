@@ -3,7 +3,7 @@
 resource "helm_release" "static_site" {
   name       = "static-site"
   namespace  = "argocd"
-  chart      = "./helm_charts/static-site"
+  chart      = "../helm_charts/static-site"
 
   set {
     name  = "title"
