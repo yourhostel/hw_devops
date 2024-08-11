@@ -222,6 +222,7 @@ kubectl delete certificate final-tyshchenko-online-tls -n default
 kubectl delete secret final-tyshchenko-online-tls -n default
 ```
 8. Іnstall Argo CD.  Add and apply [module argo_cd](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-step-final/terraform/modules/argo_cd/main.tf)
+
 ![final-3 (13).jpg](screenshots%2Ftask-3%2Ffinal-3%20%2813%29.jpg)
 - Inside the cluster we use HTTP
 ```HCL
@@ -241,18 +242,6 @@ kubectl delete secret final-tyshchenko-online-tls -n default
   set {
       name  = "server.extraArgs[1]"
       value = "--rootpath=/argo"
-  }
-
-  # Disables TLS for the Argo CD repository server, ensuring that it serves traffic over HTTP.
-  set {
-      name  = "repoServer.extraArgs[0]"
-      value = "--disable-tls"
-  }
-
-  # Disables TLS for the Argo CD Dex server, ensuring that it serves traffic over HTTP.
-  set {
-      name  = "dexServer.extraArgs[0]"
-      value = "--disable-tls"
   }
 ```
 ### Useful commands:
@@ -274,3 +263,13 @@ kubectl get ingress -A
 kubectl run --rm utils -it --image arunvelsriram/utils bash -n argocd
 curl -I http://argo-cd-argocd-server.argocd
 ```
+## Task 4 Write helm chart with manifests to deploy your app from item 1 to EKS
+
+1. Creating a helm chart for the domain root [static-site](https://github.com/yourhostel/hw_devops/tree/main/module_4/homework-step-final/helm_charts/static-site)
+- Which is used as a usual repository to create [argo_application kubernetes_manifest.static_site](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-step-final/terraform/modules/argo_application/main.tf)
+- And which is also used as a helm chart with a link to a local folder to create the [helm_release.static_site resource](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-step-final/terraform/modules/static_site/main.tf)
+![final-4 (1).jpg](screenshots%2Ftask-4%2Ffinal-4%20%281%29.jpg)
+
+![final-4 (2).jpg](screenshots%2Ftask-4%2Ffinal-4%20%282%29.jpg)
+
+![final-4 (3).jpg](screenshots%2Ftask-4%2Ffinal-4%20%283%29.jpg)
