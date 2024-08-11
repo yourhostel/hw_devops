@@ -3,7 +3,7 @@ replicaCount: 1
 image:
   repository: yourhostel/devops-final
   pullPolicy: Always
-  tag: 
+  tag: 86392b3
 
 imagePullSecrets:
   - name: dockerhub-secret
