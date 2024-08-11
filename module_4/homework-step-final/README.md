@@ -350,7 +350,8 @@ replicaCount: 1
 image:
   repository: yourhostel/devops-final
   pullPolicy: Always
-  tag: # 
+       # argo_application(kubernetes_manifest.python_app) tracks the tag in its chart
+  tag: # the tag is added automatically during pipeline execution
 
 imagePullSecrets:
   - name: dockerhub-secret
