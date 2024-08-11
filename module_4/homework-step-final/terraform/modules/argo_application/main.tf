@@ -114,8 +114,8 @@ resource "kubernetes_manifest" "static_site" {
     spec = {
       project = "default"
       source = {
-        repoURL        = "file://../../"
-        path           = "helm_charts/static-site"
+        repoURL        = "https://github.com/yourhostel/hw_devops"
+        path           = "module_4/homework-step-final/helm_charts/static-site"
         targetRevision = "main"
         helm = {
           valueFiles = ["values.yaml"]
