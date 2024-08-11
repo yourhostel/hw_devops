@@ -87,11 +87,10 @@ resource "kubernetes_manifest" "https_ingress" {
                 pathType = "Prefix"
                 backend = {
                   service = {
-                    name = "python-app-service"
+                    name = "python-app-service.python-app"
                     port = {
                       number = 80
                     }
-                    namespace = "python-app"
                   }
                 }
               },
