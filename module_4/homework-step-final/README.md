@@ -277,13 +277,17 @@ curl -I http://argo-cd-argocd-server.argocd
 - Update [app.py](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-step-final/python/app.py) to use Flask.
 - Add a template [templates/index.html](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-step-final/python/templates/index.html)
 - Edit the [github Actions](https://github.com/yourhostel/hw_devops/blob/main/.github/workflows/main.yml) test to the new path `/python-app`
-```yaml
-response=$(curl -o /dev/null -s -w "%{http_code}\n" http://localhost:8080/python-app)
-```
+
+![final-4 (8).jpg](screenshots%2Ftask-4%2Ffinal-4%20%288%29.jpg)
 - Create a [python-app chart](https://github.com/yourhostel/hw_devops/tree/main/module_4/homework-step-final/helm_charts/python-app)
 - Create [helm_release.python_app](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-step-final/terraform/modules/python_app/main.tf) in its own python-app namespace
 - Add python_app_proxy_service to the module [issuer](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-step-final/terraform/modules/issuer/main.tf) to use a namespace that does not match the `argocd` namespace in which https_ingress is located
+- Added application to [Argo SD](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-step-final/terraform/modules/argo_application/main.tf) 
 
+![final-4 (4).jpg](screenshots%2Ftask-4%2Ffinal-4%20%284%29.jpg)
+![final-4 (5).jpg](screenshots%2Ftask-4%2Ffinal-4%20%285%29.jpg)
+![final-4 (6).jpg](screenshots%2Ftask-4%2Ffinal-4%20%286%29.jpg)
+![final-4 (7).jpg](screenshots%2Ftask-4%2Ffinal-4%20%287%29.jpg)
 ### Useful commands:
 ```bash
 kubectl get pods -n python-app
