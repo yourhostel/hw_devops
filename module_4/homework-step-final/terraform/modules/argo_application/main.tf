@@ -99,4 +99,38 @@ resource "kubernetes_manifest" "nginx_ingress" {
   }
 }
 
+resource "kubernetes_manifest" "static_site" {
+  depends_on = [
+    null_resource.argocd_ready_check
+  ]
 
+  manifest = {
+    apiVersion = "argoproj.io/v1alpha1"
+    kind       = "Application"
+    metadata = {
+      name      = "static-site"
+      namespace = "argocd"
+    }
+    spec = {
+      project = "default"
+      source = {
+        repoURL        = "file://../../"
+        path           = "helm_charts/static-site"
+        targetRevision = "main"
+        helm = {
+          valueFiles = ["values.yaml"]
+        }
+      }
+      destination = {
+        server    = "https://kubernetes.default.svc"
+        namespace = "argocd"
+      }
+      syncPolicy = {
+        automated = {
+          prune    = true
+          selfHeal = true
+        }
+      }
+    }
+  }
+}
