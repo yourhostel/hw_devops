@@ -114,3 +114,4 @@ jobs:
           else
             git commit -m "Update Docker image tag to ${{ env.SHORT_SHA }}"
             git push origin main
+          fi
