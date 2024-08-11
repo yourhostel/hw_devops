@@ -73,16 +73,18 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
+      - name: Set SHORT_SHA in environment
+        run: echo "SHORT_SHA=${{ steps.vars.outputs.short_sha }}" >> $GITHUB_ENV
+
       - name: Output SHA value
-        run: | 
-          echo "SHA value: ${{ steps.vars.outputs.short_sha }}"
+        run: echo "SHA value: ${{ env.SHORT_SHA }}"
 
       - name: Update values.yaml
         run: |
           echo "Before update:"
           cat module_4/homework-step-final/helm_charts/python-app/values.yaml
           echo "Updating tag..."
-          awk '/tag:/ {sub(/tag:.*/, "  tag: '"${{ steps.vars.outputs.short_sha }}"'")}1' module_4/homework-step-final/helm_charts/python-app/values.yaml > tmp && mv tmp module_4/homework-step-final/helm_charts/python-app/values.yaml
+          sed -i "s/tag:.*/tag: ${{ env.SHORT_SHA }}/" module_4/homework-step-final/helm_charts/python-app/values.yaml
           echo "After update:"
           cat module_4/homework-step-final/helm_charts/python-app/values.yaml
 
@@ -96,6 +98,7 @@ jobs:
           if git diff-index --quiet HEAD; then
             echo "No changes to commit."
           else
-            git commit -m "Update Docker image tag to ${{ steps.vars.outputs.short_sha }}"
+            git commit -m "Update Docker image tag to ${{ env.SHORT_SHA }}"
             git push origin main
+
 
