@@ -134,3 +134,44 @@ resource "kubernetes_manifest" "static_site" {
     }
   }
 }
+
+resource "kubernetes_manifest" "python_app" {
+  depends_on = [
+    null_resource.argocd_ready_check
+  ]
+
+  manifest = {
+    apiVersion = "argoproj.io/v1alpha1"
+    kind       = "Application"
+    metadata = {
+      name      = "python-app"
+      namespace = "argocd"
+    }
+    spec = {
+      project = "default"
+      source = {
+        repoURL        = "https://github.com/yourhostel/hw_devops"
+        path           = "module_4/homework-step-final/helm_charts/python-app"
+        targetRevision = "main"
+        helm = {
+          valueFiles = ["values.yaml"]
+          parameters = [
+            { name = "image.repository", value = "yourhostel/devops-final" },
+            { name = "image.tag", value = "latest" },
+            { name = "namespace", value = "python-app" }
+          ]
+        }
+      }
+      destination = {
+        server    = "https://kubernetes.default.svc"
+        namespace = "python-app"
+      }
+      syncPolicy = {
+        automated = {
+          prune    = true
+          selfHeal = true
+        }
+      }
+    }
+  }
+}

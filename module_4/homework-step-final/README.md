@@ -273,9 +273,22 @@ curl -I http://argo-cd-argocd-server.argocd
 ![final-4 (2).jpg](screenshots%2Ftask-4%2Ffinal-4%20%282%29.jpg)
 
 ![final-4 (3).jpg](screenshots%2Ftask-4%2Ffinal-4%20%283%29.jpg)
+2. Creating a helm chart for python-app
+- Update [app.py](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-step-final/python/app.py) to use Flask.
+- Add a template [templates/index.html](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-step-final/python/templates/index.html)
+- Edit the [github Actions](https://github.com/yourhostel/hw_devops/blob/main/.github/workflows/main.yml) test to the new path `/python-app`
+```yaml
+response=$(curl -o /dev/null -s -w "%{http_code}\n" http://localhost:8080/python-app)
+```
+- Create a [python-app chart](https://github.com/yourhostel/hw_devops/tree/main/module_4/homework-step-final/helm_charts/python-app)
+- Create [helm_release.python_app](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-step-final/terraform/modules/python_app/main.tf) in its own python-app namespace
+- Add python_app_proxy_service to the module [issuer](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-step-final/terraform/modules/issuer/main.tf) to use a namespace that does not match the `argocd` namespace in which https_ingress is located
+
+### Useful commands:
 ```bash
 kubectl get pods -n python-app
 kubectl logs <pod> -n python-app
 kubectl get svc -n python-app
 kubectl describe ingress https-ingress -n argocd
+helm upgrade --install python-app ../helm_charts/python-app --namespace python-app --set image.tag=latest --recreate-pods
 ```
