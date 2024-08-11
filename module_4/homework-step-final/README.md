@@ -342,7 +342,7 @@ echo "dXNlcm5hbWU6cGFzc3dvcmQ=" | base64 --decode && echo
 ![final-5 (3).jpg](screenshots%2Ftask-5%2Ffinal-5%20%283%29.jpg)
 
 ## Task 6 Write ArgoCD app which will deploy the Python app helm chart from item 4 to EKS
-- Added `imagePullSecrets` to Helm Chart [python-app](https://github.com/yourhostel/hw_devops/tree/main/module_4/homework-step-final/helm_charts/python-app)
+1. Added `imagePullSecrets` to Helm Chart [python-app](https://github.com/yourhostel/hw_devops/tree/main/module_4/homework-step-final/helm_charts/python-app)
 ```yaml
 # values.yaml
 replicaCount: 1
@@ -350,7 +350,7 @@ replicaCount: 1
 image:
   repository: yourhostel/devops-final
   pullPolicy: Always
-  tag: "latest"
+  tag: # 
 
 imagePullSecrets:
   - name: dockerhub-secret
@@ -364,5 +364,26 @@ ingress:
 
 namespace: python-app
 ```
+2. Add a commit shot as a tag `git rev-parse --short HEAD` for the image build to the pipeline file [.github/workflows](https://github.com/yourhostel/hw_devops/blob/main/.github/workflows/main.yml)
+```yaml
+      - name: Get short SHA
+        id: vars
+        run: |
+          SHORT_SHA=$(git rev-parse --short HEAD)
+          echo "SHORT_SHA=$SHORT_SHA" >> $GITHUB_ENV 
+```
+3. Update [values.yaml](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-step-final/helm_charts/python-app/values.yaml) helm chart `python-app` with the same short commit in the pipeline [.github/workflows](https://github.com/yourhostel/hw_devops/blob/main/.github/workflows/main.yml) in the `update_values` step
+
+![final-6 (1).jpg](screenshots%2Ftask-6%2Ffinal-6%20%281%29.jpg)
+4. Let's check. Add a line to the template [index.html](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-step-final/python/templates/index.html)
+
+![final-6 (2).jpg](screenshots%2Ftask-6%2Ffinal-6%20%282%29.jpg)
+5. And do git push:
+
+![final-6 (3).jpg](screenshots%2Ftask-6%2Ffinal-6%20%283%29.jpg)
+6. By default, every 3 minutes ArgoCD will check the repository for new changes and, if found, will synchronize them with the cluster.
+- after some time:
+
+![final-6 (4).jpg](screenshots%2Ftask-6%2Ffinal-6%20%284%29.jpg)
 - The application was added earlier. kubernetes_manifest.python_app in [argo_application/main.tf](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-step-final/terraform/modules/argo_application/main.tf)
 
