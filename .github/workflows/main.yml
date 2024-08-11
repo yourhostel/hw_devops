@@ -73,11 +73,12 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Set SHORT_SHA in environment
+      - name: Set SHORT_SHA environment variable
         run: echo "SHORT_SHA=${{ steps.vars.outputs.short_sha }}" >> $GITHUB_ENV
 
       - name: Output SHA value
-        run: echo "SHA value: ${{ env.SHORT_SHA }}"
+        run: |
+          echo "SHA value: ${{ env.SHORT_SHA }}"
 
       - name: Update values.yaml
         run: |
@@ -100,5 +101,3 @@ jobs:
           else
             git commit -m "Update Docker image tag to ${{ env.SHORT_SHA }}"
             git push origin main
-
-
