@@ -157,7 +157,6 @@ resource "kubernetes_manifest" "python_app" {
           valueFiles = ["values.yaml"]
           parameters = [
             { name = "image.repository", value = "yourhostel/devops-final" },
-            { name = "image.tag", value = "latest" },
             { name = "namespace", value = "python-app" }
           ]
         }
