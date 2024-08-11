@@ -52,7 +52,7 @@ jobs:
       - name: Check application response
         run: |
           sleep 10  # Give time for the server to start
-          response=$(curl -o /dev/null -s -w "%{http_code}\n" http://localhost:8080)
+          response=$(curl -o /dev/null -s -w "%{http_code}\n" http://localhost:8080/python-app)
           if [ "$response" -eq 200 ]; then
             echo "Application responded with 200 OK"
           else
