@@ -39,17 +39,17 @@ resource "helm_release" "argo_cd" {
       value = "--rootpath=/argo"
   }
 
-  # Disables TLS for the Argo CD repository server, ensuring that it serves traffic over HTTP.
-  set {
-      name  = "repoServer.extraArgs[0]"
-      value = "--disable-tls"
-  }
-
-  # Disables TLS for the Argo CD Dex server, ensuring that it serves traffic over HTTP.
-  set {
-      name  = "dexServer.extraArgs[0]"
-      value = "--disable-tls"
-  }
+#  # Disables TLS for the Argo CD repository server, ensuring that it serves traffic over HTTP.
+#  set {
+#      name  = "repoServer.extraArgs[0]"
+#      value = "--disable-tls"
+#  }
+#
+#  # Disables TLS for the Argo CD Dex server, ensuring that it serves traffic over HTTP.
+#  set {
+#      name  = "dexServer.extraArgs[0]"
+#      value = "--disable-tls"
+#  }
 }
 
 resource "null_resource" "argocd_ready_check" {
