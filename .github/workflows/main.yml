@@ -40,6 +40,7 @@ jobs:
         id: vars
         run: |
           SHORT_SHA=$(git rev-parse --short HEAD)
+          echo "SHORT_SHA=$SHORT_SHA" >> $GITHUB_ENV
 
       - name: Build and push
         uses: docker/build-push-action@v3
@@ -81,8 +82,8 @@ jobs:
 
       - name: Get short SHA again
         run: |
-          SHORT_SHA=$(git rev-parse --short HEAD)
-          echo "SHA value: $SHORT_SHA"        
+          SHORT_SHA=$(git rev-parse --short HEAD)       
+          echo "SHORT_SHA=$SHORT_SHA" >> $GITHUB_ENV
 
       - name: Output SHA value
         run: |
