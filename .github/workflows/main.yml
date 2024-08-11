@@ -73,6 +73,10 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
+      - name: Output SHA value
+        run: | 
+          echo "SHA value: ${{ steps.vars.outputs.short_sha }}"
+
       - name: Update values.yaml
         run: |
           echo "Before update:"
@@ -94,3 +98,4 @@ jobs:
           else
             git commit -m "Update Docker image tag to ${{ steps.vars.outputs.short_sha }}"
             git push origin main
+
