@@ -21,10 +21,15 @@ on:
 ```
 3. Added [app.py](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-step-final/python/app.py) and [Dockerfile](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-step-final/python/Dockerfile) to the project.
 4. Added repository secrets.
+
 ![final-1 (1).jpg](screenshots%2Ftask-1%2Ffinal-1%20%281%29.jpg)
+
 5. Checking the workflows.
+
 ![final-1 (2).jpg](screenshots%2Ftask-1%2Ffinal-1%20%282%29.jpg)
+
 ![final-1 (3).jpg](screenshots%2Ftask-1%2Ffinal-1%20%283%29.jpg)
+
 ![final-1 (4).jpg](screenshots%2Ftask-1%2Ffinal-1%20%284%29.jpg)
 
 ## Task 2 Write terraform code to create EKS cluster
@@ -65,9 +70,13 @@ terraform plan -out=tfplan
 terraform apply tfplan
 aws eks update-kubeconfig --region eu-north-1 --name yourhostel
 ```
+
 ![final-2 (1).jpg](screenshots%2Ftask-2%2Ffinal-2%20%281%29.jpg)
+
 ![final-2 (2).jpg](screenshots%2Ftask-2%2Ffinal-2%20%282%29.jpg)
+
 ![final-2 (3).jpg](screenshots%2Ftask-2%2Ffinal-2%20%283%29.jpg)
+
 ### Useful commands:
 ```bash
 kubectl get pods -n kube-system -l app.kubernetes.io/name=ingress-nginx
@@ -141,6 +150,7 @@ aws ec2 describe-network-interfaces \
 --filters "Name=description,Values='ELB net/a8b4bc81a22f3423ea48f2326e0a1d48*'" \
 --query 'NetworkInterfaces[*].{NetworkInterfaceId:NetworkInterfaceId, Description:Description, Association:Association}'
 ```
+
 ![final-3 (1).jpg](screenshots%2Ftask-3%2Ffinal-3%20%281%29.jpg)
 
 3. Start from scratch fully automatic cluster deployment
@@ -153,16 +163,25 @@ terraform plan -out=tfplan
 terraform apply tfplan
 aws eks update-kubeconfig --region eu-north-1 --name yourhostel # if necessary, update the config
 ```
+
 ![final-3 (2).jpg](screenshots%2Ftask-3%2Ffinal-3%20%282%29.jpg)
+
 ![final-3 (3).jpg](screenshots%2Ftask-3%2Ffinal-3%20%283%29.jpg)
+
 ![final-3 (4).jpg](screenshots%2Ftask-3%2Ffinal-3%20%284%29.jpg)
+
 4. Created module [dns_updater](https://github.com/yourhostel/hw_devops/tree/main/module_4/homework-step-final/terraform/modules/dns_updater) for updating DNS records.
 
 5. Added a script [update_dns.py](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-step-final/terraform/modules/dns_updater/update_dns.py) for automatic update of DNS records of type A of subdomain final.tyshchenko.online via API interface of hosting provider ukraine.com.ua.
+
 ![final-3 (5).jpg](screenshots%2Ftask-3%2Ffinal-3%20%285%29.jpg)
+
 - Checking
+
 ![final-3 (6).jpg](screenshots%2Ftask-3%2Ffinal-3%20%286%29.jpg)
+
 ![final-3 (7).jpg](screenshots%2Ftask-3%2Ffinal-3%20%287%29.jpg)
+
 6. The script [update_dns.py](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-step-final/terraform/modules/dns_updater/update_dns.py) has been updated with the logic for installing an ALIAS record in the final.tyshchenko.online domain. If it is missing, then A-type records are installed (effective only if there is one subnet and it is not possible to install CNAME, ALIAS or ANAME).
 - A check for balancer readiness has also been added.
 ```py
@@ -188,8 +207,11 @@ aws eks update-kubeconfig --region eu-north-1 --name yourhostel # if necessary, 
     else:
         responses['error'] = "Failed to update DNS after multiple attempts"
 ```
+
 ![final-3 (8).jpg](screenshots%2Ftask-3%2Ffinal-3%20%288%29.jpg)
+
 ![final-3 (9).jpg](screenshots%2Ftask-3%2Ffinal-3%20%289%29.jpg)
+
 7. Installing [Cert Manager](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-step-final/terraform/modules/cert_manager/main.tf) and creating kubernetes_manifests:[cluster_issuer, https_ingress](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-step-final/terraform/modules/issuer/main.tf)
 - The issuer module should be uncommented in the [main file](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-step-final/terraform/main.tf) only after the cluster is fully deployed.
 - After checking the http availability, you need to uncomment this module, update and apply the plan.
@@ -204,9 +226,13 @@ module "issuer" {
   }
 }
 ```
+
 ![final-3 (10).jpg](screenshots%2Ftask-3%2Ffinal-3%20%2810%29.jpg)
+
 ![final-3 (11).jpg](screenshots%2Ftask-3%2Ffinal-3%20%2811%29.jpg)
+
 ![final-3 (12).jpg](screenshots%2Ftask-3%2Ffinal-3%20%2812%29.jpg)
+
 ### Useful commands:
 ```bash
 kubectl get certificates -A
@@ -224,6 +250,7 @@ kubectl delete secret final-tyshchenko-online-tls -n default
 8. Іnstall Argo CD.  Add and apply [module argo_cd](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-step-final/terraform/modules/argo_cd/main.tf)
 
 ![final-3 (13).jpg](screenshots%2Ftask-3%2Ffinal-3%20%2813%29.jpg)
+
 - Inside the cluster we use HTTP
 ```HCL
   # Sets the service type of the Argo CD server to ClusterIP, making it accessible only within the cluster.
@@ -268,11 +295,13 @@ curl -I http://argo-cd-argocd-server.argocd
 1. Creating a helm chart for the domain root [static-site](https://github.com/yourhostel/hw_devops/tree/main/module_4/homework-step-final/helm_charts/static-site)
 - Which is used as a usual repository to create [argo_application kubernetes_manifest.static_site](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-step-final/terraform/modules/argo_application/main.tf)
 - And which is also used as a helm chart with a link to a local folder to create the [helm_release.static_site resource](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-step-final/terraform/modules/static_site/main.tf)
+
 ![final-4 (1).jpg](screenshots%2Ftask-4%2Ffinal-4%20%281%29.jpg)
 
 ![final-4 (2).jpg](screenshots%2Ftask-4%2Ffinal-4%20%282%29.jpg)
 
 ![final-4 (3).jpg](screenshots%2Ftask-4%2Ffinal-4%20%283%29.jpg)
+
 2. Creating a helm chart for python-app
 - Update [app.py](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-step-final/python/app.py) to use Flask.
 - Add a template [templates/index.html](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-step-final/python/templates/index.html)
@@ -285,9 +314,13 @@ curl -I http://argo-cd-argocd-server.argocd
 - Added application to [Argo SD](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-step-final/terraform/modules/argo_application/main.tf) 
 
 ![final-4 (4).jpg](screenshots%2Ftask-4%2Ffinal-4%20%284%29.jpg)
+
 ![final-4 (5).jpg](screenshots%2Ftask-4%2Ffinal-4%20%285%29.jpg)
+
 ![final-4 (6).jpg](screenshots%2Ftask-4%2Ffinal-4%20%286%29.jpg)
+
 ![final-4 (7).jpg](screenshots%2Ftask-4%2Ffinal-4%20%287%29.jpg)
+
 ### Useful commands:
 ```bash
 kubectl get pods -n python-app
@@ -330,6 +363,7 @@ kubectl create secret docker-registry dockerhub-secret \
 4. Added Application to Argo CD [kubernetes_manifest.sealed_secret](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-step-final/terraform/modules/argo_application/main.tf)
 
 ![final-5 (2).jpg](screenshots%2Ftask-5%2Ffinal-5%20%282%29.jpg)
+
 ```bash
 kubectl get secrets -n python-app
 kubectl describe secret dockerhub-secret -n python-app
@@ -376,15 +410,19 @@ namespace: python-app
 3. Update [values.yaml](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-step-final/helm_charts/python-app/values.yaml) helm chart `python-app` with the same short commit in the pipeline [.github/workflows](https://github.com/yourhostel/hw_devops/blob/main/.github/workflows/main.yml) in the `update_values` step
 
 ![final-6 (1).jpg](screenshots%2Ftask-6%2Ffinal-6%20%281%29.jpg)
+
 4. Let's check. Add a line to the template [index.html](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-step-final/python/templates/index.html)
 
 ![final-6 (2).jpg](screenshots%2Ftask-6%2Ffinal-6%20%282%29.jpg)
+
 5. And do git push:
 
 ![final-6 (3).jpg](screenshots%2Ftask-6%2Ffinal-6%20%283%29.jpg)
+
 6. By default, every 3 minutes ArgoCD will check the repository for new changes and, if found, will synchronize them with the cluster.
 - after some time:
 
 ![final-6 (4).jpg](screenshots%2Ftask-6%2Ffinal-6%20%284%29.jpg)
+
 - The application was added earlier. kubernetes_manifest.python_app in [argo_application/main.tf](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-step-final/terraform/modules/argo_application/main.tf)
 
