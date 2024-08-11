@@ -3,9 +3,7 @@
 resource "helm_release" "static_site" {
   name       = "static-site"
   namespace  = "argocd"
-  repository = "https://github.com/yourhostel/hw_devops"
-  chart      = "module_4/homework-step-final/helm_charts/static-site"
-  version    = "main"
+  chart      = "./helm_charts/static-site"
 
   set {
     name  = "title"
