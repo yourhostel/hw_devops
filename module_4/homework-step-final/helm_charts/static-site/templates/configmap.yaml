@@ -9,5 +9,11 @@ data:
     <head><title>{{ .Values.title }}</title></head>
     <body>
     <h1>{{ .Values.message }}</h1>
+    <p><a href="https://final.tyshchenko.online/argo">Go to ArgoCD</a></p>
+    <p><a href="https://final.tyshchenko.online/python-app">Go to Python App</a></p>
     </body>
     </html>
+
+
+
+
