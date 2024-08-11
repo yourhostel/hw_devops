@@ -1,6 +1,14 @@
 # terraform/modules/python_app/main.tf
 
+resource "kubernetes_namespace" "python_app" {
+  metadata {
+    name = "python-app"
+  }
+}
+
 resource "helm_release" "python_app" {
+  depends_on = [kubernetes_namespace.python_app]
+
   name       = "python-app"
   namespace  = "python-app"
   chart      = "../helm_charts/python-app"
