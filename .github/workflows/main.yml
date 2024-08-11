@@ -57,5 +57,6 @@ jobs:
             echo "Application responded with 200 OK"
           else
             echo "Application failed to respond with 200 OK"
+            docker logs myapp  # Check container logs
             exit 1
           fi
