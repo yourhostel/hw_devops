@@ -73,23 +73,16 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Check for sed
-        run: |
-          if ! command -v sed &> /dev/null
-          then
-            echo "sed could not be found"
-            exit 1
-          fi
-
       - name: Update values.yaml
         run: |
-          echo "Before sed:"
+          echo "Before update:"
           cat module_4/homework-step-final/helm_charts/python-app/values.yaml
-          sed -i -E "s/^([[:space:]]*tag:).*/\1 ${{ steps.vars.outputs.short_sha }}/" module_4/homework-step-final/helm_charts/python-app/values.yaml
-          echo "After sed:"
+          echo "Updating tag..."
+          sed -i "/tag:/c\  tag: ${{ steps.vars.outputs.short_sha }}" module_4/homework-step-final/helm_charts/python-app/values.yaml
+          echo "After update:"
           cat module_4/homework-step-final/helm_charts/python-app/values.yaml
+
       - name: Commit and Push changes
-        if: ${{ github.event_name == 'push' }}
         env:
           GITHUB_TOKEN: ${{ secrets.ACTIONS_DEPLOY_KEY }}
         run: |
@@ -102,3 +95,4 @@ jobs:
             git commit -m "Update Docker image tag to ${{ steps.vars.outputs.short_sha }}"
             git push origin main
           fi
+
