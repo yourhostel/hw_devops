@@ -1,15 +1,13 @@
 # python/app.py
 
-from flask import Flask, render_template_string
+from flask import Flask, render_template
 
 app = Flask(__name__)
 
 
 @app.route('/')
 def index():
-    with open('index.html', 'r') as file:
-        html_content = file.read()
-    return render_template_string(html_content)
+    return render_template('index.html')
 
 
 if __name__ == '__main__':
