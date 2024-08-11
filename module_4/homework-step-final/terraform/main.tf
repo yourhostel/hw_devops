@@ -46,6 +46,10 @@ module "static_site" {
   source = "./modules/static_site"
 }
 
+module "python_app" {
+  source = "./modules/python_app"
+}
+
 module "issuer" {
   source = "./modules/issuer"
   depends_on = [module.cert_manager]

@@ -19,7 +19,7 @@ on:
     paths:
       - 'module_4/homework-step-final/python/**'
 ```
-3. Added [app.py](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-step-final/app.py) and [Dockerfile](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-step-final/Dockerfile) to the project.
+3. Added [app.py](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-step-final/python/app.py) and [Dockerfile](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-step-final/python/Dockerfile) to the project.
 4. Added repository secrets.
 ![final-1 (1).jpg](screenshots%2Ftask-1%2Ffinal-1%20%281%29.jpg)
 5. Checking the workflows.

@@ -91,6 +91,7 @@ resource "kubernetes_manifest" "https_ingress" {
                     port = {
                       number = 80
                     }
+                    namespace = "python-app"
                   }
                 }
               },

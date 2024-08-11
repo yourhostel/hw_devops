@@ -1,0 +1,15 @@
+replicaCount: 1
+
+image:
+  repository: yourhostel/devops-final
+  pullPolicy: Always
+  tag: "latest"
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+
+namespace: python-app
