@@ -45,11 +45,11 @@ module "cert_manager" {
 module "static_site" {
   source = "./modules/static_site"
 }
-
-module "python_app" {
-  source = "./modules/python_app"
-}
-
+#
+#module "python_app" {
+#  source = "./modules/python_app"
+#}
+#
 module "issuer" {
   source = "./modules/issuer"
   depends_on = [module.cert_manager]
@@ -69,20 +69,20 @@ module "argo_cd" {
     helm       = helm
   }
 }
-
-module "argo_application" {
-  source = "./modules/argo_application"
-  argocd_ready = module.argo_cd.argocd_ready
-  depends_on = [
-    module.cert_manager,
-    module.ingress,
-  ]
-
-  providers = {
-    kubernetes = kubernetes
-    helm       = helm
-  }
-}
+#
+#module "argo_application" {
+#  source = "./modules/argo_application"
+#  argocd_ready = module.argo_cd.argocd_ready
+#  depends_on = [
+#    module.cert_manager,
+#    module.ingress,
+#  ]
+#
+#  providers = {
+#    kubernetes = kubernetes
+#    helm       = helm
+#  }
+#}
 
 module "ingress" {
   source = "./modules/ingress"
@@ -153,10 +153,10 @@ output "ingress_nginx_controller" {
   value = module.ingress.ingress_nginx_controller
 }
 
-#output "argo_cd_admin_password" {
-#  value = module.argo_cd.argo_cd_admin_password
-#  sensitive = true
-#}
+output "argo_cd_admin_password" {
+  value = module.argo_cd.argo_cd_admin_password
+  sensitive = true
+}
 
 # Output of nginx_ingress_service object for debugging
 #output "nginx_ingress_service_full" {
