@@ -341,6 +341,9 @@ sudo mv kubeseal /usr/local/bin/
 kubeseal --version
 helm repo add sealed-secrets https://bitnami-labs.github.io/sealed-secrets
 helm repo update
+
+kubectl delete secret -l sealedsecrets.bitnami.com/sealed-secrets-key -n kube-system
+helm uninstall sealed-secrets-controller -n kube-system
 helm install sealed-secrets-controller sealed-secrets/sealed-secrets --namespace kube-system
 kubectl get pods -n kube-system | grep sealed-secrets
 ```
@@ -348,16 +351,31 @@ kubectl get pods -n kube-system | grep sealed-secrets
 
 2. Created sealed-secret.yaml
 ```bash
+# Export the current public key
+kubectl get secrets -n kube-system -l sealedsecrets.bitnami.com/sealed-secrets-key
+kubectl get secret sealed-secrets-<key9rpgs> -n kube-system -o jsonpath="{.data['tls\.crt']}" | base64 --decode > tls.crt
+
+mkdir sealed-secrets && cd sealed-secrets
+
 kubectl create secret docker-registry dockerhub-secret \
   --docker-server=https://index.docker.io/v1/ \
   --docker-username=your-dockerhub-username \
   --docker-password=your-dockerhub-password \
-  --docker-email=your-email@example.com \
+  --docker-email=yourhostel.ua@gmail.com \
   --namespace=python-app \
   -o yaml --dry-run=client | kubeseal \
   --controller-name=sealed-secrets-controller \
   --controller-namespace=kube-system \
   --format=yaml > sealed-secret.yaml
+  
+# Apply the new encrypted secret 
+kubectl apply -f sealed-secret.yaml -n python-app
+# Check the status of the new secret after applying it
+kubectl describe sealedsecret dockerhub-secret -n python-app
+  
+git add sealed-secret.yaml
+git commit -m "Add sealed Docker credentials secret"
+git push
 ```
 3. Added sealed-secret.yaml in repo `module_4/homework-step-final/sealed-secrets`
 4. Added Application to Argo CD [kubernetes_manifest.sealed_secret](https://github.com/yourhostel/hw_devops/blob/main/module_4/homework-step-final/terraform/modules/argo_application/main.tf)
