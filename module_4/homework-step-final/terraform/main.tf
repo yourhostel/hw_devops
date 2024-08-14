@@ -42,47 +42,47 @@ module "cert_manager" {
   }
 }
 
-#module "static_site" {
-#  source = "./modules/static_site"
-#}
-#
-#module "python_app" {
-#  source = "./modules/python_app"
-#}
-#
-#module "issuer" {
-#  source = "./modules/issuer"
-#  depends_on = [module.cert_manager]
-#
-#  providers = {
-#    kubernetes = kubernetes
-#    helm       = helm
-#  }
-#}
-#
-#module "argo_cd" {
-#  source = "./modules/argo_cd"
-#  depends_on = [module.issuer]
-#
-#  providers = {
-#    kubernetes = kubernetes
-#    helm       = helm
-#  }
-#}
-#
-#module "argo_application" {
-#  source = "./modules/argo_application"
-#  argocd_ready = module.argo_cd.argocd_ready
-#  depends_on = [
-#    module.cert_manager,
-#    module.ingress,
-#  ]
-#
-#  providers = {
-#    kubernetes = kubernetes
-#    helm       = helm
-#  }
-#}
+module "static_site" {
+  source = "./modules/static_site"
+}
+
+module "python_app" {
+  source = "./modules/python_app"
+}
+
+module "issuer" {
+  source = "./modules/issuer"
+  depends_on = [module.cert_manager]
+
+  providers = {
+    kubernetes = kubernetes
+    helm       = helm
+  }
+}
+
+module "argo_cd" {
+  source = "./modules/argo_cd"
+  depends_on = [module.issuer]
+
+  providers = {
+    kubernetes = kubernetes
+    helm       = helm
+  }
+}
+
+module "argo_application" {
+  source = "./modules/argo_application"
+  argocd_ready = module.argo_cd.argocd_ready
+  depends_on = [
+    module.cert_manager,
+    module.ingress,
+  ]
+
+  providers = {
+    kubernetes = kubernetes
+    helm       = helm
+  }
+}
 
 module "ingress" {
   source = "./modules/ingress"
